@@ -1,22 +1,24 @@
 """
-SERMAS Pre-Consulta — LLM Service (stub)
+SERMAS Pre-Consulta — LLM Service
 
-Recibe síntomas + historial FHIR y genera el briefing pre-consulta
-para el médico usando GPT-4o.
+Recibe síntomas + historial FHIR mapeado y genera un triaje clínico
+estructurado para el médico.
 
-TODO: implementar briefing.py con el prompt clínico completo.
+Endpoints:
+  POST /briefing/generate  — genera triaje
+  GET  /health
 """
 
 from fastapi import FastAPI
 from pydantic import BaseModel
+from triage import generate_triage
 
 app = FastAPI(title="SERMAS Pre-Consulta — LLM Service", version="0.1.0")
 
 
 class BriefingRequest(BaseModel):
-    session_id: str
     symptoms: dict
-    fhir_history: dict  # Recursos FHIR del paciente
+    history: dict
 
 
 @app.get("/health")
@@ -26,11 +28,4 @@ async def health():
 
 @app.post("/briefing/generate")
 async def generate_briefing(payload: BriefingRequest):
-    """
-    Genera un briefing clínico estructurado para el médico.
-    TODO: implementar en briefing.py
-    """
-    return {
-        "session_id": payload.session_id,
-        "briefing": "Briefing pendiente de generación (stub)",
-    }
+    return await generate_triage(payload.symptoms, payload.history)

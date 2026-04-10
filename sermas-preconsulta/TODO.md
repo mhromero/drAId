@@ -33,16 +33,12 @@
 
 ## fhir-service
 
-- [ ] **Implementar fhir_client.py con datos Synthea**
-  Cargar pacientes sintéticos generados con Synthea en formato FHIR R4.
-  Buscar por CIP y devolver Bundle con Condition, MedicationRequest, AllergyIntolerance.
-
-- [ ] **Endpoint real `/fhir/preconsulta`**
-  Sustituir el stub actual por la lógica completa:
-  buscar historial → combinar con síntomas → llamar al llm-service → devolver DocumentReference.
-
-- [ ] **Integración con CIP real del SERMAS**
-  En producción, el CIP autentica contra el sistema del SERMAS vía FHIR Patient/$match.
+- [ ] **Integración con HSIC y ORUS (producción)**
+  `fhir_client.py` tiene dos modos: `local` (Synthea, prototipo) y `fhir` (servidor real).
+  En producción: `FHIR_MODE=fhir` + `FHIR_SERVER_URL=https://fhir.sermas.madrid.es`.
+  - HSIC expone Patient, Condition, MedicationRequest, AllergyIntolerance, Encounter en FHIR R4.
+  - ORUS gestiona citas (Appointment) — se puede usar para crear/modificar citas post-triaje.
+  - Requiere autenticación OAuth2 con el IdP del SERMAS y acuerdo de integración formal.
 
 ## llm-service
 

@@ -1,0 +1,397 @@
+[
+  {
+    "id": "c7a21c5f-e08d-412f-a810-d9911a99e5f1",
+    "session_id": "test-carlos-001",
+    "cip": "2800001234",
+    "timestamp": "2026-04-10T20:22:06.753511",
+    "symptoms": {
+      "chief_complaint": "dolor de pecho",
+      "symptoms": [
+        "dolor de pecho opresivo"
+      ],
+      "duration": "2 horas",
+      "severity": "severe",
+      "associated_symptoms": [
+        "sudoración",
+        "náuseas",
+        "brazo izquierdo entumecido"
+      ]
+    },
+    "history": {
+      "paciente": {
+        "nombre": "Carlos Martínez López",
+        "cip": "2800001234",
+        "fecha_nacimiento": "1966-03-14",
+        "edad": 60,
+        "sexo": "male"
+      },
+      "diagnosticos_activos": [
+        {
+          "nombre": "Hipertensión arterial",
+          "codigo_snomed": "38341003",
+          "desde": "2015-06-01"
+        },
+        {
+          "nombre": "Diabetes mellitus tipo 2",
+          "codigo_snomed": "44054006",
+          "desde": "2018-01-20"
+        },
+        {
+          "nombre": "Cardiopatía isquémica",
+          "codigo_snomed": "53741008",
+          "desde": "2021-11-05"
+        }
+      ],
+      "medicacion_actual": [
+        {
+          "nombre": "Losartán 50mg",
+          "posologia": "1 comprimido — 1 vez al día"
+        },
+        {
+          "nombre": "Metformina 850mg",
+          "posologia": "1 comprimido — 2 veces al día"
+        },
+        {
+          "nombre": "Atorvastatina 40mg",
+          "posologia": "1 comprimido — por la noche"
+        },
+        {
+          "nombre": "Aspirina 100mg",
+          "posologia": "1 comprimido — 1 vez al día"
+        }
+      ],
+      "alergias": [],
+      "visitas_recientes": [
+        {
+          "fecha": "2026-01-22",
+          "motivo": "Dolor torácico",
+          "resultado": "Angina de pecho, ajuste de medicación"
+        },
+        {
+          "fecha": "2025-11-10",
+          "motivo": "Revisión cardiología",
+          "resultado": "Cardiopatía isquémica estable"
+        }
+      ]
+    },
+    "triage": {
+      "urgencia": "alta",
+      "resumen": "Paciente de 60 años con dolor de pecho opresivo severo, asociado a sudoración, náuseas y entumecimiento del brazo izquierdo. Historial de cardiopatía isquémica.",
+      "alertas": [
+        "Riesgo cardiovascular",
+        "Posible angina de pecho"
+      ],
+      "recomendacion": "Contactar al paciente hoy para evaluar la urgencia del dolor y considerar una visita en el centro"
+    },
+    "status": "pending"
+  },
+  {
+    "id": "be2e46c1-4aa2-41eb-87a8-c9c9b237eee6",
+    "session_id": "test-ana-001",
+    "cip": "2800005678",
+    "timestamp": "2026-04-10T20:23:22.366586",
+    "symptoms": {
+      "chief_complaint": "dificultad para respirar",
+      "symptoms": [
+        "disnea",
+        "pitidos en el pecho"
+      ],
+      "duration": "esta mañana",
+      "severity": "moderate",
+      "associated_symptoms": [
+        "tomó ibuprofeno ayer por dolor de cabeza"
+      ]
+    },
+    "history": {
+      "paciente": {
+        "nombre": "Ana García Ruiz",
+        "cip": "2800005678",
+        "fecha_nacimiento": "1989-07-22",
+        "edad": 36,
+        "sexo": "female"
+      },
+      "diagnosticos_activos": [
+        {
+          "nombre": "Asma bronquial",
+          "codigo_snomed": "195967001",
+          "desde": "2005-03-10"
+        },
+        {
+          "nombre": "Rinitis alérgica",
+          "codigo_snomed": "21719001",
+          "desde": "2007-09-15"
+        }
+      ],
+      "medicacion_actual": [
+        {
+          "nombre": "Salbutamol 100mcg inhalador",
+          "posologia": "2 pulsaciones — si precisa"
+        },
+        {
+          "nombre": "Budesonida/Formoterol 160/4.5mcg",
+          "posologia": "1 pulsación — 2 veces al día"
+        },
+        {
+          "nombre": "Montelukast 10mg",
+          "posologia": "1 comprimido — por la noche"
+        }
+      ],
+      "alergias": [
+        {
+          "sustancia": "Ibuprofeno (AINE)",
+          "criticidad": "high",
+          "manifestacion": "Broncoespasmo grave — ingreso UCI 2019"
+        },
+        {
+          "sustancia": "Aspirina",
+          "criticidad": "high",
+          "manifestacion": "Urticaria generalizada"
+        }
+      ],
+      "visitas_recientes": [
+        {
+          "fecha": "2026-02-11",
+          "motivo": "Revisión neumología",
+          "resultado": "Asma bien controlada, continuar tratamiento"
+        },
+        {
+          "fecha": "2025-08-03",
+          "motivo": "Crisis asmática",
+          "resultado": "Asma moderada, nebulización en urgencias"
+        }
+      ]
+    },
+    "triage": {
+      "urgencia": "alta",
+      "resumen": "Paciente con asma bronquial y rinitis alérgica, presenta disnea y pitidos en el pecho desde esta mañana. Ha tomado ibuprofeno ayer por dolor de cabeza.",
+      "alertas": [
+        "Alergia a AINE (ibuprofeno) con episodio grave de broncoespasmo en el pasado"
+      ],
+      "recomendacion": "Contactar al paciente para evaluar la situación y ajustar tratamiento según sea necesario"
+    },
+    "status": "pending"
+  },
+  {
+    "id": "55808028-10f7-40bf-9b9a-40c348f9c11a",
+    "session_id": "test-carmen-001",
+    "cip": "2800009012",
+    "timestamp": "2026-04-10T20:23:36.219433",
+    "symptoms": {
+      "chief_complaint": "mareos al levantarse",
+      "symptoms": [
+        "vértigo posicional",
+        "sensación de inestabilidad"
+      ],
+      "duration": "3 días",
+      "severity": "mild",
+      "associated_symptoms": [
+        "sin náuseas",
+        "sin pérdida de conciencia"
+      ]
+    },
+    "history": {
+      "paciente": {
+        "nombre": "Carmen Fernández Iglesias",
+        "cip": "2800009012",
+        "fecha_nacimiento": "1948-11-30",
+        "edad": 77,
+        "sexo": "female"
+      },
+      "diagnosticos_activos": [
+        {
+          "nombre": "Hipertensión arterial",
+          "codigo_snomed": "38341003",
+          "desde": "2000-04-01"
+        },
+        {
+          "nombre": "Diabetes mellitus tipo 2",
+          "codigo_snomed": "44054006",
+          "desde": "2010-07-15"
+        },
+        {
+          "nombre": "Fibrilación auricular",
+          "codigo_snomed": "40425004",
+          "desde": "2019-03-22"
+        },
+        {
+          "nombre": "Hipotiroidismo",
+          "codigo_snomed": "73211009",
+          "desde": "2012-01-10"
+        },
+        {
+          "nombre": "Osteoporosis",
+          "codigo_snomed": "396275006",
+          "desde": "2020-06-05"
+        }
+      ],
+      "medicacion_actual": [
+        {
+          "nombre": "Losartán 100mg",
+          "posologia": "1 comprimido — 1 vez al día"
+        },
+        {
+          "nombre": "Bisoprolol 5mg",
+          "posologia": "1 comprimido — 1 vez al día"
+        },
+        {
+          "nombre": "Warfarina 5mg",
+          "posologia": "según INR — 1 vez al día"
+        },
+        {
+          "nombre": "Levotiroxina 75mcg",
+          "posologia": "1 comprimido — en ayunas"
+        },
+        {
+          "nombre": "Metformina 500mg",
+          "posologia": "1 comprimido — 2 veces al día"
+        },
+        {
+          "nombre": "Alendronato 70mg",
+          "posologia": "1 comprimido — semanal en ayunas"
+        }
+      ],
+      "alergias": [
+        {
+          "sustancia": "Penicilina",
+          "criticidad": "low",
+          "manifestacion": "Exantema cutáneo leve"
+        }
+      ],
+      "visitas_recientes": [
+        {
+          "fecha": "2026-03-05",
+          "motivo": "Mareo episódico",
+          "resultado": "Hipotensión ortostática, revisar dosis antihipertensivos"
+        },
+        {
+          "fecha": "2025-12-01",
+          "motivo": "Control INR",
+          "resultado": "INR 2.8 — en rango terapéutico"
+        }
+      ]
+    },
+    "triage": {
+      "urgencia": "media",
+      "resumen": "Paciente de 77 años con mareos al levantarse desde hace 3 días, sin náuseas ni pérdida de conciencia. Historial de hipertensión arterial, diabetes mellitus tipo 2, fibrilación auricular y hipotiroidismo.",
+      "alertas": [
+        "Fibrilación auricular",
+        "Uso de Warfarina"
+      ],
+      "recomendacion": "Valorar la necesidad de ajuste en la dosis de Warfarina o considerar una evaluación cardiológica"
+    },
+    "status": "pending"
+  },
+  {
+    "id": "ab80bf66-7d22-4f13-b304-8dc7c70c2517",
+    "session_id": "test-miguel-001",
+    "cip": "2800003456",
+    "timestamp": "2026-04-10T20:23:45.377826",
+    "symptoms": {
+      "chief_complaint": "dolor de garganta y fiebre",
+      "symptoms": [
+        "odinofagia",
+        "fiebre 38.5"
+      ],
+      "duration": "2 días",
+      "severity": "mild",
+      "associated_symptoms": [
+        "malestar general",
+        "sin dificultad para respirar"
+      ]
+    },
+    "history": {
+      "paciente": {
+        "nombre": "Miguel Torres Vega",
+        "cip": "2800003456",
+        "fecha_nacimiento": "1998-04-05",
+        "edad": 28,
+        "sexo": "male"
+      },
+      "diagnosticos_activos": [],
+      "medicacion_actual": [],
+      "alergias": [],
+      "visitas_recientes": [
+        {
+          "fecha": "2025-01-15",
+          "motivo": "Revisión general",
+          "resultado": "Paciente sano, analítica normal"
+        }
+      ]
+    },
+    "triage": {
+      "urgencia": "media",
+      "resumen": "Paciente de 28 años con dolor de garganta, fiebre y odinofagia desde hace 2 días. No tiene medicación actual ni alergias conocidas.",
+      "alertas": [],
+      "recomendacion": "Valorar en 24-48 horas para evaluar la evolución del cuadro"
+    },
+    "status": "pending"
+  },
+  {
+    "id": "31717a43-490f-4d87-8355-e0fcba237d1a",
+    "session_id": "sim-laura-001",
+    "cip": "2800007890",
+    "caller_phone": "+34600000005",
+    "timestamp": "2026-04-10T20:34:36.992594",
+    "symptoms": {
+      "cip": null,
+      "chief_complaint": null,
+      "symptoms": [],
+      "duration": null,
+      "severity": null,
+      "associated_symptoms": [],
+      "relevant_history_flags": []
+    },
+    "history": {
+      "paciente": {
+        "nombre": "Laura Sánchez Moreno",
+        "cip": "2800007890",
+        "fecha_nacimiento": "1993-09-18",
+        "edad": 32,
+        "sexo": "female"
+      },
+      "diagnosticos_activos": [
+        {
+          "nombre": "Hipertensión gestacional",
+          "codigo_snomed": "48194001",
+          "desde": "2026-02-15"
+        },
+        {
+          "nombre": "Embarazo normal (semana 32)",
+          "codigo_snomed": "72892002",
+          "desde": "2025-11-01"
+        }
+      ],
+      "medicacion_actual": [
+        {
+          "nombre": "Labetalol 100mg",
+          "posologia": "1 comprimido — 2 veces al día"
+        },
+        {
+          "nombre": "Ácido fólico 5mg",
+          "posologia": "1 comprimido — 1 vez al día"
+        }
+      ],
+      "alergias": [],
+      "visitas_recientes": [
+        {
+          "fecha": "2026-04-01",
+          "motivo": "Urgencias obstétricas",
+          "resultado": "TA 155/100, ingreso observación 24h"
+        },
+        {
+          "fecha": "2026-03-20",
+          "motivo": "Control obstétrico",
+          "resultado": "TA 145/95, proteinuria leve, control estrecho"
+        }
+      ]
+    },
+    "triage": {
+      "urgencia": "baja",
+      "resumen": "Paciente embarazada de 32 semanas con hipertensión gestacional controlada con labetalol. No presenta síntomas nuevos.",
+      "alertas": [],
+      "recomendacion": "Mantener la cita programada para su seguimiento"
+    },
+    "status": "pending",
+    "notification": null
+  }
+]

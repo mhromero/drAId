@@ -2,10 +2,274 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>SERMAS Pre-Consulta — Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SERMAS Pre-Consulta — Triaje</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+    }
+
+    header {
+      background: #003087;
+      color: white;
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    header img { height: 36px; }
+    header h1 { font-size: 18px; font-weight: 600; }
+    header p  { font-size: 13px; opacity: 0.8; margin-top: 2px; }
+
+    .toolbar {
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .toolbar span { font-size: 13px; color: #666; }
+    .refresh-btn {
+      background: #003087;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .refresh-btn:hover { background: #004db3; }
+
+    .cases { padding: 0 32px 32px; display: flex; flex-direction: column; gap: 12px; }
+
+    .empty {
+      text-align: center;
+      padding: 64px;
+      color: #999;
+      font-size: 15px;
+    }
+
+    /* ── Tarjeta de caso ── */
+    .card {
+      background: white;
+      border-radius: 10px;
+      border-left: 5px solid #ccc;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: start;
+    }
+    .card.alta   { border-left-color: #e53e3e; }
+    .card.media  { border-left-color: #dd6b20; }
+    .card.baja   { border-left-color: #38a169; }
+
+    .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: .5px;
+    }
+    .badge.alta  { background: #fff5f5; color: #c53030; }
+    .badge.media { background: #fffaf0; color: #c05621; }
+    .badge.baja  { background: #f0fff4; color: #276749; }
+
+    .patient-name { font-size: 16px; font-weight: 600; }
+    .patient-meta { font-size: 12px; color: #888; margin-left: auto; }
+
+    .resumen { font-size: 14px; color: #444; line-height: 1.5; margin-bottom: 10px; }
+
+    .alertas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    .alerta-tag {
+      background: #fff5f5;
+      color: #c53030;
+      border: 1px solid #feb2b2;
+      border-radius: 4px;
+      font-size: 12px;
+      padding: 2px 8px;
+    }
+
+    .recomendacion {
+      font-size: 13px;
+      color: #555;
+      font-style: italic;
+    }
+    .recomendacion::before { content: "→ "; font-style: normal; }
+
+    /* ── Síntomas expandibles ── */
+    details { margin-top: 10px; }
+    summary {
+      font-size: 12px;
+      color: #888;
+      cursor: pointer;
+      user-select: none;
+    }
+    summary:hover { color: #003087; }
+    .symptoms-detail {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #666;
+      background: #f8f9fa;
+      padding: 10px 12px;
+      border-radius: 6px;
+      line-height: 1.7;
+    }
+
+    /* ── Botones de acción ── */
+    .actions { display: flex; flex-direction: column; gap: 8px; min-width: 160px; }
+    .action-btn {
+      padding: 9px 14px;
+      border-radius: 7px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: opacity .15s;
+      text-align: center;
+    }
+    .action-btn:hover { opacity: .85; }
+    .btn-call      { background: #e53e3e; color: white; }
+    .btn-keep      { background: #edf2ff; color: #3730a3; }
+    .btn-emergency { background: #1a1a2e; color: white; }
+
+    .timestamp { font-size: 11px; color: #bbb; margin-top: 8px; text-align: right; }
+  </style>
 </head>
 <body>
-  <h1>Dashboard médico</h1>
-  <p>TODO: mostrar briefings pre-consulta generados por el agente de voz.</p>
+
+<header>
+  <div>
+    <h1>SERMAS Pre-Consulta · Triaje telefónico</h1>
+    <p>Casos pendientes de revisión médica</p>
+  </div>
+</header>
+
+<div class="toolbar">
+  <span id="count">Cargando...</span>
+  <button class="refresh-btn" onclick="loadCases()">↻ Actualizar</button>
+</div>
+
+<div class="cases" id="cases"></div>
+
+<script>
+  const API = '';
+
+  async function loadCases() {
+    const res = await fetch(`${API}/fhir/casos`);
+    const cases = await res.json();
+
+    const container = document.getElementById('cases');
+    const countEl = document.getElementById('count');
+
+    countEl.textContent = cases.length === 0
+      ? 'Sin casos pendientes'
+      : `${cases.length} caso${cases.length > 1 ? 's' : ''} pendiente${cases.length > 1 ? 's' : ''}`;
+
+    if (cases.length === 0) {
+      container.innerHTML = '<div class="empty">No hay casos pendientes en este momento.</div>';
+      return;
+    }
+
+    container.innerHTML = cases.map(c => renderCase(c)).join('');
+  }
+
+  function renderCase(c) {
+    const t = c.triage || {};
+    const p = c.history?.paciente || {};
+    const urgencia = t.urgencia || 'baja';
+    const alertas = (t.alertas || []).map(a =>
+      `<span class="alerta-tag">⚠ ${a}</span>`
+    ).join('');
+    const ts = new Date(c.timestamp).toLocaleString('es-ES', {
+      day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'
+    });
+    const s = c.symptoms || {};
+    const sintomasAsociados = (s.associated_symptoms || []).join(', ') || '—';
+
+    return `
+    <div class="card ${urgencia}" id="case-${c.id}">
+      <div>
+        <div class="card-header">
+          <span class="badge ${urgencia}">Urgencia ${urgencia}</span>
+          <span class="patient-name">${p.nombre || 'Paciente desconocido'}</span>
+          <span class="patient-meta">${p.edad ? p.edad + ' años' : ''} · CIP ${c.cip || '—'}</span>
+        </div>
+
+        <p class="resumen">${t.resumen || '—'}</p>
+
+        ${alertas ? `<div class="alertas">${alertas}</div>` : ''}
+
+        <p class="recomendacion">${t.recomendacion || '—'}</p>
+
+        <details>
+          <summary>Ver síntomas referidos en la llamada</summary>
+          <div class="symptoms-detail">
+            <b>Motivo:</b> ${s.chief_complaint || '—'}<br>
+            <b>Duración:</b> ${s.duration || '—'}<br>
+            <b>Severidad:</b> ${s.severity || '—'}<br>
+            <b>Asociados:</b> ${sintomasAsociados}
+          </div>
+        </details>
+
+        <div class="timestamp">Llamada recibida: ${ts}</div>
+      </div>
+
+      <div class="actions">
+        <button class="action-btn btn-call"
+          onclick="takeAction('${c.id}', 'call_now')">
+          📞 Llamar ahora
+        </button>
+        <button class="action-btn btn-keep"
+          onclick="takeAction('${c.id}', 'keep_appointment')">
+          📅 Mantener cita
+        </button>
+        <button class="action-btn btn-emergency"
+          onclick="takeAction('${c.id}', 'refer_emergency')">
+          🚨 Derivar urgencias
+        </button>
+      </div>
+    </div>`;
+  }
+
+  async function takeAction(caseId, action) {
+    const res = await fetch(`${API}/fhir/casos/${caseId}/accion`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action }),
+    });
+    const updated = await res.json();
+
+    // Mostrar brevemente el mensaje enviado al paciente
+    const card = document.getElementById(`case-${caseId}`);
+    if (card && updated.notification) {
+      const msg = updated.notification.message || '';
+      const simulated = updated.notification.simulated ? ' (simulado)' : '';
+      const banner = document.createElement('div');
+      banner.style.cssText = 'background:#ebf8ff;border:1px solid #90cdf4;border-radius:6px;padding:10px 14px;font-size:12px;color:#2c5282;margin-top:10px;';
+      banner.innerHTML = `✉ Mensaje enviado al paciente${simulated}:<br><i>${msg}</i>`;
+      card.querySelector('.actions').replaceWith(banner);
+      setTimeout(() => {
+        card.style.transition = 'opacity .4s';
+        card.style.opacity = '0';
+        setTimeout(() => loadCases(), 450);
+      }, 2500);
+    } else {
+      card.style.transition = 'opacity .3s';
+      card.style.opacity = '0';
+      setTimeout(() => loadCases(), 350);
+    }
+  }
+
+  loadCases();
+  // Refrescar automáticamente cada 30 segundos
+  setInterval(loadCases, 30000);
+</script>
 </body>
 </html>

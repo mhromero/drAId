@@ -1,0 +1,252 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "P001",
+        "identifier": [
+          {
+            "system": "https://www.sermas.es/cip",
+            "value": "2800001234"
+          }
+        ],
+        "name": [
+          {
+            "family": "Martínez López",
+            "given": [
+              "Carlos"
+            ]
+          }
+        ],
+        "birthDate": "1966-03-14",
+        "gender": "male",
+        "address": [
+          {
+            "city": "Madrid",
+            "country": "ES"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Condition",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "38341003",
+              "display": "Hipertensión arterial"
+            }
+          ]
+        },
+        "onsetDateTime": "2015-06-01",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Condition",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "44054006",
+              "display": "Diabetes mellitus tipo 2"
+            }
+          ]
+        },
+        "onsetDateTime": "2018-01-20",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Condition",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "53741008",
+              "display": "Cardiopatía isquémica"
+            }
+          ]
+        },
+        "onsetDateTime": "2021-11-05",
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "active",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "29046",
+              "display": "Losartán 50mg"
+            }
+          ]
+        },
+        "dosageInstruction": [
+          {
+            "text": "1 comprimido — 1 vez al día"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "active",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "860975",
+              "display": "Metformina 850mg"
+            }
+          ]
+        },
+        "dosageInstruction": [
+          {
+            "text": "1 comprimido — 2 veces al día"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "active",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "308460",
+              "display": "Atorvastatina 40mg"
+            }
+          ]
+        },
+        "dosageInstruction": [
+          {
+            "text": "1 comprimido — por la noche"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "MedicationRequest",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "active",
+        "medicationCodeableConcept": {
+          "coding": [
+            {
+              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+              "code": "1191",
+              "display": "Aspirina 100mg"
+            }
+          ]
+        },
+        "dosageInstruction": [
+          {
+            "text": "1 comprimido — 1 vez al día"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Encounter",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "finished",
+        "period": {
+          "start": "2025-11-10"
+        },
+        "reasonCode": [
+          {
+            "text": "Revisión cardiología"
+          }
+        ],
+        "diagnosis": [
+          {
+            "condition": {
+              "display": "Cardiopatía isquémica estable"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Encounter",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "finished",
+        "period": {
+          "start": "2026-01-22"
+        },
+        "reasonCode": [
+          {
+            "text": "Dolor torácico"
+          }
+        ],
+        "diagnosis": [
+          {
+            "condition": {
+              "display": "Angina de pecho, ajuste de medicación"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
