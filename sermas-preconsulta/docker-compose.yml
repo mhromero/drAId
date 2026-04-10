@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  voice-agent:
+    build: ./voice-agent
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./voice-agent/.env
+    depends_on:
+      - fhir-service
+    restart: unless-stopped
+
+  fhir-service:
+    build: ./fhir-service
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+
+  llm-service:
+    build: ./llm-service
+    ports:
+      - "8002:8002"
+    env_file:
+      - ./voice-agent/.env   # comparten OPENAI_API_KEY
+    restart: unless-stopped
+
+  # TODO [PRODUCCIÓN]: descomentar cuando se implemente la cola asíncrona
+  # redis:
+  #   image: redis:7-alpine
+  #   ports:
+  #     - "6379:6379"

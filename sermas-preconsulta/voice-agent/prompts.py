@@ -47,7 +47,7 @@ ERROR_MESSAGE = (
 
 URGENCY_KEYWORDS = [
     "dolor pecho", "no respira", "inconsciente", "infarto", "accidente",
-    "mucho dolor", "sangre", "desmayo", "convulsión", "alergia grave"
+    "mucho dolor", "sangre", "desmayo", "convulsión", "alergia grave", "no responde", "amputacion", "shock anafiláctico", "reacción alergica grave", "ahogamiento",
 ]
 
 URGENCY_REDIRECT = (
