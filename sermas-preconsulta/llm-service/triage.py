@@ -59,6 +59,15 @@ async def generate_triage(symptoms: dict, history: dict) -> dict:
     alergias = [f"{a['sustancia']} ({a['manifestacion']})" for a in history.get("alergias", [])]
     visitas = history.get("visitas_recientes", [])
     ultima_visita = f"{visitas[0]['fecha']}: {visitas[0]['motivo']}" if visitas else "Sin visitas recientes"
+    selected_evidence = history.get("selected_evidence", []) or []
+    evidence_lines = []
+    for ev in selected_evidence[:10]:
+        if isinstance(ev, dict):
+            ev_type = ev.get("type") or "evidencia"
+            ev_date = ev.get("date") or "s/f"
+            ev_text = (ev.get("text") or "").strip()
+            if ev_text:
+                evidence_lines.append(f"- [{ev_type} | {ev_date}] {ev_text[:180]}")
 
     user_content = f"""PACIENTE: {nombre}, {edad} años, {sexo}
 
@@ -73,7 +82,10 @@ HISTORIAL CLÍNICO:
 - Diagnósticos activos: {', '.join(diagnosticos) if diagnosticos else 'Ninguno'}
 - Medicación actual: {', '.join(medicacion) if medicacion else 'Ninguna'}
 - Alergias: {', '.join(alergias) if alergias else 'Ninguna conocida'}
-- Última visita: {ultima_visita}"""
+- Última visita: {ultima_visita}
+
+EVIDENCIA CLÍNICA SELECCIONADA POR EL MÉDICO:
+{chr(10).join(evidence_lines) if evidence_lines else "- Sin evidencia seleccionada"}"""
 
     response = await _client.chat.completions.create(
         model=_cfg["model"],

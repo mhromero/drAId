@@ -240,7 +240,7 @@
     const cip = c.cip || '';
     const contexto = s.chief_complaint || (s.symptoms || []).join(' ');
     const cipHtml = cip
-      ? `<a class="cip-link" href="/historial?cip=${encodeURIComponent(cip)}&context=${encodeURIComponent(contexto)}">${cip}</a>`
+      ? `<a class="cip-link" href="/historial?cip=${encodeURIComponent(cip)}&case_id=${encodeURIComponent(c.id)}&context=${encodeURIComponent(contexto)}">${cip}</a>`
       : '—';
 
     const actionsHtml = resolved

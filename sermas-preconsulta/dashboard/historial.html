@@ -163,6 +163,15 @@
       font-size: 11px;
       font-weight: 700;
       cursor: pointer;
+      transition: background .12s ease, transform .06s ease, box-shadow .12s ease;
+    }
+    .btn-use:hover {
+      background: #b9d8f7;
+      box-shadow: 0 0 0 2px rgba(83,122,164,.25) inset;
+    }
+    .btn-use:active {
+      transform: translateY(1px);
+      background: #a9cdf3;
     }
 
     .timeline-item {
@@ -258,6 +267,13 @@
         <div id="docs" class="docs"></div>
         <div style="font-size:12px;font-weight:700;margin:10px 0 6px;">Evidencia seleccionada</div>
         <div id="evidenceList" class="evidence-list"></div>
+        <div style="font-size:12px;font-weight:700;margin:10px 0 6px;">Resumen rápido (borrador)</div>
+        <div id="summaryDraft" class="state">Añade evidencia con “Usar en resumen”.</div>
+        <div style="margin-top:8px;">
+          <button id="recomputeBtn" class="btn-use" type="button">Recalcular resumen final</button>
+        </div>
+        <div style="font-size:12px;font-weight:700;margin:10px 0 6px;">Resumen final del caso</div>
+        <div id="finalSummary" class="state">Pendiente de recalcular.</div>
       </div>
     </aside>
   </main>
@@ -265,6 +281,7 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const cip = params.get("cip");
+    const caseId = params.get("case_id");
     const context = (params.get("context") || "").trim();
 
     const patientLineEl = document.getElementById("patientLine");
@@ -282,8 +299,12 @@
     const docsEl = document.getElementById("docs");
     const catalogListEl = document.getElementById("catalogList");
     const qualityBoxEl = document.getElementById("qualityBox");
+    const summaryDraftEl = document.getElementById("summaryDraft");
+    const recomputeBtnEl = document.getElementById("recomputeBtn");
+    const finalSummaryEl = document.getElementById("finalSummary");
 
     const EVIDENCE = [];
+    let LAST_RESULTS = [];
     const CACHE_TTL_MS = 5 * 60 * 1000;
     let isTimelineMode = false;
     let semanticReady = false;
@@ -348,6 +369,7 @@
 
     function buildDoc(type, date, origin, text, extra, meta = {}) {
       return {
+        section_id: meta.section_id || null,
         type,
         date: date || "",
         origin: origin || "HCIS",
@@ -370,6 +392,7 @@
           f.text || "",
           `${f.source_section || ""} ${f.author || ""}`,
           {
+            section_id: f.section_id || null,
             source_section: f.source_section,
             author: f.author,
             confidence: f.confidence,
@@ -534,6 +557,7 @@
     }
 
     function renderTableResults(items) {
+      LAST_RESULTS = items;
       if (!items.length) {
         resultsViewEl.innerHTML = `<div class="state">Sin resultados para la búsqueda actual.</div>`;
         return;
@@ -555,7 +579,7 @@
             <span class="score">${(r.score * 100).toFixed(0)}</span>
             ${r.manual_review ? '<span class="review-flag">REVISAR MANUALMENTE</span>' : ''}
           </td>
-          <td><button class="btn-use" data-idx="${i}" type="button">Usar en resumen</button></td>
+          <td><button class="btn-use" data-idx="${i}" type="button" onclick="window.__addEvidenceFromResult(${i})">Usar en resumen</button></td>
         </tr>
       `).join("");
       resultsViewEl.innerHTML = `
@@ -573,14 +597,6 @@
           <tbody>${rows}</tbody>
         </table>
       `;
-      const buttons = resultsViewEl.querySelectorAll(".btn-use");
-      buttons.forEach(btn => {
-        btn.addEventListener("click", () => {
-          const item = items[Number(btn.dataset.idx)];
-          EVIDENCE.push(item);
-          renderEvidence();
-        });
-      });
     }
 
     function renderTimeline(items) {
@@ -601,6 +617,7 @@
     function renderEvidence() {
       if (!EVIDENCE.length) {
         evidenceListEl.innerHTML = `<div class="state">Todavía no hay evidencia seleccionada.</div>`;
+        summaryDraftEl.textContent = "Añade evidencia con “Usar en resumen”.";
         return;
       }
       evidenceListEl.innerHTML = EVIDENCE.map((e, i) => `
@@ -612,8 +629,54 @@
             Confianza: ${Math.round((e.confidence || 0.6) * 100)}%
             ${e.manual_review ? " · REVISAR MANUALMENTE" : ""}
           </span>
+          <div style="margin-top:6px;">
+            <button class="btn-use" data-remove-idx="${i}" type="button">Quitar</button>
+          </div>
         </div>
       `).join("");
+      const removeButtons = evidenceListEl.querySelectorAll(".btn-use[data-remove-idx]");
+      removeButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const ridx = Number(btn.dataset.removeIdx);
+          if (Number.isNaN(ridx)) return;
+          EVIDENCE.splice(ridx, 1);
+          renderEvidence();
+        });
+      });
+      renderSummaryDraft();
+    }
+
+    function addEvidence(item) {
+      const dup = EVIDENCE.some(e =>
+        (e.section_id && item.section_id && e.section_id === item.section_id) ||
+        (e.text === item.text && e.date === item.date && e.type === item.type)
+      );
+      if (dup) return;
+      EVIDENCE.push(item);
+      renderEvidence();
+    }
+    window.__addEvidenceFromResult = function(idx) {
+      const i = Number(idx);
+      if (Number.isNaN(i) || !LAST_RESULTS[i]) return;
+      addEvidence(LAST_RESULTS[i]);
+    };
+
+    function renderSummaryDraft() {
+      if (!EVIDENCE.length) {
+        summaryDraftEl.textContent = "Añade evidencia con “Usar en resumen”.";
+        return;
+      }
+      const top = EVIDENCE.slice(0, 5);
+      const lines = top.map((e, idx) =>
+        `${idx + 1}. ${e.type.toUpperCase()} (${e.date || "s/f"}): ${e.text.slice(0, 120)}${e.text.length > 120 ? "..." : ""}`
+      );
+      const risk = EVIDENCE.filter(e => /alerg|anticoag|disnea|torac|ictus|embar|warfar|sangrad/i.test(e.text || ""));
+      const flags = risk.slice(0, 4).map(e => `⚠ ${e.type}: ${(e.text || "").slice(0, 80)}${(e.text || "").length > 80 ? "..." : ""}`);
+      summaryDraftEl.innerHTML = `
+        <b>Evidencias usadas:</b> ${EVIDENCE.length}<br>
+        <b>Resumen clínico:</b><br>${lines.join("<br>")}
+        <br><br><b>Flags sugeridos:</b><br>${flags.length ? flags.join("<br>") : "Sin flags automáticos con la selección actual."}
+      `;
     }
 
     function renderDocsLinks(documentos) {
@@ -735,10 +798,72 @@
         renderEvidence();
         buildSuggestions();
         buildSemanticIndexLazy();
+        if (caseId) {
+          await loadCaseCurrentTriage();
+        } else {
+          finalSummaryEl.textContent = "Abre el historial desde un caso del dashboard para poder recalcular el resumen final.";
+          recomputeBtnEl.disabled = true;
+          recomputeBtnEl.style.opacity = "0.55";
+          recomputeBtnEl.style.cursor = "not-allowed";
+        }
         runSearch();
       } catch (err) {
         patientLineEl.textContent = "Error cargando historial.";
         console.error(err);
+      }
+    }
+
+    async function loadCaseCurrentTriage() {
+      try {
+        const res = await fetch(`/fhir/casos/${encodeURIComponent(caseId)}`);
+        if (!res.ok) return;
+        const data = await res.json();
+        const triage = data.triage || {};
+        finalSummaryEl.innerHTML = `
+          <b>Urgencia:</b> ${(triage.urgencia || "s/d").toUpperCase()}<br>
+          <b>Resumen:</b> ${triage.resumen || "s/d"}<br>
+          <b>Alertas:</b> ${(triage.alertas || []).join(" · ") || "sin alertas"}<br>
+          <b>Recomendación:</b> ${triage.recomendacion || "s/d"}
+        `;
+      } catch {}
+    }
+
+    async function recomputeFinalSummary() {
+      if (!caseId) {
+        finalSummaryEl.textContent = "No hay case_id para recalcular.";
+        return;
+      }
+      if (!EVIDENCE.length) {
+        finalSummaryEl.textContent = "Selecciona al menos una evidencia antes de recalcular.";
+        return;
+      }
+      recomputeBtnEl.disabled = true;
+      recomputeBtnEl.textContent = "Recalculando...";
+      finalSummaryEl.textContent = "Generando resumen final...";
+      try {
+        const res = await fetch(`/fhir/casos/${encodeURIComponent(caseId)}/recompute-triage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ selected_evidence: EVIDENCE }),
+        });
+        if (!res.ok) {
+          finalSummaryEl.textContent = "No se pudo recalcular el resumen final.";
+          return;
+        }
+        const data = await res.json();
+        const triage = data.triage || {};
+        finalSummaryEl.innerHTML = `
+          <b>Urgencia:</b> ${(triage.urgencia || "s/d").toUpperCase()}<br>
+          <b>Resumen:</b> ${triage.resumen || "s/d"}<br>
+          <b>Alertas:</b> ${(triage.alertas || []).join(" · ") || "sin alertas"}<br>
+          <b>Recomendación:</b> ${triage.recomendacion || "s/d"}<br>
+          <span class="mini">Actualizado con ${data.selected_evidence_count || 0} evidencias.</span>
+        `;
+      } catch (e) {
+        finalSummaryEl.textContent = "Error recalculando resumen final.";
+      } finally {
+        recomputeBtnEl.disabled = false;
+        recomputeBtnEl.textContent = "Recalcular resumen final";
       }
     }
 
@@ -752,7 +877,7 @@
       toggleViewBtnEl.textContent = isTimelineMode ? "Modo tabla" : "Modo timeline";
       runSearch();
     });
-
+    recomputeBtnEl.addEventListener("click", recomputeFinalSummary);
     // Evita que el navegador deje una fecha antigua persistida y vacíe resultados al cargar.
     dateFromEl.value = "";
     loadHistory();

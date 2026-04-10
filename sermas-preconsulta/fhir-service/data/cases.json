@@ -491,13 +491,10 @@
       ]
     },
     "triage": {
-      "urgencia": "alta",
-      "resumen": "Dolor de cabeza severo y visión borrosa desde esta mañana en una paciente embarazada con hipertensión gestacional. Es importante valorar la posibilidad de un accidente cerebrovascular o crisis hipertensiva.",
-      "alertas": [
-        "Hipertensión gestacional",
-        "Embarazo en semana 32"
-      ],
-      "recomendacion": "Contactar a Laura Sánchez Moreno lo antes posible para evaluar su estado y ajustar la medicación si es necesario."
+      "urgencia": "media",
+      "resumen": "No se pudo generar triaje automático. Revisar manualmente.",
+      "alertas": [],
+      "recomendacion": "Contactar con el paciente para valoración directa."
     },
     "status": "call_now",
     "notification": {
@@ -506,6 +503,14 @@
       "phone": "+34600000005",
       "message": "SERMAS Madrid: Su médico ha revisado su llamada y se pondrá en contacto con usted en los próximos minutos. Por favor, mantenga su teléfono disponible."
     },
-    "actioned_at": "2026-04-10T20:58:58.771489"
+    "actioned_at": "2026-04-10T20:58:58.771489",
+    "selected_evidence": [
+      {
+        "type": "composition",
+        "date": "2026-01-23",
+        "text": "Alta tras dolor torácico sin criterios de isquemia aguda."
+      }
+    ],
+    "triage_curated_at": "2026-04-10T23:19:26.043971"
   }
 ]

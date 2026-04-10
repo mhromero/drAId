@@ -61,6 +61,10 @@ class CaseAction(BaseModel):
     action: str  # "call_now" | "keep_appointment" | "refer_emergency"
 
 
+class RecomputeTriageRequest(BaseModel):
+    selected_evidence: list[dict] = []
+
+
 # ── Helpers de persistencia ──────────────────────────────────────────────────
 
 def _load_cases() -> list:
@@ -813,6 +817,47 @@ async def update_case_action(case_id: str, body: CaseAction):
 
             _save_cases(cases)
             return case
+    raise HTTPException(status_code=404, detail="Caso no encontrado")
+
+
+@app.get("/fhir/casos/{case_id}")
+async def get_case(case_id: str):
+    cases = _load_cases()
+    for case in cases:
+        if case.get("id") == case_id:
+            return case
+    raise HTTPException(status_code=404, detail="Caso no encontrado")
+
+
+@app.post("/fhir/casos/{case_id}/recompute-triage")
+async def recompute_case_triage(case_id: str, body: RecomputeTriageRequest):
+    """
+    Recalcula el triaje del caso usando síntomas originales + evidencia seleccionada del historial.
+    """
+    cases = _load_cases()
+    for case in cases:
+        if case.get("id") != case_id:
+            continue
+
+        symptoms = case.get("symptoms") or {}
+        history = case.get("history") or {}
+        selected = body.selected_evidence or []
+        history_enhanced = dict(history)
+        history_enhanced["selected_evidence"] = selected[:20]
+
+        triage = await _call_llm_service(symptoms, history_enhanced)
+        case["triage"] = triage
+        case["selected_evidence"] = selected[:20]
+        case["triage_curated_at"] = datetime.now().isoformat()
+        _save_cases(cases)
+
+        return {
+            "id": case.get("id"),
+            "triage": triage,
+            "selected_evidence_count": len(selected),
+            "triage_curated_at": case["triage_curated_at"],
+        }
+
     raise HTTPException(status_code=404, detail="Caso no encontrado")
 
 
