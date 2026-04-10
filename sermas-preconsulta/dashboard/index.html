@@ -21,7 +21,6 @@
       align-items: center;
       gap: 16px;
     }
-    header img { height: 36px; }
     header h1 { font-size: 18px; font-weight: 600; }
     header p  { font-size: 13px; opacity: 0.8; margin-top: 2px; }
 
@@ -30,116 +29,118 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      border-bottom: 1px solid #e2e8f0;
     }
     .toolbar span { font-size: 13px; color: #666; }
     .refresh-btn {
-      background: #003087;
-      color: white;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 13px;
+      background: #003087; color: white; border: none;
+      padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 13px;
     }
     .refresh-btn:hover { background: #004db3; }
 
-    .cases { padding: 0 32px 32px; display: flex; flex-direction: column; gap: 12px; }
-
-    .empty {
-      text-align: center;
-      padding: 64px;
-      color: #999;
-      font-size: 15px;
+    .section-title {
+      padding: 20px 32px 8px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: #888;
     }
 
-    /* ── Tarjeta de caso ── */
+    .cases { padding: 0 32px 12px; display: flex; flex-direction: column; gap: 12px; }
+
+    .empty {
+      text-align: center; padding: 40px;
+      color: #bbb; font-size: 14px;
+    }
+
+    /* ── Tarjeta ── */
     .card {
       background: white;
       border-radius: 10px;
       border-left: 5px solid #ccc;
       box-shadow: 0 1px 4px rgba(0,0,0,.08);
-      padding: 20px 24px;
+      padding: 18px 22px;
       display: grid;
       grid-template-columns: 1fr auto;
       gap: 16px;
       align-items: start;
     }
-    .card.alta   { border-left-color: #e53e3e; }
-    .card.media  { border-left-color: #dd6b20; }
-    .card.baja   { border-left-color: #38a169; }
+    .card.alta  { border-left-color: #e53e3e; }
+    .card.media { border-left-color: #dd6b20; }
+    .card.baja  { border-left-color: #38a169; }
+    .card.resolved { border-left-color: #a0aec0; opacity: .75; }
 
-    .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+
     .badge {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 3px 10px;
-      border-radius: 20px;
-      letter-spacing: .5px;
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      padding: 3px 10px; border-radius: 20px; letter-spacing: .5px; white-space: nowrap;
     }
-    .badge.alta  { background: #fff5f5; color: #c53030; }
-    .badge.media { background: #fffaf0; color: #c05621; }
-    .badge.baja  { background: #f0fff4; color: #276749; }
+    .badge.alta  { background:#fff5f5; color:#c53030; }
+    .badge.media { background:#fffaf0; color:#c05621; }
+    .badge.baja  { background:#f0fff4; color:#276749; }
+    .badge.resolved { background:#f7fafc; color:#718096; }
 
-    .patient-name { font-size: 16px; font-weight: 600; }
-    .patient-meta { font-size: 12px; color: #888; margin-left: auto; }
+    .patient-name { font-size: 15px; font-weight: 600; }
+    .patient-meta { font-size: 12px; color: #999; }
 
-    .resumen { font-size: 14px; color: #444; line-height: 1.5; margin-bottom: 10px; }
+    /* Motivo prominente */
+    .chief-complaint {
+      font-size: 14px; font-weight: 500;
+      color: #2d3748; margin-bottom: 6px;
+    }
 
-    .alertas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+    /* Síntomas en grid */
+    .symptoms-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 4px 16px; margin-bottom: 10px;
+    }
+    .sym-item { font-size: 12px; color: #555; }
+    .sym-item b { color: #2d3748; }
+
+    .resumen { font-size: 13px; color: #4a5568; line-height: 1.5; margin-bottom: 8px; }
+
+    .alertas { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
     .alerta-tag {
-      background: #fff5f5;
-      color: #c53030;
-      border: 1px solid #feb2b2;
-      border-radius: 4px;
-      font-size: 12px;
-      padding: 2px 8px;
+      background: #fff5f5; color: #c53030;
+      border: 1px solid #feb2b2; border-radius: 4px;
+      font-size: 11px; padding: 2px 8px;
     }
 
-    .recomendacion {
-      font-size: 13px;
-      color: #555;
-      font-style: italic;
-    }
+    .recomendacion { font-size: 12px; color: #718096; font-style: italic; }
     .recomendacion::before { content: "→ "; font-style: normal; }
 
-    /* ── Síntomas expandibles ── */
-    details { margin-top: 10px; }
-    summary {
-      font-size: 12px;
-      color: #888;
-      cursor: pointer;
-      user-select: none;
-    }
-    summary:hover { color: #003087; }
-    .symptoms-detail {
-      margin-top: 8px;
-      font-size: 12px;
-      color: #666;
-      background: #f8f9fa;
-      padding: 10px 12px;
-      border-radius: 6px;
-      line-height: 1.7;
-    }
+    .timestamp { font-size: 11px; color: #cbd5e0; margin-top: 8px; }
 
-    /* ── Botones de acción ── */
-    .actions { display: flex; flex-direction: column; gap: 8px; min-width: 160px; }
+    /* ── Acciones ── */
+    .actions { display: flex; flex-direction: column; gap: 8px; min-width: 170px; }
     .action-btn {
-      padding: 9px 14px;
-      border-radius: 7px;
-      border: none;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 500;
-      transition: opacity .15s;
-      text-align: center;
+      padding: 9px 14px; border-radius: 7px; border: none;
+      cursor: pointer; font-size: 13px; font-weight: 500;
+      transition: opacity .15s; text-align: center;
     }
     .action-btn:hover { opacity: .85; }
     .btn-call      { background: #e53e3e; color: white; }
-    .btn-keep      { background: #edf2ff; color: #3730a3; }
+    .btn-keep      { background: #ebf8ff; color: #2b6cb0; }
     .btn-emergency { background: #1a1a2e; color: white; }
 
-    .timestamp { font-size: 11px; color: #bbb; margin-top: 8px; text-align: right; }
+    /* ── Notificación enviada ── */
+    .notif-sent {
+      background: #f0fff4; border: 1px solid #9ae6b4;
+      border-radius: 6px; padding: 10px 12px;
+      font-size: 12px; color: #276749; line-height: 1.6;
+    }
+    .notif-sent .notif-label {
+      font-weight: 600; margin-bottom: 4px;
+    }
+    .notif-action-badge {
+      display: inline-block; font-size: 11px; font-weight: 600;
+      padding: 2px 8px; border-radius: 10px; margin-bottom: 6px;
+    }
+    .notif-action-badge.call_now      { background:#fed7d7; color:#c53030; }
+    .notif-action-badge.keep_appointment { background:#bee3f8; color:#2b6cb0; }
+    .notif-action-badge.refer_emergency  { background:#1a1a2e; color:white; }
   </style>
 </head>
 <body>
@@ -147,7 +148,7 @@
 <header>
   <div>
     <h1>SERMAS Pre-Consulta · Triaje telefónico</h1>
-    <p>Casos pendientes de revisión médica</p>
+    <p>Revisión de llamadas entrantes — decisión médica</p>
   </div>
 </header>
 
@@ -156,50 +157,98 @@
   <button class="refresh-btn" onclick="loadCases()">↻ Actualizar</button>
 </div>
 
-<div class="cases" id="cases"></div>
+<div id="pending-section">
+  <div class="section-title">Pendientes de revisión</div>
+  <div class="cases" id="pending-cases"></div>
+</div>
+
+<div id="resolved-section" style="display:none">
+  <div class="section-title">Atendidos hoy</div>
+  <div class="cases" id="resolved-cases"></div>
+</div>
 
 <script>
   const API = '';
 
+  const ACTION_LABELS = {
+    call_now:           '📞 Llamar ahora',
+    keep_appointment:   '📅 Mantener cita',
+    refer_emergency:    '🚨 Derivar urgencias',
+  };
+
   async function loadCases() {
-    const res = await fetch(`${API}/fhir/casos`);
-    const cases = await res.json();
+    const res = await fetch(`${API}/fhir/casos/todos`);
+    const all = await res.json();
 
-    const container = document.getElementById('cases');
-    const countEl = document.getElementById('count');
+    const pending  = all.filter(c => c.status === 'pending');
+    const resolved = all.filter(c => c.status !== 'pending');
 
-    countEl.textContent = cases.length === 0
-      ? 'Sin casos pendientes'
-      : `${cases.length} caso${cases.length > 1 ? 's' : ''} pendiente${cases.length > 1 ? 's' : ''}`;
+    // Pendientes
+    const pc = document.getElementById('pending-cases');
+    document.getElementById('count').textContent =
+      pending.length === 0 ? 'Sin casos pendientes'
+      : `${pending.length} caso${pending.length > 1 ? 's' : ''} pendiente${pending.length > 1 ? 's' : ''}`;
+    pc.innerHTML = pending.length === 0
+      ? '<div class="empty">No hay casos pendientes.</div>'
+      : pending.map(c => renderCard(c, false)).join('');
 
-    if (cases.length === 0) {
-      container.innerHTML = '<div class="empty">No hay casos pendientes en este momento.</div>';
-      return;
+    // Resueltos
+    const rs = document.getElementById('resolved-section');
+    const rc = document.getElementById('resolved-cases');
+    if (resolved.length > 0) {
+      rs.style.display = 'block';
+      rc.innerHTML = resolved.map(c => renderCard(c, true)).join('');
+    } else {
+      rs.style.display = 'none';
     }
-
-    container.innerHTML = cases.map(c => renderCase(c)).join('');
   }
 
-  function renderCase(c) {
+  function renderCard(c, resolved) {
     const t = c.triage || {};
     const p = c.history?.paciente || {};
-    const urgencia = t.urgencia || 'baja';
-    const alertas = (t.alertas || []).map(a =>
-      `<span class="alerta-tag">⚠ ${a}</span>`
-    ).join('');
-    const ts = new Date(c.timestamp).toLocaleString('es-ES', {
-      day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'
-    });
     const s = c.symptoms || {};
-    const sintomasAsociados = (s.associated_symptoms || []).join(', ') || '—';
+    const urgencia = t.urgencia || 'baja';
+
+    const alertas = (t.alertas || [])
+      .map(a => `<span class="alerta-tag">⚠ ${a}</span>`).join('');
+
+    const sintomasAsoc = (s.associated_symptoms || []).join(', ') || '—';
+    const sintomasList = (s.symptoms || []).join(', ') || '—';
+
+    const ts = new Date(c.timestamp).toLocaleString('es-ES',
+      {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
+
+    const badgeClass = resolved ? 'resolved' : urgencia;
+    const badgeLabel = resolved
+      ? (ACTION_LABELS[c.status] || c.status)
+      : `Urgencia ${urgencia}`;
+
+    const actionsHtml = resolved
+      ? renderNotifSent(c)
+      : `<div class="actions">
+          <button class="action-btn btn-call"      onclick="takeAction('${c.id}','call_now')">📞 Llamar ahora</button>
+          <button class="action-btn btn-keep"      onclick="takeAction('${c.id}','keep_appointment')">📅 Mantener cita</button>
+          <button class="action-btn btn-emergency" onclick="takeAction('${c.id}','refer_emergency')">🚨 Derivar urgencias</button>
+        </div>`;
 
     return `
-    <div class="card ${urgencia}" id="case-${c.id}">
+    <div class="card ${resolved ? 'resolved' : urgencia}" id="case-${c.id}">
       <div>
         <div class="card-header">
-          <span class="badge ${urgencia}">Urgencia ${urgencia}</span>
-          <span class="patient-name">${p.nombre || 'Paciente desconocido'}</span>
+          <span class="badge ${badgeClass}">${badgeLabel}</span>
+          <span class="patient-name">${p.nombre || 'Desconocido'}</span>
           <span class="patient-meta">${p.edad ? p.edad + ' años' : ''} · CIP ${c.cip || '—'}</span>
+        </div>
+
+        ${s.chief_complaint
+          ? `<div class="chief-complaint">🗣 "${s.chief_complaint}"</div>`
+          : ''}
+
+        <div class="symptoms-grid">
+          <div class="sym-item"><b>Duración:</b> ${s.duration || '—'}</div>
+          <div class="sym-item"><b>Severidad:</b> ${s.severity || '—'}</div>
+          <div class="sym-item"><b>Síntomas:</b> ${sintomasList}</div>
+          <div class="sym-item"><b>Asociados:</b> ${sintomasAsoc}</div>
         </div>
 
         <p class="resumen">${t.resumen || '—'}</p>
@@ -208,67 +257,39 @@
 
         <p class="recomendacion">${t.recomendacion || '—'}</p>
 
-        <details>
-          <summary>Ver síntomas referidos en la llamada</summary>
-          <div class="symptoms-detail">
-            <b>Motivo:</b> ${s.chief_complaint || '—'}<br>
-            <b>Duración:</b> ${s.duration || '—'}<br>
-            <b>Severidad:</b> ${s.severity || '—'}<br>
-            <b>Asociados:</b> ${sintomasAsociados}
-          </div>
-        </details>
-
-        <div class="timestamp">Llamada recibida: ${ts}</div>
+        <div class="timestamp">Llamada: ${ts}</div>
       </div>
-
-      <div class="actions">
-        <button class="action-btn btn-call"
-          onclick="takeAction('${c.id}', 'call_now')">
-          📞 Llamar ahora
-        </button>
-        <button class="action-btn btn-keep"
-          onclick="takeAction('${c.id}', 'keep_appointment')">
-          📅 Mantener cita
-        </button>
-        <button class="action-btn btn-emergency"
-          onclick="takeAction('${c.id}', 'refer_emergency')">
-          🚨 Derivar urgencias
-        </button>
-      </div>
+      ${actionsHtml}
     </div>`;
   }
 
-  async function takeAction(caseId, action) {
-    const res = await fetch(`${API}/fhir/casos/${caseId}/accion`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action }),
-    });
-    const updated = await res.json();
+  function renderNotifSent(c) {
+    const notif = c.notification || {};
+    const msg = notif.message || '—';
+    const simulated = notif.simulated ? ' · simulado (prototipo)' : '';
+    const actionLabel = ACTION_LABELS[c.status] || c.status;
+    const accionedAt = c.actioned_at
+      ? new Date(c.actioned_at).toLocaleTimeString('es-ES', {hour:'2-digit', minute:'2-digit'})
+      : '';
+    return `
+      <div class="notif-sent">
+        <div class="notif-label">Decisión tomada a las ${accionedAt}${simulated}</div>
+        <span class="notif-action-badge ${c.status}">${actionLabel}</span>
+        <div>✉ Mensaje al paciente:</div>
+        <div style="margin-top:4px;font-style:italic">"${msg}"</div>
+      </div>`;
+  }
 
-    // Mostrar brevemente el mensaje enviado al paciente
-    const card = document.getElementById(`case-${caseId}`);
-    if (card && updated.notification) {
-      const msg = updated.notification.message || '';
-      const simulated = updated.notification.simulated ? ' (simulado)' : '';
-      const banner = document.createElement('div');
-      banner.style.cssText = 'background:#ebf8ff;border:1px solid #90cdf4;border-radius:6px;padding:10px 14px;font-size:12px;color:#2c5282;margin-top:10px;';
-      banner.innerHTML = `✉ Mensaje enviado al paciente${simulated}:<br><i>${msg}</i>`;
-      card.querySelector('.actions').replaceWith(banner);
-      setTimeout(() => {
-        card.style.transition = 'opacity .4s';
-        card.style.opacity = '0';
-        setTimeout(() => loadCases(), 450);
-      }, 2500);
-    } else {
-      card.style.transition = 'opacity .3s';
-      card.style.opacity = '0';
-      setTimeout(() => loadCases(), 350);
-    }
+  async function takeAction(caseId, action) {
+    await fetch(`${API}/fhir/casos/${caseId}/accion`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action}),
+    });
+    loadCases();
   }
 
   loadCases();
-  // Refrescar automáticamente cada 30 segundos
   setInterval(loadCases, 30000);
 </script>
 </body>

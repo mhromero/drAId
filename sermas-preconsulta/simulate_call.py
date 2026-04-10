@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """
 Simulación de llamada completa — SERMAS Pre-Consulta
 

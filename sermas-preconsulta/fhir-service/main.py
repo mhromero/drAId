@@ -134,13 +134,23 @@ async def get_cases():
     """Devuelve casos pendientes ordenados por urgencia (alta primero)."""
     cases = _load_cases()
     pending = [c for c in cases if c.get("status") == "pending"]
-
     urgency_order = {"alta": 0, "media": 1, "baja": 2}
     pending.sort(key=lambda c: urgency_order.get(
         c.get("triage", {}).get("urgencia", "baja"), 2
     ))
-
     return pending
+
+
+@app.get("/fhir/casos/todos")
+async def get_all_cases():
+    """Devuelve todos los casos (pendientes + resueltos) para el dashboard."""
+    cases = _load_cases()
+    urgency_order = {"alta": 0, "media": 1, "baja": 2}
+    cases.sort(key=lambda c: (
+        0 if c.get("status") == "pending" else 1,
+        urgency_order.get(c.get("triage", {}).get("urgencia", "baja"), 2),
+    ))
+    return cases
 
 
 @app.post("/fhir/casos/{case_id}/accion")

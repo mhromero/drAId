@@ -83,7 +83,13 @@
       ],
       "recomendacion": "Contactar al paciente hoy para evaluar la urgencia del dolor y considerar una visita en el centro"
     },
-    "status": "pending"
+    "status": "call_now",
+    "actioned_at": "2026-04-10T20:41:16.520917",
+    "notification": {
+      "sent": false,
+      "simulated": true,
+      "message": "SERMAS Madrid: Su médico ha revisado su llamada y se pondrá en contacto con usted en los próximos minutos. Por favor, mantenga su teléfono disponible."
+    }
   },
   {
     "id": "be2e46c1-4aa2-41eb-87a8-c9c9b237eee6",
@@ -169,7 +175,13 @@
       ],
       "recomendacion": "Contactar al paciente para evaluar la situación y ajustar tratamiento según sea necesario"
     },
-    "status": "pending"
+    "status": "call_now",
+    "actioned_at": "2026-04-10T20:41:22.734126",
+    "notification": {
+      "sent": false,
+      "simulated": true,
+      "message": "SERMAS Madrid: Su médico ha revisado su llamada y se pondrá en contacto con usted en los próximos minutos. Por favor, mantenga su teléfono disponible."
+    }
   },
   {
     "id": "55808028-10f7-40bf-9b9a-40c348f9c11a",
@@ -279,7 +291,13 @@
       ],
       "recomendacion": "Valorar la necesidad de ajuste en la dosis de Warfarina o considerar una evaluación cardiológica"
     },
-    "status": "pending"
+    "status": "call_now",
+    "actioned_at": "2026-04-10T20:41:29.648916",
+    "notification": {
+      "sent": false,
+      "simulated": true,
+      "message": "SERMAS Madrid: Su médico ha revisado su llamada y se pondrá en contacto con usted en los próximos minutos. Por favor, mantenga su teléfono disponible."
+    }
   },
   {
     "id": "ab80bf66-7d22-4f13-b304-8dc7c70c2517",
@@ -324,20 +342,28 @@
       "alertas": [],
       "recomendacion": "Valorar en 24-48 horas para evaluar la evolución del cuadro"
     },
-    "status": "pending"
+    "status": "call_now",
+    "actioned_at": "2026-04-10T20:41:31.649304",
+    "notification": {
+      "sent": false,
+      "simulated": true,
+      "message": "SERMAS Madrid: Su médico ha revisado su llamada y se pondrá en contacto con usted en los próximos minutos. Por favor, mantenga su teléfono disponible."
+    }
   },
   {
-    "id": "31717a43-490f-4d87-8355-e0fcba237d1a",
+    "id": "ac1d4448-9094-4e46-919a-4f639be3de27",
     "session_id": "sim-laura-001",
     "cip": "2800007890",
     "caller_phone": "+34600000005",
-    "timestamp": "2026-04-10T20:34:36.992594",
+    "timestamp": "2026-04-10T20:40:42.437597",
     "symptoms": {
-      "cip": null,
-      "chief_complaint": null,
-      "symptoms": [],
-      "duration": null,
-      "severity": null,
+      "cip": "2800007890",
+      "chief_complaint": "dolor de cabeza muy fuerte desde esta mañana",
+      "symptoms": [
+        "visión borrosa"
+      ],
+      "duration": "desde esta mañana",
+      "severity": "severe",
       "associated_symptoms": [],
       "relevant_history_flags": []
     },
@@ -386,12 +412,100 @@
       ]
     },
     "triage": {
-      "urgencia": "baja",
-      "resumen": "Paciente embarazada de 32 semanas con hipertensión gestacional controlada con labetalol. No presenta síntomas nuevos.",
-      "alertas": [],
-      "recomendacion": "Mantener la cita programada para su seguimiento"
+      "urgencia": "alta",
+      "resumen": "Dolor de cabeza severo y visión borrosa desde esta mañana en una paciente embarazada con hipertensión gestacional. Es importante valorar la posibilidad de un accidente cerebrovascular o crisis hipertensiva.",
+      "alertas": [
+        "Hipertensión gestacional",
+        "Embarazo a término"
+      ],
+      "recomendacion": "Contactar al paciente hoy para evaluar su estado y determinar si es necesario realizar una visita urgente"
     },
-    "status": "pending",
-    "notification": null
+    "status": "refer_emergency",
+    "notification": {
+      "sent": false,
+      "simulated": true,
+      "phone": "+34600000005",
+      "message": "SERMAS Madrid: Por los síntomas que ha descrito, le recomendamos que acuda a urgencias o llame al 112 lo antes posible. No espere a su cita."
+    },
+    "actioned_at": "2026-04-10T20:41:25.965358"
+  },
+  {
+    "id": "df832dff-5cce-4ca5-bec5-87c8c7c4c17a",
+    "session_id": "sim-laura-001",
+    "cip": "2800007890",
+    "caller_phone": "+34600000005",
+    "timestamp": "2026-04-10T20:56:55.286063",
+    "symptoms": {
+      "cip": "2800007890",
+      "chief_complaint": "Dolor de cabeza muy fuerte",
+      "symptoms": [
+        "Visión borrosa"
+      ],
+      "duration": "Desde esta mañana",
+      "severity": "severe",
+      "associated_symptoms": [],
+      "relevant_history_flags": []
+    },
+    "history": {
+      "paciente": {
+        "nombre": "Laura Sánchez Moreno",
+        "cip": "2800007890",
+        "fecha_nacimiento": "1993-09-18",
+        "edad": 32,
+        "sexo": "female"
+      },
+      "diagnosticos_activos": [
+        {
+          "nombre": "Hipertensión gestacional",
+          "codigo_snomed": "48194001",
+          "desde": "2026-02-15"
+        },
+        {
+          "nombre": "Embarazo normal (semana 32)",
+          "codigo_snomed": "72892002",
+          "desde": "2025-11-01"
+        }
+      ],
+      "medicacion_actual": [
+        {
+          "nombre": "Labetalol 100mg",
+          "posologia": "1 comprimido — 2 veces al día"
+        },
+        {
+          "nombre": "Ácido fólico 5mg",
+          "posologia": "1 comprimido — 1 vez al día"
+        }
+      ],
+      "alergias": [],
+      "visitas_recientes": [
+        {
+          "fecha": "2026-04-01",
+          "motivo": "Urgencias obstétricas",
+          "resultado": "TA 155/100, ingreso observación 24h"
+        },
+        {
+          "fecha": "2026-03-20",
+          "motivo": "Control obstétrico",
+          "resultado": "TA 145/95, proteinuria leve, control estrecho"
+        }
+      ]
+    },
+    "triage": {
+      "urgencia": "alta",
+      "resumen": "Dolor de cabeza severo y visión borrosa desde esta mañana en una paciente embarazada con hipertensión gestacional. Es importante valorar la posibilidad de un accidente cerebrovascular o crisis hipertensiva.",
+      "alertas": [
+        "Hipertensión gestacional",
+        "Embarazo en semana 32"
+      ],
+      "recomendacion": "Contactar a Laura Sánchez Moreno lo antes posible para evaluar su estado y ajustar la medicación si es necesario."
+    },
+    "status": "call_now",
+    "notification": {
+      "sent": false,
+      "simulated": true,
+      "phone": "+34600000005",
+      "message": "SERMAS Madrid: Su médico ha revisado su llamada y se pondrá en contacto con usted en los próximos minutos. Por favor, mantenga su teléfono disponible."
+    },
+    "actioned_at": "2026-04-10T20:58:58.771489"
   }
 ]
