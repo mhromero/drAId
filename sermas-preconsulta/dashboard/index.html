@@ -84,6 +84,21 @@
 
     .patient-name { font-size: 15px; font-weight: 600; }
     .patient-meta { font-size: 12px; color: #999; }
+    .cip-link {
+      display: inline-block;
+      margin-left: 4px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid #cbd5e0;
+      background: #f7fafc;
+      color: #2b6cb0;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .cip-link:hover {
+      background: #ebf8ff;
+      border-color: #90cdf4;
+    }
 
     /* Motivo prominente */
     .chief-complaint {
@@ -222,6 +237,11 @@
     const badgeLabel = resolved
       ? (ACTION_LABELS[c.status] || c.status)
       : `Urgencia ${urgencia}`;
+    const cip = c.cip || '';
+    const contexto = s.chief_complaint || (s.symptoms || []).join(' ');
+    const cipHtml = cip
+      ? `<a class="cip-link" href="/historial?cip=${encodeURIComponent(cip)}&context=${encodeURIComponent(contexto)}">${cip}</a>`
+      : '—';
 
     const actionsHtml = resolved
       ? renderNotifSent(c)
@@ -237,7 +257,7 @@
         <div class="card-header">
           <span class="badge ${badgeClass}">${badgeLabel}</span>
           <span class="patient-name">${p.nombre || 'Desconocido'}</span>
-          <span class="patient-meta">${p.edad ? p.edad + ' años' : ''} · CIP ${c.cip || '—'}</span>
+          <span class="patient-meta">${p.edad ? p.edad + ' años' : ''} · CIP ${cipHtml}</span>
         </div>
 
         ${s.chief_complaint

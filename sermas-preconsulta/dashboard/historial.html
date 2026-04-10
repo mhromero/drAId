@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HCIS - Historial del paciente</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: Tahoma, Verdana, sans-serif; background: #cfd8e3; color: #0b2340; }
+    .topbar {
+      background: linear-gradient(180deg, #2f5f95 0%, #204a78 100%);
+      color: #fff;
+      padding: 10px 14px;
+      border-bottom: 1px solid #143255;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .topbar h1 { font-size: 16px; font-weight: 700; }
+    .back-link {
+      color: #0b2c4f;
+      background: #dce8f5;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 7px 10px;
+      border: 1px solid #6f8db2;
+      border-radius: 4px;
+    }
+    .layout {
+      max-width: 1300px;
+      margin: 10px auto;
+      padding: 0 10px 18px;
+      display: grid;
+      grid-template-columns: 2.2fr 1fr;
+      gap: 10px;
+    }
+    .panel {
+      background: #e8eef6;
+      border: 1px solid #6c88aa;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: inset 0 1px 0 #fff;
+    }
+    .panel-title {
+      background: linear-gradient(180deg, #3f71a8 0%, #2f5f95 100%);
+      color: white;
+      padding: 7px 10px;
+      font-size: 14px;
+      font-weight: 700;
+      border-bottom: 1px solid #21466f;
+    }
+    .panel-body { padding: 10px; }
+    .patient-line {
+      background: #d6e3f2;
+      border: 1px solid #8aa3be;
+      padding: 8px 10px;
+      font-size: 12px;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 120px 1fr 120px 145px 145px 120px;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .toolbar input, .toolbar select, .toolbar button {
+      height: 34px;
+      font-size: 12px;
+      border: 1px solid #7f98b6;
+      border-radius: 4px;
+      background: #f7fbff;
+      padding: 0 8px;
+    }
+    .toolbar button {
+      font-weight: 700;
+      cursor: pointer;
+      background: #dbe9f8;
+    }
+    .toolbar button:hover { background: #c8def4; }
+
+    .suggestions { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
+    .chip {
+      border: 1px solid #7492b5;
+      background: #ecf4fc;
+      border-radius: 999px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #173f66;
+      cursor: pointer;
+    }
+    .chip:hover { background: #dcecff; }
+
+    .notice {
+      border: 1px solid #d2ab4a;
+      background: #fff6dc;
+      color: #654f12;
+      border-radius: 4px;
+      font-size: 12px;
+      padding: 8px 9px;
+      margin-bottom: 8px;
+      display: none;
+    }
+
+    .table-wrap {
+      border: 1px solid #6f8db2;
+      background: #d9e7f5;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+    th {
+      background: #a9c1db;
+      color: #133557;
+      text-align: left;
+      padding: 7px;
+      border-bottom: 1px solid #6f8db2;
+    }
+    td {
+      padding: 7px;
+      border-bottom: 1px solid #b8c9dc;
+      background: #edf4fc;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: #e1ecf8; }
+    .mini { color: #445d78; font-size: 11px; margin-top: 3px; }
+    .score {
+      display: inline-block;
+      background: #d7e8fa;
+      border: 1px solid #7da0c5;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-weight: 700;
+      font-size: 11px;
+    }
+    .review-flag {
+      display: inline-block;
+      margin-left: 6px;
+      background: #fff0f0;
+      color: #8a1f1f;
+      border: 1px solid #d08b8b;
+      border-radius: 999px;
+      padding: 2px 8px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .btn-use {
+      border: 1px solid #537aa4;
+      background: #cee1f6;
+      color: #163a60;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .timeline-item {
+      border-left: 3px solid #3f71a8;
+      padding: 6px 10px 6px 10px;
+      margin: 6px 0;
+      background: #edf4fc;
+      border-radius: 0 4px 4px 0;
+      font-size: 12px;
+    }
+    .timeline-item b { color: #173f66; }
+
+    .docs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .doc-link {
+      border: 1px solid #537aa4;
+      background: #d8e9fb;
+      color: #173f66;
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 4px;
+    }
+
+    .evidence-list { display: grid; gap: 6px; }
+    .evidence-item {
+      border: 1px solid #8aa3be;
+      border-radius: 4px;
+      padding: 7px;
+      background: #f0f6fd;
+      font-size: 12px;
+    }
+    .state {
+      border: 1px dashed #8aa3be;
+      border-radius: 4px;
+      padding: 12px;
+      background: #f5f9ff;
+      font-size: 12px;
+      color: #37506c;
+    }
+
+    @media (max-width: 1100px) {
+      .layout { grid-template-columns: 1fr; }
+      .toolbar { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <h1>HP-HCIS · Historial clínico contextual</h1>
+    <a class="back-link" href="/">← Volver al dashboard</a>
+  </header>
+
+  <main class="layout">
+    <section class="panel">
+      <div class="panel-title">Problemas y episodios</div>
+      <div class="panel-body">
+        <div id="patientLine" class="patient-line">Cargando paciente...</div>
+
+        <div class="toolbar">
+          <select id="mode">
+            <option value="hybrid">Híbrida</option>
+            <option value="classic">Clásica</option>
+            <option value="semantic">Semántica</option>
+          </select>
+          <input id="query" type="text" placeholder="Buscar en historial...">
+          <select id="docType">
+            <option value="">Tipo (todos)</option>
+            <option value="problema">Problema</option>
+            <option value="episodio">Episodio</option>
+            <option value="alergia">Alergia</option>
+            <option value="medicacion">Medicación</option>
+          </select>
+          <input id="specialty" type="text" placeholder="Especialidad">
+          <input id="dateFrom" type="date">
+          <button id="toggleViewBtn">Modo timeline</button>
+        </div>
+
+        <div id="fallbackNotice" class="notice"></div>
+        <div id="suggestions" class="suggestions"></div>
+        <div id="resultsView" class="table-wrap"></div>
+        <div id="timelineView" style="display:none;"></div>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div class="panel-title">Resumen / flags</div>
+      <div class="panel-body">
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px;">Apartados HCIS detectados</div>
+        <div id="catalogList" class="evidence-list" style="margin-bottom:10px;"></div>
+        <div id="docs" class="docs"></div>
+        <div style="font-size:12px;font-weight:700;margin:10px 0 6px;">Evidencia seleccionada</div>
+        <div id="evidenceList" class="evidence-list"></div>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const cip = params.get("cip");
+    const context = (params.get("context") || "").trim();
+
+    const patientLineEl = document.getElementById("patientLine");
+    const modeEl = document.getElementById("mode");
+    const queryEl = document.getElementById("query");
+    const docTypeEl = document.getElementById("docType");
+    const specialtyEl = document.getElementById("specialty");
+    const dateFromEl = document.getElementById("dateFrom");
+    const resultsViewEl = document.getElementById("resultsView");
+    const timelineViewEl = document.getElementById("timelineView");
+    const toggleViewBtnEl = document.getElementById("toggleViewBtn");
+    const suggestionsEl = document.getElementById("suggestions");
+    const fallbackNoticeEl = document.getElementById("fallbackNotice");
+    const evidenceListEl = document.getElementById("evidenceList");
+    const docsEl = document.getElementById("docs");
+    const catalogListEl = document.getElementById("catalogList");
+
+    const EVIDENCE = [];
+    const CACHE_TTL_MS = 5 * 60 * 1000;
+    let isTimelineMode = false;
+    let semanticReady = false;
+    let history = null;
+    let docs = [];
+    let semanticIndex = null;
+
+    const SPECIALTY_HINTS = {
+      cardiologia: ["cardio", "torac", "angina", "isqu", "electro"],
+      neumologia: ["disnea", "asma", "bronco", "respir"],
+      alergologia: ["alerg", "urtic", "ram"],
+      medicina_interna: ["mareo", "fiebre", "dolor", "diabetes", "hipertension"]
+    };
+
+    const SEMANTIC_SYNONYMS = {
+      disnea: ["falta de aire", "dificultad para respirar", "broncoespasmo", "asma"],
+      alergia: ["ram", "reaccion adversa", "hipersensibilidad", "urticaria"],
+      ingreso: ["hospitalizacion", "urgencias", "episodio", "encounter"],
+      cardiaco: ["dolor de pecho", "toracico", "angina", "isquemica"]
+    };
+
+    function normalize(v) {
+      return (v || "")
+        .toString()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+    }
+
+    function inferSpecialty(text) {
+      const n = normalize(text);
+      for (const [spec, hints] of Object.entries(SPECIALTY_HINTS)) {
+        if (hints.some(h => n.includes(h))) return spec;
+      }
+      return "general";
+    }
+
+    function scoreClassic(text, query) {
+      if (!query) return 0.2;
+      const t = normalize(text);
+      const q = normalize(query);
+      const words = q.split(/\s+/).filter(Boolean);
+      if (words.length === 0) return 0.2;
+      let hits = 0;
+      for (const w of words) if (t.includes(w)) hits += 1;
+      return hits / words.length;
+    }
+
+    function scoreSemantic(text, query) {
+      if (!query) return 0.2;
+      const nText = normalize(text);
+      const nQuery = normalize(query);
+      let score = 0;
+      for (const [key, syns] of Object.entries(SEMANTIC_SYNONYMS)) {
+        const matchQuery = nQuery.includes(key) || syns.some(s => nQuery.includes(normalize(s)));
+        if (!matchQuery) continue;
+        if (nText.includes(key)) score += 0.4;
+        for (const s of syns) if (nText.includes(normalize(s))) score += 0.25;
+      }
+      return Math.min(1, score);
+    }
+
+    function buildDoc(type, date, origin, text, extra, meta = {}) {
+      return {
+        type,
+        date: date || "",
+        origin: origin || "HCIS",
+        text: text || "",
+        specialty: inferSpecialty((text || "") + " " + (extra || "")),
+        source_section: meta.source_section || "",
+        author: meta.author || "No informado",
+        confidence: typeof meta.confidence === "number" ? meta.confidence : 0.6,
+        manual_review: !!meta.manual_review,
+        document_access: meta.document_access || null,
+      };
+    }
+
+    function buildDocsFromHistory(h) {
+      if (Array.isArray(h.all_sections) && h.all_sections.length > 0) {
+        return h.all_sections.map(f => buildDoc(
+          (f.resource_type || "documento").toLowerCase(),
+          f.timestamp || "",
+          `HCIS.${f.resource_type || "Resource"}`,
+          f.text || "",
+          `${f.source_section || ""} ${f.author || ""}`,
+          {
+            source_section: f.source_section,
+            author: f.author,
+            confidence: f.confidence,
+            manual_review: f.manual_review,
+            document_access: f.document_access || null
+          }
+        ));
+      }
+      const out = [];
+      for (const p of (h.problemas || [])) {
+        out.push(buildDoc(
+          "problema",
+          p.fecha_inicio || p.desde || "",
+          "HCIS.Condition",
+          `${p.descripcion || p.nombre || "Problema"} · estado ${p.estado || "s/d"} · código ${p.codigo || p.codigo_snomed || "s/d"}`,
+          p.descripcion || p.nombre || "",
+          { source_section: "problemas_diagnosticos", author: "No informado", confidence: 0.6, manual_review: true }
+        ));
+      }
+      for (const m of (h.tratamiento || [])) {
+        out.push(buildDoc(
+          "medicacion",
+          "",
+          "HCIS.MedicationRequest",
+          `${m.medicamento || m.nombre || "Medicacion"} · ${m.posologia || "sin posologia"} · estado ${m.estado || "s/d"}`,
+          m.medicamento || m.nombre || "",
+          { source_section: "medicacion", author: "No informado", confidence: 0.55, manual_review: true }
+        ));
+      }
+      for (const a of (h.alergias || [])) {
+        out.push(buildDoc(
+          "alergia",
+          "",
+          "HCIS.AllergyIntolerance",
+          `${a.sustancia || "Alergia"} · criticidad ${a.criticidad || "s/d"} · ${a.manifestacion || "sin manifestacion"}`,
+          a.sustancia || "",
+          { source_section: "alergias_ram", author: "No informado", confidence: 0.55, manual_review: true }
+        ));
+      }
+      for (const e of (h.episodios || [])) {
+        out.push(buildDoc(
+          "episodio",
+          e.fecha || "",
+          "HCIS.Encounter",
+          `${e.motivo || "Motivo no registrado"} · ${e.resultado || "sin resultado"} · estado ${e.estado || "s/d"}`,
+          `${e.motivo || ""} ${e.resultado || ""}`,
+          { source_section: "consultas_episodios", author: "No informado", confidence: 0.6, manual_review: true }
+        ));
+      }
+      return out;
+    }
+
+    function getCacheKey() {
+      return `hcis-index-${cip}`;
+    }
+
+    function loadCachedIndex() {
+      try {
+        const raw = sessionStorage.getItem(getCacheKey());
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (Date.now() - parsed.ts > CACHE_TTL_MS) return null;
+        return parsed.index;
+      } catch {
+        return null;
+      }
+    }
+
+    function saveCachedIndex(index) {
+      try {
+        sessionStorage.setItem(getCacheKey(), JSON.stringify({ ts: Date.now(), index }));
+      } catch {}
+    }
+
+    function buildSemanticIndexLazy() {
+      const cached = loadCachedIndex();
+      if (cached) {
+        semanticIndex = cached;
+        semanticReady = true;
+        fallbackNoticeEl.style.display = "none";
+        runSearch();
+        return;
+      }
+      semanticReady = false;
+      fallbackNoticeEl.style.display = "block";
+      fallbackNoticeEl.textContent = "Índice semántico en actualización. Degradando temporalmente a búsqueda clásica.";
+      setTimeout(() => {
+        semanticIndex = docs.map(d => ({
+          ...d,
+          norm: normalize(d.text),
+          keywords: normalize(d.text).split(/\s+/).filter(Boolean).slice(0, 80),
+        }));
+        saveCachedIndex(semanticIndex);
+        semanticReady = true;
+        fallbackNoticeEl.style.display = "none";
+        runSearch();
+      }, 200);
+    }
+
+    function buildSuggestions() {
+      const sug = [];
+      const c = normalize(context);
+      if (c.includes("disnea") || c.includes("respir")) {
+        sug.push("episodios previos de disnea");
+      }
+      if (c.includes("alerg") || c.includes("ibuprof") || c.includes("ram")) {
+        sug.push("alergias/ram relacionadas");
+      }
+      if (context) {
+        sug.push(`ingresos en últimos 12 meses por ${context}`);
+      }
+      if (!sug.length) {
+        sug.push("episodios previos de disnea");
+        sug.push("alergias/ram relacionadas");
+        sug.push("ingresos en últimos 12 meses por motivo actual");
+      }
+      suggestionsEl.innerHTML = sug.map(s => `<button class="chip" type="button">${s}</button>`).join("");
+      for (const btn of suggestionsEl.querySelectorAll(".chip")) {
+        btn.addEventListener("click", () => {
+          queryEl.value = btn.textContent;
+          runSearch();
+        });
+      }
+    }
+
+    function passesFilters(d) {
+      const type = docTypeEl.value;
+      const spec = normalize(specialtyEl.value);
+      const from = dateFromEl.value;
+      if (type && d.type !== type) return false;
+      if (spec && !normalize(d.specialty).includes(spec)) return false;
+      if (from && d.date && d.date < from) return false;
+      return true;
+    }
+
+    function searchDocs(query, mode) {
+      const source = semanticReady ? (semanticIndex || docs) : docs;
+      const safeMode = (!semanticReady && (mode === "semantic" || mode === "hybrid")) ? "classic" : mode;
+      return source
+        .map(d => {
+          const c = scoreClassic(d.text, query);
+          const s = scoreSemantic(d.text, query);
+          const baseScore = safeMode === "classic" ? c : safeMode === "semantic" ? s : (0.55 * c + 0.45 * s);
+          const confidenceBoost = Math.min(0.15, (d.confidence || 0.6) * 0.15);
+          const score = Math.min(1, baseScore + confidenceBoost);
+          return { ...d, score };
+        })
+        .filter(d => d.score > 0.1)
+        .filter(passesFilters)
+        .sort((a, b) => (b.score - a.score) || ((b.date || "").localeCompare(a.date || "")));
+    }
+
+    function renderTableResults(items) {
+      if (!items.length) {
+        resultsViewEl.innerHTML = `<div class="state">Sin resultados para la búsqueda actual.</div>`;
+        return;
+      }
+      const rows = items.map((r, i) => `
+        <tr>
+          <td>${r.type}</td>
+          <td>
+            ${r.text}
+            <div class="mini">
+              Especialidad: ${r.specialty} · Sección: ${r.source_section || "n/a"} · Autor: ${r.author || "No informado"}<br>
+              Justificación: “${r.text.slice(0, 120)}${r.text.length > 120 ? "..." : ""}” (${r.date || "s/f"})
+              ${r.document_access ? `<br><a href="${r.document_access.url}" target="_blank" rel="noopener">Abrir adjunto (${r.document_access.content_type || "documento"})</a>` : ""}
+            </div>
+          </td>
+          <td>${r.date || "s/f"}</td>
+          <td>${r.origin}</td>
+          <td>
+            <span class="score">${(r.score * 100).toFixed(0)}</span>
+            ${r.manual_review ? '<span class="review-flag">REVISAR MANUALMENTE</span>' : ''}
+          </td>
+          <td><button class="btn-use" data-idx="${i}" type="button">Usar en resumen</button></td>
+        </tr>
+      `).join("");
+      resultsViewEl.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>Snippet clínico</th>
+              <th>Fecha</th>
+              <th>Origen HCIS</th>
+              <th>Score</th>
+              <th>Acción</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+      const buttons = resultsViewEl.querySelectorAll(".btn-use");
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          const item = items[Number(btn.dataset.idx)];
+          EVIDENCE.push(item);
+          renderEvidence();
+        });
+      });
+    }
+
+    function renderTimeline(items) {
+      if (!items.length) {
+        timelineViewEl.innerHTML = `<div class="state">Sin hitos para mostrar.</div>`;
+        return;
+      }
+      const sorted = [...items].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+      timelineViewEl.innerHTML = sorted.map(x => `
+        <div class="timeline-item">
+          <b>${x.date || "s/f"} · ${x.type.toUpperCase()}</b><br>
+          ${x.text}<br>
+          <span class="mini">Origen: ${x.origin} · Score: ${(x.score * 100).toFixed(0)}</span>
+        </div>
+      `).join("");
+    }
+
+    function renderEvidence() {
+      if (!EVIDENCE.length) {
+        evidenceListEl.innerHTML = `<div class="state">Todavía no hay evidencia seleccionada.</div>`;
+        return;
+      }
+      evidenceListEl.innerHTML = EVIDENCE.map((e, i) => `
+        <div class="evidence-item">
+          <b>${i + 1}. ${e.type}</b> · ${e.date || "s/f"}<br>
+          ${e.text}<br>
+          <span class="mini">
+            ${e.origin} · Sección: ${e.source_section || "n/a"} · Autor: ${e.author || "No informado"} ·
+            Confianza: ${Math.round((e.confidence || 0.6) * 100)}%
+            ${e.manual_review ? " · REVISAR MANUALMENTE" : ""}
+          </span>
+        </div>
+      `).join("");
+    }
+
+    function renderDocsLinks(documentos) {
+      if (!documentos || !documentos.length) {
+        docsEl.innerHTML = `<div class="state">No hay documentos exportables.</div>`;
+        return;
+      }
+      docsEl.innerHTML = documentos.map(d =>
+        `<a class="doc-link" href="${d.url}" target="_blank" rel="noopener">${d.label || d.tipo}</a>`
+      ).join("");
+    }
+
+    function renderCatalog(catalogo, docsList) {
+      const detected = new Set((docsList || []).map(d => d.source_section).filter(Boolean));
+      if (!catalogo || !catalogo.length) {
+        catalogListEl.innerHTML = `<div class="state">Sin catálogo disponible.</div>`;
+        return;
+      }
+      catalogListEl.innerHTML = catalogo.map(c => `
+        <div class="evidence-item">
+          <b>${c.section}</b><br>
+          <span class="mini">FHIR: ${(c.resources || []).join(", ") || "n/a"}</span><br>
+          <span class="mini">Estado: ${detected.has(c.section) ? "con registros" : "sin registros"}</span>
+        </div>
+      `).join("");
+    }
+
+    function runSearch() {
+      const q = queryEl.value.trim();
+      const mode = modeEl.value;
+      const results = searchDocs(q, mode);
+      if (isTimelineMode) {
+        resultsViewEl.style.display = "none";
+        timelineViewEl.style.display = "block";
+        renderTimeline(results);
+      } else {
+        timelineViewEl.style.display = "none";
+        resultsViewEl.style.display = "block";
+        renderTableResults(results);
+      }
+    }
+
+    async function loadHistory() {
+      if (!cip) {
+        patientLineEl.textContent = "No se recibió CIP en la URL.";
+        return;
+      }
+      try {
+        const res = await fetch(`/fhir/pacientes/${encodeURIComponent(cip)}/historial`);
+        if (!res.ok) {
+          patientLineEl.textContent = "No se encontró historial para este paciente.";
+          return;
+        }
+        history = await res.json();
+        const p = history.paciente || {};
+        const name = p.nombre_completo || p.nombre || "Paciente";
+        patientLineEl.innerHTML = `
+          <b>${name}</b> · CIP <b>${p.cip || cip}</b><br>
+          Fecha nacimiento: ${p.fecha_nacimiento || "s/d"} · Sexo: ${p.sexo || "s/d"} · Estructura: ${history.estructura || "HCIS"}
+        `;
+        docs = buildDocsFromHistory(history);
+        renderCatalog(history.catalogo_hcis || [], docs);
+        renderDocsLinks(history.documentos || []);
+        renderEvidence();
+        buildSuggestions();
+        buildSemanticIndexLazy();
+        runSearch();
+      } catch (err) {
+        patientLineEl.textContent = "Error cargando historial.";
+        console.error(err);
+      }
+    }
+
+    modeEl.addEventListener("change", runSearch);
+    queryEl.addEventListener("input", runSearch);
+    docTypeEl.addEventListener("change", runSearch);
+    specialtyEl.addEventListener("input", runSearch);
+    dateFromEl.addEventListener("change", runSearch);
+    toggleViewBtnEl.addEventListener("click", () => {
+      isTimelineMode = !isTimelineMode;
+      toggleViewBtnEl.textContent = isTimelineMode ? "Modo tabla" : "Modo timeline";
+      runSearch();
+    });
+
+    loadHistory();
+  </script>
+</body>
+</html>
