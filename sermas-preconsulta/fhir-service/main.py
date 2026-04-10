@@ -19,12 +19,13 @@ from datetime import datetime
 from pathlib import Path
 
 import httpx
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, PlainTextResponse, Response, RedirectResponse
 from pydantic import BaseModel
 
 from fhir_client import get_patient_bundle
+from hcis_master import build_patient_master_record, to_legacy_history_view
 from mapper import map_bundle
 from notifier import notify_patient
 
@@ -42,6 +43,7 @@ DASHBOARD_PATH = DASHBOARD_DIR / "index.html"
 PATIENT_HISTORY_PATH = DASHBOARD_DIR / "historial.html"
 
 LLM_SERVICE_URL = os.getenv("LLM_SERVICE_URL", "http://llm-service:8002")
+SEARCH_SERVICE_URL = os.getenv("SEARCH_SERVICE_URL")
 CASES_FILE = Path(__file__).parent / "data" / "cases.json"
 CASES_FILE.parent.mkdir(parents=True, exist_ok=True)
 
@@ -401,9 +403,13 @@ def _build_fragments_from_bundle(bundle: dict, cip: str) -> list[dict]:
 async def _resolve_hcis_history(cip: str) -> dict | None:
     bundle = await get_patient_bundle(cip)
     if bundle:
-        base = _to_hcis_structure_from_bundle(bundle, cip)
-        base["all_sections"] = _build_fragments_from_bundle(bundle, cip)
-        base["catalogo_hcis"] = _hcis_section_catalog()
+        master_record = build_patient_master_record(bundle, cip)
+        base = to_legacy_history_view(master_record, cip)
+        if not base.get("all_sections"):
+            # Fallback defensivo para no romper el dashboard si faltan secciones.
+            base["all_sections"] = _build_fragments_from_bundle(bundle, cip)
+        if not base.get("catalogo_hcis"):
+            base["catalogo_hcis"] = _hcis_section_catalog()
         return base
 
     cached_history = _get_cached_history_for_cip(cip)
@@ -712,6 +718,17 @@ async def get_patient_history(cip: str):
     raise HTTPException(status_code=404, detail="Paciente no encontrado")
 
 
+@app.get("/fhir/pacientes/{cip}/master-record")
+async def get_patient_master_record(cip: str):
+    """
+    Devuelve el JSON maestro normalizado del paciente para indexado, RAG y dashboard limpio.
+    """
+    bundle = await get_patient_bundle(cip)
+    if not bundle:
+        raise HTTPException(status_code=404, detail="Paciente no encontrado")
+    return build_patient_master_record(bundle, cip)
+
+
 @app.get("/fhir/pacientes/{cip}/historial/texto")
 async def get_patient_history_text(cip: str):
     history = await _resolve_hcis_history(cip)
@@ -821,3 +838,65 @@ async def _call_llm_service(symptoms: dict, history: dict) -> dict:
             "alertas": [],
             "recomendacion": "Contactar con el paciente para valoración directa.",
         }
+
+
+async def _call_external_search_service(payload: dict) -> dict:
+    """
+    Proxy al buscador semántico/clásico externo (RAG) ya implementado por el equipo.
+    """
+    if not SEARCH_SERVICE_URL:
+        return {
+            "integration_status": "not_configured",
+            "items": [],
+            "message": "SEARCH_SERVICE_URL no está configurado.",
+        }
+    try:
+        async with httpx.AsyncClient(timeout=30.0) as client:
+            r = await client.post(f"{SEARCH_SERVICE_URL}/search", json=payload)
+            r.raise_for_status()
+            data = r.json()
+            if isinstance(data, dict):
+                return data
+            return {"integration_status": "ok", "items": data if isinstance(data, list) else []}
+    except httpx.RequestError as exc:
+        raise HTTPException(status_code=502, detail=f"Buscador externo no disponible: {exc}") from exc
+    except httpx.HTTPStatusError as exc:
+        raise HTTPException(status_code=502, detail=f"Buscador externo devolvió error HTTP: {exc}") from exc
+
+
+@app.get("/fhir/pacientes/{cip}/search")
+async def search_patient_history(
+    cip: str,
+    q: str = Query(default="", description="Consulta de búsqueda"),
+    mode: str = Query(default="hybrid", description="classic|semantic|hybrid"),
+    section_type: str | None = Query(default=None),
+    date_from: str | None = Query(default=None),
+    date_to: str | None = Query(default=None),
+    author: str | None = Query(default=None),
+    min_confidence: float | None = Query(default=None, ge=0, le=1),
+    limit: int = Query(default=50, ge=1, le=200),
+):
+    """
+    Endpoint de integración con el buscador RAG del equipo.
+    No implementa scoring local: delega en SEARCH_SERVICE_URL.
+    """
+    bundle = await get_patient_bundle(cip)
+    if not bundle:
+        raise HTTPException(status_code=404, detail="Paciente no encontrado")
+
+    master_record = build_patient_master_record(bundle, cip)
+    payload = {
+        "cip": cip,
+        "query": q,
+        "mode": mode,
+        "filters": {
+            "section_type": section_type,
+            "date_from": date_from,
+            "date_to": date_to,
+            "author": author,
+            "min_confidence": min_confidence,
+            "limit": limit,
+        },
+        "master_record": master_record,
+    }
+    return await _call_external_search_service(payload)

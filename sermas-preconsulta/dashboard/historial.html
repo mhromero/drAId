@@ -251,6 +251,8 @@
     <aside class="panel">
       <div class="panel-title">Resumen / flags</div>
       <div class="panel-body">
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px;">Calidad del historial</div>
+        <div id="qualityBox" class="state" style="margin-bottom:10px;">Cargando validación...</div>
         <div style="font-size:12px;font-weight:700;margin-bottom:6px;">Apartados HCIS detectados</div>
         <div id="catalogList" class="evidence-list" style="margin-bottom:10px;"></div>
         <div id="docs" class="docs"></div>
@@ -279,6 +281,7 @@
     const evidenceListEl = document.getElementById("evidenceList");
     const docsEl = document.getElementById("docs");
     const catalogListEl = document.getElementById("catalogList");
+    const qualityBoxEl = document.getElementById("qualityBox");
 
     const EVIDENCE = [];
     const CACHE_TTL_MS = 5 * 60 * 1000;
@@ -361,7 +364,7 @@
     function buildDocsFromHistory(h) {
       if (Array.isArray(h.all_sections) && h.all_sections.length > 0) {
         return h.all_sections.map(f => buildDoc(
-          (f.resource_type || "documento").toLowerCase(),
+          (f.section_type || f.resource_type || "documento").toLowerCase(),
           f.timestamp || "",
           `HCIS.${f.resource_type || "Resource"}`,
           f.text || "",
@@ -490,6 +493,17 @@
           runSearch();
         });
       }
+    }
+
+    function populateDocTypeOptions(items) {
+      const current = docTypeEl.value;
+      const options = ['<option value="">Tipo (todos)</option>'];
+      const types = [...new Set((items || []).map(x => x.type).filter(Boolean))].sort();
+      for (const t of types) {
+        options.push(`<option value="${t}">${t}</option>`);
+      }
+      docTypeEl.innerHTML = options.join("");
+      if (types.includes(current)) docTypeEl.value = current;
     }
 
     function passesFilters(d) {
@@ -627,10 +641,63 @@
       `).join("");
     }
 
-    function runSearch() {
+    function renderQualityReport(report) {
+      if (!report) {
+        qualityBoxEl.textContent = "Sin informe de calidad.";
+        return;
+      }
+      const checks = report.checks || [];
+      const rows = checks.map(c => `${c.status.toUpperCase()}: ${c.title}`).join("<br>");
+      qualityBoxEl.innerHTML = `
+        <b>Score:</b> ${report.score || 0}/100<br>
+        <b>Estado:</b> ${report.passes ? "apto para demo" : "requiere revisión"}<br>
+        <div class="mini" style="margin-top:6px;">${rows || "Sin checks"}</div>
+      `;
+    }
+
+    async function fetchServerSearch(query, mode) {
+      if (!cip) return null;
+      const params = new URLSearchParams();
+      params.set("q", query || "");
+      params.set("mode", mode || "hybrid");
+      if (docTypeEl.value) params.set("section_type", docTypeEl.value);
+      if (dateFromEl.value) params.set("date_from", dateFromEl.value);
+      params.set("limit", "80");
+      const res = await fetch(`/fhir/pacientes/${encodeURIComponent(cip)}/search?${params.toString()}`);
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (data?.integration_status && data.integration_status !== "ok") {
+        return null;
+      }
+      const items = Array.isArray(data?.items) ? data.items : [];
+      if (!items.length) return null;
+      return items.map((it) => ({
+        type: (it.type || "documento").toLowerCase(),
+        date: it.date || "",
+        origin: it.origin || `HCIS.${it.resource_type || "Resource"}`,
+        text: it.text || "",
+        specialty: inferSpecialty(`${it.text || ""} ${it.source_section || ""}`),
+        source_section: it.source_section || "",
+        author: it.author || "No informado",
+        confidence: typeof it.confidence === "number" ? it.confidence : 0.6,
+        manual_review: !!it.manual_review,
+        document_access: it.document_access || null,
+        score: typeof it.score === "number" ? it.score : 0.2,
+      }));
+    }
+
+    async function runSearch() {
       const q = queryEl.value.trim();
       const mode = modeEl.value;
-      const results = searchDocs(q, mode);
+      let results = null;
+      try {
+        results = await fetchServerSearch(q, mode);
+      } catch (e) {
+        results = null;
+      }
+      if (!Array.isArray(results)) {
+        results = searchDocs(q, mode);
+      }
       if (isTimelineMode) {
         resultsViewEl.style.display = "none";
         timelineViewEl.style.display = "block";
@@ -661,7 +728,9 @@
           Fecha nacimiento: ${p.fecha_nacimiento || "s/d"} · Sexo: ${p.sexo || "s/d"} · Estructura: ${history.estructura || "HCIS"}
         `;
         docs = buildDocsFromHistory(history);
+        populateDocTypeOptions(docs);
         renderCatalog(history.catalogo_hcis || [], docs);
+        renderQualityReport(history.quality_report || null);
         renderDocsLinks(history.documentos || []);
         renderEvidence();
         buildSuggestions();
@@ -684,6 +753,8 @@
       runSearch();
     });
 
+    // Evita que el navegador deje una fecha antigua persistida y vacíe resultados al cargar.
+    dateFromEl.value = "";
     loadHistory();
   </script>
 </body>

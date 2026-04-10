@@ -22,10 +22,17 @@
         ],
         "birthDate": "1966-03-14",
         "gender": "male",
+        "telecom": [
+          {
+            "system": "phone",
+            "value": "+34600000000"
+          }
+        ],
         "address": [
           {
             "city": "Madrid",
-            "country": "ES"
+            "country": "ES",
+            "postalCode": "28001"
           }
         ]
       }
@@ -33,6 +40,7 @@
     {
       "resource": {
         "resourceType": "Condition",
+        "id": "cond-P001-38341003",
         "subject": {
           "reference": "Patient/P001"
         },
@@ -53,12 +61,14 @@
               "code": "active"
             }
           ]
-        }
+        },
+        "recordedDate": "2015-06-01"
       }
     },
     {
       "resource": {
         "resourceType": "Condition",
+        "id": "cond-P001-44054006",
         "subject": {
           "reference": "Patient/P001"
         },
@@ -79,12 +89,14 @@
               "code": "active"
             }
           ]
-        }
+        },
+        "recordedDate": "2018-01-20"
       }
     },
     {
       "resource": {
         "resourceType": "Condition",
+        "id": "cond-P001-53741008",
         "subject": {
           "reference": "Patient/P001"
         },
@@ -105,16 +117,19 @@
               "code": "active"
             }
           ]
-        }
+        },
+        "recordedDate": "2021-11-05"
       }
     },
     {
       "resource": {
         "resourceType": "MedicationRequest",
+        "id": "med-P001-29046-2026-02-01",
         "subject": {
           "reference": "Patient/P001"
         },
         "status": "active",
+        "authoredOn": "2026-02-01",
         "medicationCodeableConcept": {
           "coding": [
             {
@@ -126,7 +141,7 @@
         },
         "dosageInstruction": [
           {
-            "text": "1 comprimido — 1 vez al día"
+            "text": "1 comprimido - 1 vez al día"
           }
         ]
       }
@@ -134,10 +149,12 @@
     {
       "resource": {
         "resourceType": "MedicationRequest",
+        "id": "med-P001-860975-2026-02-01",
         "subject": {
           "reference": "Patient/P001"
         },
         "status": "active",
+        "authoredOn": "2026-02-01",
         "medicationCodeableConcept": {
           "coding": [
             {
@@ -149,7 +166,7 @@
         },
         "dosageInstruction": [
           {
-            "text": "1 comprimido — 2 veces al día"
+            "text": "1 comprimido - 2 veces al día"
           }
         ]
       }
@@ -157,10 +174,12 @@
     {
       "resource": {
         "resourceType": "MedicationRequest",
+        "id": "med-P001-308460-2026-02-01",
         "subject": {
           "reference": "Patient/P001"
         },
         "status": "active",
+        "authoredOn": "2026-02-01",
         "medicationCodeableConcept": {
           "coding": [
             {
@@ -172,77 +191,326 @@
         },
         "dosageInstruction": [
           {
-            "text": "1 comprimido — por la noche"
+            "text": "1 comprimido - por la noche"
           }
         ]
       }
     },
     {
       "resource": {
-        "resourceType": "MedicationRequest",
+        "resourceType": "Encounter",
+        "id": "enc-p001-1",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "finished",
+        "class": {
+          "code": "EMER"
+        },
+        "serviceType": {
+          "text": "Urgencias"
+        },
+        "period": {
+          "start": "2026-01-22T10:00:00Z"
+        },
+        "reasonCode": [
+          {
+            "text": "Urgencias por dolor torácico"
+          }
+        ],
+        "diagnosis": [
+          {
+            "condition": {
+              "display": "Angina estable"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "enc-p001-2",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "finished",
+        "class": {
+          "code": "AMB"
+        },
+        "serviceType": {
+          "text": "Atención primaria"
+        },
+        "period": {
+          "start": "2026-02-11T09:30:00Z"
+        },
+        "reasonCode": [
+          {
+            "text": "Control de atención primaria"
+          }
+        ],
+        "diagnosis": [
+          {
+            "condition": {
+              "display": "Ajuste antihipertensivo"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Encounter",
+        "id": "enc-p001-3",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "finished",
+        "class": {
+          "code": "AMB"
+        },
+        "serviceType": {
+          "text": "Consulta externa"
+        },
+        "period": {
+          "start": "2026-03-10T12:00:00Z"
+        },
+        "reasonCode": [
+          {
+            "text": "Revisión consulta externa cardiología"
+          }
+        ],
+        "diagnosis": [
+          {
+            "condition": {
+              "display": "Cardiopatía estable"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Procedure",
+        "id": "proc-p001-1",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "completed",
+        "performedDateTime": "2023-02-14",
+        "category": {
+          "text": "Cirugía cardiaca"
+        },
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "232717009",
+              "display": "Angioplastia coronaria previa"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "rep-p001-lab",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "final",
+        "category": [
+          {
+            "text": "Laboratorio"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "718-7",
+              "display": "Hemoglobina"
+            }
+          ]
+        },
+        "conclusion": "Hemoglobina 13.1 g/dL",
+        "effectiveDateTime": "2026-03-10T08:00:00Z",
+        "issued": "2026-03-10T11:00:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "rep-p001-img",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "final",
+        "category": [
+          {
+            "text": "Radiología e imagen"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "30746-2",
+              "display": "Radiografía de tórax"
+            }
+          ]
+        },
+        "conclusion": "Sin infiltrados agudos",
+        "effectiveDateTime": "2026-01-22T10:15:00Z",
+        "issued": "2026-01-22T11:20:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "DiagnosticReport",
+        "id": "rep-p001-ecg",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "final",
+        "category": [
+          {
+            "text": "Electrocardiograma"
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "131328",
+              "display": "ECG 12 derivaciones"
+            }
+          ]
+        },
+        "conclusion": "Ritmo sinusal, sin cambios agudos",
+        "effectiveDateTime": "2026-01-22T10:10:00Z",
+        "issued": "2026-01-22T10:40:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "obs-p001-1",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8480-6",
+              "display": "Presión arterial sistólica"
+            }
+          ]
+        },
+        "valueQuantity": {
+          "value": 152,
+          "unit": "mmHg"
+        },
+        "effectiveDateTime": "2026-01-22T10:00:00Z"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "CarePlan",
+        "id": "care-p001-1",
         "subject": {
           "reference": "Patient/P001"
         },
         "status": "active",
-        "medicationCodeableConcept": {
-          "coding": [
-            {
-              "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
-              "code": "1191",
-              "display": "Aspirina 100mg"
-            }
-          ]
+        "created": "2026-03-10",
+        "title": "Plan de cuidados de enfermería cardiovascular",
+        "description": "Plan de cuidados de enfermería cardiovascular"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Composition",
+        "id": "comp-p001-hcr",
+        "subject": {
+          "reference": "Patient/P001"
         },
-        "dosageInstruction": [
+        "status": "final",
+        "type": {
+          "text": "Resumen"
+        },
+        "title": "Historia clínica resumida",
+        "date": "2026-03-11T09:00:00Z",
+        "text": {
+          "status": "generated",
+          "div": "<div>Antecedentes cardiovasculares relevantes y control metabólico.</div>"
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Composition",
+        "id": "comp-p001-alta",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "status": "final",
+        "type": {
+          "text": "Alta hospitalaria"
+        },
+        "title": "Informe clínico de alta",
+        "date": "2026-01-23T12:00:00Z",
+        "text": {
+          "status": "generated",
+          "div": "<div>Alta tras dolor torácico sin criterios de isquemia aguda.</div>"
+        }
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "DocumentReference",
+        "id": "doc-P001-txt",
+        "status": "current",
+        "subject": {
+          "reference": "Patient/P001"
+        },
+        "date": "2026-04-01T09:00:00Z",
+        "type": {
+          "text": "Historia clínica resumida"
+        },
+        "content": [
           {
-            "text": "1 comprimido — 1 vez al día"
+            "attachment": {
+              "contentType": "text/plain",
+              "title": "Nota evolutiva Cardio",
+              "creation": "2026-04-01T09:00:00Z",
+              "data": "UmVzdW1lbiBjbMOtbmljbyBsb25naXR1ZGluYWwgZGVsIHBhY2llbnRlIFAwMDEuIFJpZXNnb3MgeSBhbnRlY2VkZW50ZXMgcmVsZXZhbnRlcy4="
+            }
           }
         ]
       }
     },
     {
       "resource": {
-        "resourceType": "Encounter",
+        "resourceType": "DocumentReference",
+        "id": "doc-P001-pdf",
+        "status": "current",
         "subject": {
           "reference": "Patient/P001"
         },
-        "status": "finished",
-        "period": {
-          "start": "2025-11-10"
+        "date": "2026-04-02T10:30:00Z",
+        "type": {
+          "text": "Urgencias"
         },
-        "reasonCode": [
+        "content": [
           {
-            "text": "Revisión cardiología"
-          }
-        ],
-        "diagnosis": [
-          {
-            "condition": {
-              "display": "Cardiopatía isquémica estable"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "resource": {
-        "resourceType": "Encounter",
-        "subject": {
-          "reference": "Patient/P001"
-        },
-        "status": "finished",
-        "period": {
-          "start": "2026-01-22"
-        },
-        "reasonCode": [
-          {
-            "text": "Dolor torácico"
-          }
-        ],
-        "diagnosis": [
-          {
-            "condition": {
-              "display": "Angina de pecho, ajuste de medicación"
+            "attachment": {
+              "contentType": "application/pdf",
+              "title": "Informe de urgencias Cardio",
+              "creation": "2026-04-02T10:30:00Z",
+              "data": "JVBERi0xLjQKMSAwIG9iaiA8PCAvVHlwZSAvQ2F0YWxvZyAvUGFnZXMgMiAwIFIgPj4gZW5kb2JqCjIgMCBvYmogPDwgL1R5cGUgL1BhZ2VzIC9LaWRzIFszIDAgUl0gL0NvdW50IDEgPj4gZW5kb2JqCjMgMCBvYmogPDwgL1R5cGUgL1BhZ2UgL1BhcmVudCAyIDAgUiAvTWVkaWFCb3ggWzAgMCA1OTUgODQyXSAvUmVzb3VyY2VzIDw8IC9Gb250IDw8IC9GMSA0IDAgUiA+PiA+PiAvQ29udGVudHMgNSAwIFIgPj4gZW5kb2JqCjQgMCBvYmogPDwgL1R5cGUgL0ZvbnQgL1N1YnR5cGUgL1R5cGUxIC9CYXNlRm9udCAvSGVsdmV0aWNhID4+IGVuZG9iago1IDAgb2JqIDw8IC9MZW5ndGggMjQxID4+IHN0cmVhbQpCVAovRjEgMTAgVGYKNDAgNzkwIFRkCihJbmZvcm1lIGRlIHVyZ2VuY2lhcyAtIENhcmRpbykgVGoKMCAtMTQgVGQKKE1vdGl2byBkZSBjb25zdWx0YTogZG9sb3IgdG9y4WNpY28vZGlzbmVhIHNlZ/puIHBlcmZpbCkgVGoKMCAtMTQgVGQKKFBydWViYXMgcmVhbGl6YWRhczogRUNHLCBhbmFs7XRpY2EgeSBSeCkgVGoKMCAtMTQgVGQKKFBsYW46IHNlZ3VpbWllbnRvIHBvciBzdSBt6WRpY28gcmVzcG9uc2FibGUpIFRqCkVUCmVuZHN0cmVhbSBlbmRvYmoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDA5IDAwMDAwIG4gCjAwMDAwMDAwNTggMDAwMDAgbiAKMDAwMDAwMDExNSAwMDAwMCBuIAowMDAwMDAwMjQxIDAwMDAwIG4gCjAwMDAwMDAzMTEgMDAwMDAgbiAKdHJhaWxlciA8PCAvU2l6ZSA2IC9Sb290IDEgMCBSID4+CnN0YXJ0eHJlZgo2MDMKJSVFT0Y="
             }
           }
         ]

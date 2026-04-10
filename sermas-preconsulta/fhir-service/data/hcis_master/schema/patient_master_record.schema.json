@@ -1,318 +1,137 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://drAid.local/schemas/patient_master_record.schema.json",
-  "title": "HCIS Patient Master Record",
+  "title": "Patient Master Record v1",
   "type": "object",
   "required": [
-    "metadata",
+    "schema_version",
+    "record_id",
     "patient_demographics",
-    "sections",
-    "documents_registry",
-    "all_sections_index"
+    "document_index",
+    "encounters",
+    "diagnoses",
+    "procedures",
+    "medications",
+    "allergies_adrs",
+    "lab_results",
+    "imaging_reports",
+    "other_diagnostic_tests",
+    "clinical_notes",
+    "discharge_summaries",
+    "attachments",
+    "evidence_spans",
+    "source_refs",
+    "all_sections"
   ],
   "properties": {
-    "metadata": {
-      "type": "object",
-      "required": [
-        "schema_version",
-        "record_id",
-        "patient_cip",
-        "source_system",
-        "generated_at"
-      ],
-      "properties": {
-        "schema_version": { "type": "string" },
-        "record_id": { "type": "string" },
-        "patient_cip": { "type": "string" },
-        "source_system": { "type": "string" },
-        "generated_at": { "type": "string", "format": "date-time" },
-        "ingestion_notes": { "type": "string" }
-      }
-    },
+    "schema_version": { "type": "string" },
+    "record_id": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
     "patient_demographics": {
       "type": "object",
-      "required": [
-        "cip",
-        "full_name",
-        "sex",
-        "birth_date"
-      ],
+      "required": ["patient_id", "name", "family_name_1", "birth_date", "sex_at_birth"],
       "properties": {
-        "cip": { "type": "string" },
-        "full_name": { "type": "string" },
-        "sex": { "type": "string" },
-        "birth_date": { "type": "string", "format": "date" },
-        "age": { "type": "integer" },
-        "national_id_masked": { "type": "string" },
-        "contact": {
-          "type": "object",
-          "properties": {
-            "phone_masked": { "type": "string" },
-            "city": { "type": "string" }
-          }
-        }
+        "patient_id": { "type": ["string", "null"] },
+        "cip_sns": { "type": ["string", "null"] },
+        "cip_aut": { "type": ["string", "null"] },
+        "nhc": { "type": ["string", "null"] },
+        "dni_nie": { "type": ["string", "null"] },
+        "name": { "type": ["string", "null"] },
+        "family_name_1": { "type": ["string", "null"] },
+        "family_name_2": { "type": ["string", "null"] },
+        "birth_date": { "type": ["string", "null"] },
+        "sex_at_birth": { "type": ["string", "null"] },
+        "phones": { "type": "array", "items": { "type": "string" } },
+        "email": { "type": ["string", "null"] },
+        "address": { "type": "object" },
+        "primary_care_center": { "type": "object" }
       }
     },
-    "sections": {
-      "type": "object",
-      "required": [
-        "history_summary",
-        "encounters",
-        "diagnoses",
-        "procedures",
-        "medications",
-        "allergies_adrs",
-        "lab_results",
-        "imaging_reports",
-        "discharge_summaries",
-        "clinical_notes",
-        "nursing_notes",
-        "interconsultations",
-        "documents"
-      ],
-      "properties": {
-        "history_summary": { "$ref": "#/$defs/traceableObject" },
-        "encounters": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/encounter" }
-        },
-        "diagnoses": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/diagnosis" }
-        },
-        "procedures": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/procedure" }
-        },
-        "medications": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/medication" }
-        },
-        "allergies_adrs": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/allergyAdr" }
-        },
-        "lab_results": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/labResult" }
-        },
-        "imaging_reports": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/imagingReport" }
-        },
-        "discharge_summaries": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/dischargeSummary" }
-        },
-        "clinical_notes": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/clinicalNote" }
-        },
-        "nursing_notes": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/clinicalNote" }
-        },
-        "interconsultations": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/interconsultation" }
-        },
-        "documents": {
-          "type": "array",
-          "items": { "$ref": "#/$defs/documentRef" }
-        }
-      }
-    },
-    "documents_registry": {
-      "type": "array",
-      "items": { "$ref": "#/$defs/documentBlob" }
-    },
-    "all_sections_index": {
-      "description": "Fragmentos normalizados para embeddings/busqueda",
-      "type": "array",
-      "items": { "$ref": "#/$defs/indexFragment" }
-    }
+    "document_index": { "type": "array", "items": { "$ref": "#/$defs/document" } },
+    "encounters": { "type": "array", "items": { "type": "object" } },
+    "diagnoses": { "type": "array", "items": { "type": "object" } },
+    "active_problems": { "type": "array", "items": { "type": "object" } },
+    "procedures": { "type": "array", "items": { "type": "object" } },
+    "medications": { "type": "array", "items": { "type": "object" } },
+    "allergies_adrs": { "type": "array", "items": { "type": "object" } },
+    "lab_results": { "type": "array", "items": { "type": "object" } },
+    "imaging_reports": { "type": "array", "items": { "type": "object" } },
+    "other_diagnostic_tests": { "type": "array", "items": { "type": "object" } },
+    "clinical_notes": { "type": "array", "items": { "type": "object" } },
+    "discharge_summaries": { "type": "array", "items": { "type": "object" } },
+    "nursing_care": { "type": "array", "items": { "type": "object" } },
+    "attachments": { "type": "array", "items": { "$ref": "#/$defs/attachment" } },
+    "evidence_spans": { "type": "array", "items": { "$ref": "#/$defs/evidence" } },
+    "source_refs": { "type": "array", "items": { "$ref": "#/$defs/sourceRef" } },
+    "all_sections": { "type": "array", "items": { "$ref": "#/$defs/section" } },
+    "traceability": { "type": "object" },
+    "conflict_resolution": { "type": "object" }
   },
   "$defs": {
-    "traceability": {
+    "document": {
       "type": "object",
-      "required": [
-        "source_section",
-        "timestamp",
-        "author",
-        "confidence",
-        "manual_review",
-        "evidence_text"
-      ],
+      "required": ["doc_id", "doc_type", "title", "source_refs"],
       "properties": {
-        "source_section": { "type": "string" },
-        "source_resource_type": { "type": "string" },
-        "source_document_id": { "type": "string" },
-        "timestamp": { "type": "string" },
-        "author": { "type": "string" },
-        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
-        "manual_review": { "type": "boolean" },
-        "evidence_text": { "type": "string" }
-      }
-    },
-    "traceableObject": {
-      "type": "object",
-      "required": ["content", "traceability"],
-      "properties": {
-        "content": { "type": "string" },
-        "traceability": { "$ref": "#/$defs/traceability" }
-      }
-    },
-    "encounter": {
-      "type": "object",
-      "required": ["encounter_id", "care_setting", "date_start", "reason", "traceability"],
-      "properties": {
-        "encounter_id": { "type": "string" },
-        "care_setting": { "type": "string" },
-        "date_start": { "type": "string" },
-        "date_end": { "type": "string" },
-        "specialty": { "type": "string" },
-        "reason": { "type": "string" },
-        "outcome": { "type": "string" },
-        "traceability": { "$ref": "#/$defs/traceability" }
-      }
-    },
-    "diagnosis": {
-      "type": "object",
-      "required": ["name", "status", "traceability"],
-      "properties": {
-        "name": { "type": "string" },
-        "coding_system": { "type": "string" },
-        "code": { "type": "string" },
-        "status": { "type": "string" },
-        "onset_date": { "type": "string" },
-        "traceability": { "$ref": "#/$defs/traceability" }
-      }
-    },
-    "procedure": {
-      "type": "object",
-      "required": ["name", "date", "traceability"],
-      "properties": {
-        "name": { "type": "string" },
-        "category": { "type": "string" },
-        "date": { "type": "string" },
-        "status": { "type": "string" },
-        "notes": { "type": "string" },
-        "traceability": { "$ref": "#/$defs/traceability" }
-      }
-    },
-    "medication": {
-      "type": "object",
-      "required": ["name", "status", "traceability"],
-      "properties": {
-        "name": { "type": "string" },
-        "dose": { "type": "string" },
-        "frequency": { "type": "string" },
-        "route": { "type": "string" },
-        "status": { "type": "string" },
-        "traceability": { "$ref": "#/$defs/traceability" }
-      }
-    },
-    "allergyAdr": {
-      "type": "object",
-      "required": ["substance", "criticality", "traceability"],
-      "properties": {
-        "substance": { "type": "string" },
-        "criticality": { "type": "string" },
-        "reaction": { "type": "string" },
-        "traceability": { "$ref": "#/$defs/traceability" }
-      }
-    },
-    "labResult": {
-      "type": "object",
-      "required": ["test_name", "date", "traceability"],
-      "properties": {
-        "test_name": { "type": "string" },
-        "date": { "type": "string" },
-        "value": { "type": "string" },
-        "unit": { "type": "string" },
-        "reference_range": { "type": "string" },
-        "interpretation": { "type": "string" },
-        "traceability": { "$ref": "#/$defs/traceability" }
-      }
-    },
-    "imagingReport": {
-      "type": "object",
-      "required": ["study", "date", "impression", "traceability"],
-      "properties": {
-        "study": { "type": "string" },
-        "date": { "type": "string" },
-        "impression": { "type": "string" },
-        "traceability": { "$ref": "#/$defs/traceability" }
-      }
-    },
-    "dischargeSummary": {
-      "type": "object",
-      "required": ["date", "service", "summary", "traceability"],
-      "properties": {
-        "date": { "type": "string" },
-        "service": { "type": "string" },
-        "summary": { "type": "string" },
-        "traceability": { "$ref": "#/$defs/traceability" }
-      }
-    },
-    "clinicalNote": {
-      "type": "object",
-      "required": ["note_type", "date", "text", "traceability"],
-      "properties": {
-        "note_type": { "type": "string" },
-        "date": { "type": "string" },
-        "text": { "type": "string" },
-        "traceability": { "$ref": "#/$defs/traceability" }
-      }
-    },
-    "interconsultation": {
-      "type": "object",
-      "required": ["requested_service", "date", "question", "traceability"],
-      "properties": {
-        "requested_service": { "type": "string" },
-        "date": { "type": "string" },
-        "question": { "type": "string" },
-        "response": { "type": "string" },
-        "traceability": { "$ref": "#/$defs/traceability" }
-      }
-    },
-    "documentRef": {
-      "type": "object",
-      "required": ["document_id", "title", "section", "content_type", "traceability"],
-      "properties": {
-        "document_id": { "type": "string" },
+        "doc_id": { "type": "string" },
+        "doc_type": {
+          "type": "string",
+          "enum": ["HCR", "ICAP", "ICU", "ICA", "ICCE", "ICE", "IRPL", "IRPI", "IROPD", "OTHER"]
+        },
         "title": { "type": "string" },
-        "section": { "type": "string" },
-        "content_type": { "type": "string" },
-        "storage_ref": { "type": "string" },
-        "text_preview": { "type": "string" },
-        "traceability": { "$ref": "#/$defs/traceability" }
+        "authored_at": { "type": ["string", "null"] },
+        "status": { "type": ["string", "null"] },
+        "raw_text": { "type": ["string", "null"] },
+        "attachments": { "type": "array", "items": { "type": "string" } },
+        "source_refs": { "type": "array", "items": { "type": "string" } }
       }
     },
-    "documentBlob": {
+    "attachment": {
       "type": "object",
-      "required": ["document_id", "filename", "content_type", "path"],
+      "required": ["id", "doc_id", "mime_type", "file_name", "storage_uri"],
       "properties": {
-        "document_id": { "type": "string" },
-        "filename": { "type": "string" },
-        "content_type": { "type": "string" },
-        "path": { "type": "string" },
-        "sha256": { "type": "string" }
+        "id": { "type": "string" },
+        "doc_id": { "type": "string" },
+        "mime_type": { "type": "string" },
+        "file_name": { "type": "string" },
+        "storage_uri": { "type": "string" },
+        "extracted_text": { "type": ["string", "null"] }
       }
     },
-    "indexFragment": {
+    "evidence": {
       "type": "object",
-      "required": ["fragment_id", "source_section", "timestamp", "author", "text"],
+      "required": ["id", "doc_id", "text_quote"],
       "properties": {
-        "fragment_id": { "type": "string" },
-        "source_section": { "type": "string" },
-        "resource_type": { "type": "string" },
-        "timestamp": { "type": "string" },
-        "author": { "type": "string" },
+        "id": { "type": "string" },
+        "doc_id": { "type": "string" },
+        "text_quote": { "type": "string" },
+        "page": { "type": ["integer", "null"] }
+      }
+    },
+    "sourceRef": {
+      "type": "object",
+      "required": ["id", "source_system", "source_entity", "source_id"],
+      "properties": {
+        "id": { "type": "string" },
+        "source_system": { "type": "string" },
+        "source_entity": { "type": "string" },
+        "source_id": { "type": "string" },
+        "source_section": { "type": ["string", "null"] },
+        "confidence": { "type": ["number", "null"] },
+        "manual_review": { "type": ["boolean", "null"] }
+      }
+    },
+    "section": {
+      "type": "object",
+      "required": ["section_id", "doc_id", "section_type", "text"],
+      "properties": {
+        "section_id": { "type": "string" },
+        "doc_id": { "type": "string" },
+        "section_type": { "type": "string" },
         "text": { "type": "string" },
-        "confidence": { "type": "number" },
-        "manual_review": { "type": "boolean" },
-        "source_document_id": { "type": "string" }
+        "date": { "type": ["string", "null"] },
+        "author": { "type": ["string", "null"] },
+        "embedding_ready": { "type": "boolean" }
       }
     }
   }
