@@ -1,8 +1,25 @@
+# Runtime
 fastapi==0.115.0
 uvicorn[standard]==0.30.6
-openai==1.40.0
-pydub==0.25.1
-httpx==0.27.2
 python-dotenv==1.0.1
 python-multipart==0.0.9
+httpx==0.27.2
+pydub==0.25.1
+
+# LLM — OpenAI (gpt-4o-mini en prototipo, gpt-4o en producción)
+openai==1.40.0
+
+# STT — PROTOTIPO: faster-whisper local (gratuito)
+# PRODUCCIÓN: quitar faster-whisper, OpenAI Whisper ya viene con openai>=1.0
+faster-whisper==1.0.3
+
+# TTS — PROTOTIPO: gTTS gratuito
+# PRODUCCIÓN: quitar gTTS, OpenAI TTS ya viene con openai>=1.0
+gTTS==2.5.1
+
+# Twilio SDK (para gestión de llamadas, no para audio — el audio va por WebSocket)
 twilio==9.2.3
+
+# Audio — ffmpeg debe estar instalado en el sistema (requerido por pydub)
+# macOS:  brew install ffmpeg
+# Ubuntu: apt install ffmpeg

@@ -1,14 +1,52 @@
 import json
+import os
 import re
 from openai import AsyncOpenAI
 from schemas import ConversationState, SymptomSummary, Turn
 from prompts import SYSTEM_PROMPT, GREETING_MESSAGE, URGENCY_KEYWORDS, URGENCY_REDIRECT
 
-client = AsyncOpenAI()
+# ─────────────────────────────────────────────────────────────────────────────
+# LLM backend — seleccionar mediante la variable LLM_BACKEND en .env
+#
+# "ollama"    PROTOTIPO local (gratuito, sin internet)
+#             Requiere: ollama serve + ollama pull llama3.2
+#
+# "groq"      PROTOTIPO en nube (gratuito, rápido, bueno para voz)
+#             Requiere: GROQ_API_KEY en .env
+#
+# "openai"    PRODUCCIÓN SERMAS
+#             Requiere: OPENAI_API_KEY en .env
+# ─────────────────────────────────────────────────────────────────────────────
+_BACKEND = os.getenv("LLM_BACKEND", "ollama")
+
+_LLM_CONFIGS = {
+    "ollama": {
+        "base_url": "http://localhost:11434/v1",
+        "api_key": "ollama",
+        "model": os.getenv("OLLAMA_MODEL", "llama3.2"),
+    },
+    "groq": {
+        "base_url": "https://api.groq.com/openai/v1",
+        "api_key": os.getenv("GROQ_API_KEY", ""),
+        "model": "llama-3.1-8b-instant",
+    },
+    "openai": {
+        "base_url": None,  # SDK usa el endpoint por defecto
+        "api_key": os.getenv("OPENAI_API_KEY", ""),
+        "model": "gpt-4o",  # producción SERMAS
+    },
+}
+
+_cfg = _LLM_CONFIGS[_BACKEND]
 
 
 class VoiceAgent:
     def __init__(self, session_id: str):
+        self._client = AsyncOpenAI(
+            api_key=_cfg["api_key"],
+            base_url=_cfg["base_url"],
+        )
+        self._model = _cfg["model"]
         self.session_id = session_id
         self.state = ConversationState.GREETING
         self.symptoms = SymptomSummary()
@@ -55,9 +93,8 @@ class VoiceAgent:
         self.conversation.append({"role": "user", "content": user_input})
         self.symptoms.raw_transcript.append(Turn(role="user", content=user_input))
 
-        # Llamada a GPT-4o
-        response = await client.chat.completions.create(
-            model="gpt-4o",
+        response = await self._client.chat.completions.create(
+            model=self._model,
             messages=self.conversation,
             temperature=0.3,
             max_tokens=400,
