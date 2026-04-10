@@ -1,0 +1,30 @@
+# Entornos virtuales Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Variables de entorno — NUNCA subir al repo
+.env
+*.env
+
+# Datos de pacientes — aunque sean sintéticos, por precaución
+data/patients/
+*.json.bak
+
+# Audio temporal generado durante las llamadas
+voice-agent/audio/*.mp3
+voice-agent/audio/*.wav
+
+# Modelos ML locales (no aplica a Ollama, pero por si acaso)
+*.bin
+*.gguf
+*.pt
+
+# macOS
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
