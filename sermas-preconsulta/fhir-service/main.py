@@ -622,6 +622,7 @@ def _read_folder_as_sections(cip: str) -> list[dict]:
 async def _resolve_hcis_history(cip: str) -> dict | None:
     # Intentar leer desde carpeta de documentos del paciente
     folder_sections = _read_folder_as_sections(cip)
+    cached_history = _get_cached_history_for_cip(cip)
 
     bundle = await get_patient_bundle(cip)
     if bundle:
@@ -638,14 +639,17 @@ async def _resolve_hcis_history(cip: str) -> dict | None:
 
     # Sin bundle FHIR — si hay carpeta de documentos, construir historial mínimo
     if folder_sections:
+        cached_patient = (cached_history or {}).get("paciente", {})
         return {
             "estructura": "HCIS",
-            "paciente": {"cip": cip},
+            "paciente": {
+                **cached_patient,
+                "cip": cached_patient.get("cip") or cip,
+            },
             "all_sections": folder_sections,
             "catalogo_hcis": _hcis_section_catalog(),
         }
 
-    cached_history = _get_cached_history_for_cip(cip)
     if not cached_history:
         return None
 
