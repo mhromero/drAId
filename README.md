@@ -2,6 +2,10 @@
 
 Diagnostic screening for doctor appointments based on patient symptoms and history through integration with an LLM model.
 
+https://youtu.be/YCr1c3JRJwE
+
+https://youtu.be/5faREiga4o0
+
 ## Medical Semantic Search Pipeline
 
 This repository now includes a modular clinical search pipeline in `medical_search/`:
