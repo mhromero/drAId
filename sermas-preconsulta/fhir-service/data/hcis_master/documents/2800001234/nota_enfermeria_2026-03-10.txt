@@ -1,0 +1,29 @@
+PLAN DE CUIDADOS DE ENFERMERÍA CARDIOVASCULAR
+Hospital Universitario La Paz — Unidad de Cardiología Ambulatoria
+Fecha: 10/03/2026
+Paciente: Martínez López, Carlos  |  CIP: 2800001234
+Enfermera responsable: María Jesús Flores Torres
+
+VALORACIÓN ENFERMERA
+Paciente de 59 años con cardiopatía isquémica, HTA y DM2. Refiere adherencia
+parcial a dieta. Buen cumplimiento de medicación según declaración propia.
+Constantes: PA 136/82 mmHg. FC 74 lpm. SatO2 98%. Peso 83 kg.
+
+DIAGNÓSTICOS ENFERMEROS (NANDA)
+- 00099 Mantenimiento ineficaz de la salud r/c conocimientos insuficientes sobre
+  dieta cardiovascular.
+- 00126 Conocimientos deficientes r/c control glucémico.
+
+INTERVENCIONES (NIC)
+- Educación sobre dieta DASH y reducción de sodio.
+- Entrenamiento sobre reconocimiento de signos de alarma cardiovascular.
+- Instrucción sobre técnica correcta de autoanálisis glucémico.
+- Refuerzo de adherencia al tratamiento antiagregante (AAS).
+- Toma y registro de constantes vitales. Control de peso mensual.
+
+OBJETIVOS (NOC)
+- PA objetivo < 130/80 mmHg en próxima revisión.
+- HbA1c < 7.0% en 3 meses.
+- IMC < 27 kg/m² a 6 meses.
+
+María Jesús Flores Torres  |  Enfermera Especialista en Cardiología

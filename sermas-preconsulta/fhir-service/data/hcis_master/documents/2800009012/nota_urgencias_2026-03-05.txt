@@ -1,0 +1,54 @@
+INFORME DE URGENCIAS — SERVICIO DE URGENCIAS HOSPITALARIAS
+Hospital Universitario Ramón y Cajal — SERMAS
+Fecha y hora: 05/03/2026  10:30 h
+Paciente: Fernández Iglesias, Carmen  |  CIP: 2800009012  |  Edad: 78 años
+Médico: Dr. Luis Montoya Jiménez
+
+MOTIVO DE CONSULTA
+Mareo, sensación de inestabilidad y episodio de casi síncope al levantarse de
+la cama esta mañana. Cuidadora refiere que la paciente «se quedó blanca y casi
+se cae». Sin pérdida de conciencia. Sin traumatismo craneal. Sin dolor torácico.
+Sin focalidad neurológica aparente.
+
+ANTECEDENTES PERSONALES
+- Hipertensión arterial (desde 2000). Bisoprolol 5 mg/día.
+- Fibrilación auricular (desde 2019). Anticoagulada con Warfarina 5 mg (INR objetivo 2-3).
+- Osteoporosis (desde 2020).
+- Artroplastia total de cadera derecha (2021).
+- ALERGIA: Penicilina (exantema cutáneo). Criticidad baja.
+
+EXPLORACIÓN
+- PA en decúbito: 142/88 mmHg  |  PA en bipedestación (a los 3 min): 108/64 mmHg
+  → Descenso de 34/24 mmHg → HIPOTENSIÓN ORTOSTÁTICA confirmada.
+- PA diastólica: 58 mmHg en bipedestación.
+- FC: 68 lpm (FA en ritmo ventricular controlado).
+- SatO2: 96% basal.
+- Consciente y orientada en persona, espacio y tiempo.
+- Neurológico: sin focalidad motora ni sensitiva. Pares craneales normales.
+  Marcha posible pero con inseguridad. Romberg no valorable por cadera.
+- AC: arrítmica, sin soplos significativos.
+- AP: hipofonesis bibasal leve.
+
+PRUEBAS COMPLEMENTARIAS
+- ECG: FA con respuesta ventricular controlada (68 lpm). Sin cambios agudos.
+- TAC craneal (urgente): sin hallazgos agudos. Sin sangrado intracraneal. Sin signos
+  isquémicos agudos.
+- Analítica urgente: INR 2.8 (en rango terapéutico). Hemoglobina 11.8 g/dL.
+  Sodio 134 mEq/L (hiponatremia leve). Potasio 3.4 mEq/L (hipopotasemia leve).
+  Creatinina 1.1 mg/dL.
+
+JUICIO CLÍNICO
+Hipotensión ortostática sintomática en contexto de tratamiento antihipertensivo
+con Bisoprolol y dosis elevada (relativa para 78 años). Contribuye también la
+hiponatremia e hipopotasemia leves. FA conocida, estable.
+Riesgo ELEVADO DE CAÍDA. Descartado ictus. INR en rango.
+
+TRATAMIENTO Y PLAN EN URGENCIAS
+- Suero salino 250 mL iv en 30 min. Mejoría tensional.
+- PA en bipedestación post-expansión: 122/76 mmHg.
+- Ajuste de Bisoprolol: reducción a 2.5 mg/día.
+- Corrección electrolítica oral: suplemento de potasio y cloruro sódico.
+- Alta a domicilio con cuidadora. Instrucciones de seguridad en el hogar.
+- Cita preferente en Medicina Interna en 3 días (08/03/2026).
+
+Dr. Luis Montoya Jiménez  |  Nº colegiado: 28-23456

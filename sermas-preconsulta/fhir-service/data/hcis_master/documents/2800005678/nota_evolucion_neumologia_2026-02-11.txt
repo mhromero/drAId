@@ -1,0 +1,33 @@
+NOTA DE EVOLUCIÓN — CONSULTA EXTERNA DE NEUMOLOGÍA
+Hospital General Universitario Gregorio Marañón — SERMAS
+Fecha: 11/02/2026  10:00 h
+Paciente: García Ruiz, Ana  |  CIP: 2800005678
+Médico: Dr. Tomás Escribano Pérez — Neumólogo
+
+MOTIVO
+Revisión post-crisis asmática. Primera consulta en neumología.
+
+ANAMNESIS
+Paciente de 37 años con asma desde la adolescencia, actualmente en tratamiento
+con budesonida/formoterol + salbutamol de rescate. Refiere unos 3-4 episodios
+de rescate a la semana, con despertar nocturno ocasional por tos seca.
+ALERGIAS: Ibuprofeno (broncoespasmo grave) y Aspirina (urticaria).
+
+GRADO DE CONTROL (GINA 2023)
+- Síntomas diurnos > 2 veces/semana: SÍ
+- Limitación de actividad: ocasional
+- Síntomas nocturnos: ocasionales
+→ Asma PARCIALMENTE CONTROLADA. Escalón 3 GINA.
+
+ESPIROMETRÍA (hoy): patrón obstructivo leve con reversibilidad positiva.
+
+PLAN
+1. Escalar a budesonida/formoterol 320/9 mcg — 1 pulsación/12h.
+2. Mantener salbutamol como rescate.
+3. Derivar a alergología para estudio de sensibilización y posible inmunoterapia.
+4. Solicitar FeNO (óxido nítrico exhalado) para monitorización de inflamación eosinofílica.
+5. Iniciar diario de síntomas y peak flow.
+6. Evitar AINEs (contraindicación absoluta por alergia documentada).
+7. Próxima revisión en 3 meses.
+
+Dr. Tomás Escribano Pérez — Neumólogo

@@ -7,12 +7,18 @@ requires-python = ">=3.12"
 dependencies = [
     "chromadb>=1.0.8",
     "en-core-sci-md",
+    "fastapi>=0.135.3",
+    "httpx>=0.28.1",
     "negspacy>=1.0.4",
     "pillow>=11.2.1",
     "pymupdf>=1.26.0",
+    "pypdf>=6.10.0",
     "pytesseract>=0.3.13",
+    "python-dotenv>=1.2.2",
+    "reportlab>=4.4.10",
     "scispacy>=0.6.2",
     "spacy>=3.7.4,<3.8.0",
+    "uvicorn>=0.44.0",
 ]
 
 [tool.uv.sources]

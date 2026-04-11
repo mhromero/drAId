@@ -1,0 +1,22 @@
+INFORME DE ELECTROCARDIOGRAMA
+Hospital Universitario Ramón y Cajal
+Fecha: 05/03/2026  11:10 h
+Paciente: Fernández Iglesias, Carmen  |  CIP: 2800009012
+
+PARÁMETROS
+- Ritmo: Fibrilación auricular.
+- Frecuencia ventricular media: 68 lpm.
+- QRS: 92 ms (sin bloqueo de rama).
+- QTc: 445 ms (normal alto, monitorizar con Bisoprolol).
+- Eje eléctrico: +30°.
+
+DESCRIPCIÓN
+Ausencia de onda P organizada. Línea de base irregular con ondas fibrilatorias.
+Respuesta ventricular controlada (68 lpm). Sin cambios en la repolarización
+respecto al ECG previo de 2024. Sin signos de isquemia aguda.
+QTc en límite superior — a tener en cuenta con cualquier fármaco que prolongue QT.
+
+CONCLUSIÓN
+FA conocida con respuesta ventricular controlada. Sin cambios agudos.
+
+Dr. Luis Montoya Jiménez — Urgencias (ECG leído en sala)

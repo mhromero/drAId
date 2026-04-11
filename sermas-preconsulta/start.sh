@@ -41,7 +41,13 @@ sleep 2
 if curl -s http://localhost:8001/health > /dev/null; then
   echo ""
   echo "  Servicios arriba. Abriendo dashboard..."
-  open http://localhost:8001
+  if command -v open > /dev/null; then
+    open http://localhost:8001
+  elif command -v xdg-open > /dev/null; then
+    xdg-open http://localhost:8001
+  else
+    python3 -m webbrowser http://localhost:8001 &>/dev/null
+  fi
 else
   echo "  [ERROR] fhir-service no responde. Ver /tmp/sermas-fhir.log"
 fi

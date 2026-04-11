@@ -1,0 +1,41 @@
+NOTA DE EVOLUCIÓN — CONSULTA EXTERNA DE CARDIOLOGÍA
+Hospital Universitario La Paz — SERMAS
+Fecha: 10/03/2026  12:00 h
+Paciente: Martínez López, Carlos  |  CIP: 2800001234
+Médico: Dra. Isabel Mora Castellano — Cardióloga
+
+MOTIVO DE CONSULTA
+Revisión tras episodio de angina inestable en enero 2026. Seguimiento de
+cardiopatía isquémica con stent en DA.
+
+ANAMNESIS
+El paciente refiere buena tolerancia al esfuerzo habitual desde el episodio de
+enero. No presenta nuevos episodios de dolor torácico en reposo ni de esfuerzo.
+Cumple tratamiento. Refiere mareos ocasionales matutinos posiblemente por
+hipotensión matinal.
+
+EXPLORACIÓN
+PA: 136/82 mmHg  |  FC: 74 lpm  |  SatO2: 98%
+Auscultación: rítmico, sin soplos audibles. Murmullo vesicular conservado.
+Sin edemas maleolares.
+
+REVISIÓN DE PRUEBAS
+- Analítica (10/03/2026): Hemoglobina 13.1 (anemia leve). LDL 92 mg/dL.
+  HbA1c 7.4%. LDL por encima del objetivo (< 70 mg/dL).
+- ECG: Ritmo sinusal, sin cambios respecto a previos.
+- Ecocardiografía (pendiente de solicitar): FEVI sin datos previos recientes.
+
+JUICIO CLÍNICO
+- Cardiopatía isquémica estable. Stent DA permeable (clínica favorable).
+- Hipertensión arterial con control subóptimo en turno matinal.
+- Dislipemia: LDL por encima del objetivo en paciente de muy alto riesgo CV.
+- Anemia leve: a filiar.
+
+PLAN
+1. Añadir Ezetimiba 10 mg/noche para alcanzar objetivo LDL < 70 mg/dL.
+2. Solicitar ecocardiograma transtorácico.
+3. Derivar a hematología para estudio de anemia.
+4. Revisar posología de Losartán (tomar por la noche para evitar hipotensión matinal).
+5. Próxima revisión en 3 meses con ecocardiograma y analítica.
+
+Dra. Isabel Mora Castellano  |  Nº colegiado: 28-67890

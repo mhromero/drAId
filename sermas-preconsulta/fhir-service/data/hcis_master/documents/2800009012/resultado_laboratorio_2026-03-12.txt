@@ -1,0 +1,31 @@
+INFORME DE LABORATORIO — CONTROL ANALÍTICO
+Centro de Salud Hortaleza  |  SERMAS
+Fecha extracción: 12/03/2026  08:00 h  |  Fecha informe: 12/03/2026  10:30 h
+Paciente: Fernández Iglesias, Carmen  |  CIP: 2800009012
+Médico solicitante: Dra. Rosa Iglesias Ramos — Médica de Familia
+
+COAGULACIÓN
+INR: 2.8  [objetivo 2.0–3.0 en FA]  EN RANGO TERAPÉUTICO
+Tiempo de protrombina: 21.4 s  |  Actividad: 38%
+
+HEMOGRAMA
+Hemoglobina: 11.4 g/dL  [VR: 12.0-16.0]  BAJO (anemia leve crónica)
+VCM: 86 fL (normocítica)
+Leucocitos: 6.8 x10e9/L  Normal
+Plaquetas: 198 x10e9/L  Normal
+
+BIOQUÍMICA
+Sodio: 137 mEq/L  (normalizado respecto al ingreso)
+Potasio: 4.0 mEq/L  (normalizado)
+Creatinina: 1.05 mg/dL  |  eGFR: 52 mL/min/1.73m²  (G3a, ERC moderada leve)
+Urea: 48 mg/dL
+Calcio: 9.2 mg/dL  Normal
+Vitamina D (25-OH): 16 ng/mL  [VR > 30]  DÉFICIT
+TSH: 2.1 mUI/L  Normal
+Glucosa: 94 mg/dL  Normal  |  HbA1c: 5.6%  Normal
+
+OBSERVACIONES
+INR en rango terapéutico. Mantener dosis de Warfarina.
+Anemia leve crónica, probablemente relacionada con FA y anticoagulación.
+Déficit de vitamina D significativo: requiere suplementación.
+ERC G3a leve: vigilar función renal y ajustar dosis de fármacos con eliminación renal.
