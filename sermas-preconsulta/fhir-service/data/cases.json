@@ -116,7 +116,13 @@
       ],
       "recomendacion": "Keep case in pending physician review to confirm treatment optimization, reinforce exposure control, and decide if early allergy referral is needed if control remains suboptimal."
     },
-    "status": "pending",
-    "notification": null
+    "status": "refer_emergency",
+    "notification": {
+      "sent": false,
+      "simulated": true,
+      "phone": "+34600000101",
+      "message": "SERMAS Madrid: Por los síntomas que ha descrito, le recomendamos que acuda a urgencias o llame al 112 lo antes posible. No espere a su cita."
+    },
+    "actioned_at": "2026-04-11T11:52:59.877811"
   }
 ]

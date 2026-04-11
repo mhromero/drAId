@@ -50,6 +50,16 @@
       border-bottom: 1px solid #21466f;
     }
     .panel-body { padding: 10px; }
+    .history-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+      gap: 10px;
+      align-items: start;
+    }
+    .history-left,
+    .summary-column {
+      min-width: 0;
+    }
     .patient-line {
       background: #d6e3f2;
       border: 1px solid #8aa3be;
@@ -96,22 +106,94 @@
       font-weight: 700;
       font-size: 11px;
     }
+    .summary-card {
+      border: 1px solid #8aa3be;
+      border-radius: 4px;
+      background: #edf4fc;
+      padding: 10px;
+    }
+    .summary-title {
+      color: #244b73;
+      font-weight: 700;
+      font-size: 12px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: .3px;
+    }
+    .summary-btn {
+      display: inline-block;
+      border: 1px solid #5f7ea2;
+      background: linear-gradient(180deg, #3f71a8 0%, #2f5f95 100%);
+      color: #fff;
+      border-radius: 4px;
+      padding: 8px 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .summary-btn[disabled] {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    .summary-state {
+      border: 1px dashed #8aa3be;
+      border-radius: 4px;
+      padding: 8px;
+      background: #f5f9ff;
+      font-size: 12px;
+      color: #37506c;
+      margin-bottom: 8px;
+    }
+    .summary-content {
+      border: 1px solid #8aa3be;
+      border-radius: 4px;
+      background: #f7fbff;
+      padding: 8px;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      min-height: 180px;
+      color: #0b2340;
+    }
+    @media (max-width: 860px) {
+      .history-layout {
+        grid-template-columns: 1fr;
+      }
+      .summary-content {
+        min-height: 140px;
+      }
+    }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <h1>HP-HCIS · Historial clínico</h1>
-    <a class="back-link" href="/">← Volver al dashboard</a>
+    <h1>HP-HCIS · Patient clinical history</h1>
+    <a class="back-link" href="/">← Back to dashboard</a>
   </header>
 
   <main class="layout">
     <section class="panel">
-      <div class="panel-title">Datos básicos del paciente</div>
+      <div class="panel-title">Patient Overview</div>
       <div class="panel-body">
-        <div id="patientLine" class="patient-line">Cargando paciente...</div>
-        <input id="query" class="search-box" type="text" placeholder="Buscar en historial semántico...">
-        <div id="searchState" class="search-state">Escribe una consulta para buscar en los documentos clínicos.</div>
-        <div id="results" class="results"></div>
+        <div class="history-layout">
+          <div class="history-left">
+            <div id="patientLine" class="patient-line">Loading patient...</div>
+            <input id="query" class="search-box" type="text" placeholder="Search patient documents semantically...">
+            <div id="searchState" class="search-state">Type a query to search across the patient's clinical documents.</div>
+            <div id="results" class="results"></div>
+          </div>
+          <aside class="summary-column">
+            <div class="summary-card">
+              <div class="summary-title">AI Search Summary</div>
+              <button id="generateSummaryBtn" class="summary-btn" type="button" disabled>Generate Summary</button>
+              <div id="summaryState" class="summary-state">Run a search first, then click the button to generate a summary in English.</div>
+              <div id="summaryContent" class="summary-content">No summary generated yet.</div>
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
   </main>
@@ -123,19 +205,35 @@
     const queryEl = document.getElementById("query");
     const searchStateEl = document.getElementById("searchState");
     const resultsEl = document.getElementById("results");
+    const generateSummaryBtn = document.getElementById("generateSummaryBtn");
+    const summaryStateEl = document.getElementById("summaryState");
+    const summaryContentEl = document.getElementById("summaryContent");
 
     let debounceId = null;
     let activeController = null;
+    let latestQuery = "";
+    let latestResults = [];
+
+    function updateSummaryButtonState() {
+      const hasSearchOutput = Boolean(latestQuery) && Array.isArray(latestResults) && latestResults.length > 0;
+      generateSummaryBtn.disabled = !hasSearchOutput;
+    }
+
+    function clearSummary(message) {
+      summaryStateEl.textContent = message || "Run a search first, then click the button to generate a summary in English.";
+      summaryContentEl.textContent = "No summary generated yet.";
+      updateSummaryButtonState();
+    }
 
     async function loadBasicPatient() {
       if (!cip) {
-        patientLineEl.textContent = "No se recibió CIP en la URL.";
+        patientLineEl.textContent = "Missing CIP in URL.";
         return;
       }
       try {
         const res = await fetch(`/fhir/pacientes/${encodeURIComponent(cip)}/historial`);
         if (!res.ok) {
-          patientLineEl.textContent = "No se encontró historial para este paciente.";
+          patientLineEl.textContent = "No history found for this patient.";
           return;
         }
         const history = await res.json();
@@ -143,41 +241,41 @@
         const name = p.nombre_completo || p.nombre || "Paciente";
         patientLineEl.innerHTML = `
           <b>${name}</b> · CIP <b>${p.cip || cip}</b><br>
-          Fecha nacimiento: ${p.fecha_nacimiento || "s/d"} · Sexo: ${p.sexo || "s/d"}
+          Birth date: ${p.fecha_nacimiento || "n/a"} · Sex: ${p.sexo || "n/a"}
         `;
       } catch (err) {
-        patientLineEl.textContent = "Error cargando datos básicos del paciente.";
+        patientLineEl.textContent = "Error loading patient basic information.";
       }
     }
 
     async function warmupSemanticIndex() {
       if (!cip) return;
-      searchStateEl.textContent = "Preparando índice semántico del paciente...";
+      searchStateEl.textContent = "Preparing the patient's semantic index...";
       try {
         const res = await fetch(`/fhir/pacientes/${encodeURIComponent(cip)}/search/index`, {
           method: "POST",
         });
         if (!res.ok) {
-          searchStateEl.textContent = "No se pudo preparar el índice semántico.";
+          searchStateEl.textContent = "Could not prepare semantic index.";
           return;
         }
 
         const data = await res.json();
         if (data.integration_status === "no_documents") {
-          const p = data.documents_path ? ` Ruta: ${data.documents_path}` : "";
-          searchStateEl.textContent = (data.message || "No hay documentos para indexar.") + p;
+          const p = data.documents_path ? ` Path: ${data.documents_path}` : "";
+          searchStateEl.textContent = (data.message || "No documents found to index.") + p;
           return;
         }
 
         const idx = data.indexing || {};
         if (idx.performed) {
-          const p = data.documents_path ? ` Ruta: ${data.documents_path}.` : "";
-          searchStateEl.textContent = `Índice listo (${idx.indexed_files || 0} ficheros, ${idx.failed_files || 0} errores).${p} Escribe una consulta.`;
+          const p = data.documents_path ? ` Path: ${data.documents_path}.` : "";
+          searchStateEl.textContent = `Index ready (${idx.indexed_files || 0} files, ${idx.failed_files || 0} errors).${p} Type a query.`;
         } else {
-          searchStateEl.textContent = "Índice preparado. Escribe una consulta para buscar en los documentos clínicos.";
+          searchStateEl.textContent = "Index ready. Type a query to search the patient's clinical documents.";
         }
       } catch (_) {
-        searchStateEl.textContent = "Error preparando el índice semántico.";
+        searchStateEl.textContent = "Error preparing semantic index.";
       }
     }
 
@@ -197,20 +295,20 @@
     function renderResults(items) {
       if (!Array.isArray(items) || items.length === 0) {
         clearResults();
-        searchStateEl.textContent = "Sin resultados para esta consulta.";
+        searchStateEl.textContent = "No results for this query.";
         return;
       }
 
-      searchStateEl.textContent = `Resultados: ${items.length}`;
+      searchStateEl.textContent = `Results: ${items.length}`;
       resultsEl.innerHTML = items.map((item, idx) => {
-        const origin = escapeHtml(item.origin || "archivo no informado");
+        const origin = escapeHtml(item.origin || "source not provided");
         const scoreRaw = typeof item.score === "number" ? item.score : 0;
         const score = Math.max(0, Math.min(1, scoreRaw));
         const scorePct = Math.round(score * 100);
-        const text = escapeHtml(item.text || "(sin fragmento)");
+        const text = escapeHtml(item.text || "(no snippet)");
         return `
           <div class="result-item">
-            <div class="result-head">#${idx + 1} · Archivo: ${origin} · Score: ${scorePct}%</div>
+            <div class="result-head">#${idx + 1} · Source file: ${origin} · Score: ${scorePct}%</div>
             <div>${text}</div>
           </div>
         `;
@@ -223,7 +321,10 @@
 
       if (!q) {
         clearResults();
-        searchStateEl.textContent = "Escribe una consulta para buscar en los documentos clínicos.";
+        latestQuery = "";
+        latestResults = [];
+        searchStateEl.textContent = "Type a query to search across clinical documents.";
+        clearSummary();
         return;
       }
 
@@ -232,7 +333,7 @@
       }
       activeController = new AbortController();
 
-      searchStateEl.textContent = "Buscando... Si es la primera consulta, se está indexando la carpeta del paciente.";
+      searchStateEl.textContent = "Searching... If this is the first query, patient documents are being indexed.";
       try {
         const params = new URLSearchParams({ q, mode: "semantic", limit: "12" });
         const res = await fetch(`/fhir/pacientes/${encodeURIComponent(cip)}/search?${params.toString()}`, {
@@ -247,6 +348,9 @@
             if (errBody && errBody.detail) detail = String(errBody.detail);
           } catch (_) {}
           searchStateEl.textContent = detail;
+          latestQuery = q;
+          latestResults = [];
+          clearSummary("No results available to summarize.");
           return;
         }
 
@@ -257,31 +361,86 @@
         if (status === "error") {
           clearResults();
           searchStateEl.textContent = data.message || "Error en medical_search.";
+          latestQuery = q;
+          latestResults = [];
+          clearSummary("No results available to summarize.");
           return;
         }
 
         if (status === "no_documents") {
           clearResults();
-          const p = data.documents_path ? ` Ruta: ${data.documents_path}` : "";
-          searchStateEl.textContent = (data.message || "No hay documentos del paciente para indexar.") + p;
+          const p = data.documents_path ? ` Path: ${data.documents_path}` : "";
+          searchStateEl.textContent = (data.message || "No patient documents available for indexing.") + p;
+          latestQuery = q;
+          latestResults = [];
+          clearSummary("No results available to summarize.");
           return;
         }
 
         const items = Array.isArray(data.items) ? data.items : [];
+        latestQuery = q;
+        latestResults = items;
+        updateSummaryButtonState();
+        if (items.length > 0) {
+          summaryStateEl.textContent = "Results are ready. Click Generate Summary to ask the model.";
+        } else {
+          clearSummary("No results available to summarize.");
+        }
         renderResults(items);
 
         if (indexing.performed) {
           const ok = Number(indexing.indexed_files || 0);
           const ko = Number(indexing.failed_files || 0);
-          const suffix = items.length ? ` Resultados: ${items.length}.` : "";
-          searchStateEl.textContent = `Indexacion completada (${ok} ficheros, ${ko} errores).${suffix}`;
+          const suffix = items.length ? ` Results: ${items.length}.` : "";
+          searchStateEl.textContent = `Indexing completed (${ok} files, ${ko} errors).${suffix}`;
         } else if (data.message && items.length) {
-          searchStateEl.textContent = `${data.message} Resultados: ${items.length}.`;
+          searchStateEl.textContent = `${data.message} Results: ${items.length}.`;
         }
       } catch (err) {
         if (err && err.name === "AbortError") return;
         clearResults();
-        searchStateEl.textContent = "Error en la búsqueda semántica.";
+        latestQuery = q;
+        latestResults = [];
+        searchStateEl.textContent = "Semantic search failed.";
+        clearSummary("No results available to summarize.");
+      }
+    }
+
+    async function generateSummary() {
+      if (!cip) return;
+      if (!latestQuery || !Array.isArray(latestResults) || latestResults.length === 0) {
+        clearSummary("Run a search with visible results before generating a summary.");
+        return;
+      }
+
+      generateSummaryBtn.disabled = true;
+      summaryStateEl.textContent = "Generating summary with Ollama model llama3.2:1b...";
+      try {
+        const res = await fetch(`/fhir/pacientes/${encodeURIComponent(cip)}/search/summary`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query: latestQuery, results: latestResults }),
+        });
+
+        if (!res.ok) {
+          let detail = "Summary generation failed.";
+          try {
+            const errBody = await res.json();
+            if (errBody && errBody.detail) detail = String(errBody.detail);
+          } catch (_) {}
+          summaryStateEl.textContent = "Could not generate summary.";
+          summaryContentEl.textContent = detail;
+          return;
+        }
+
+        const data = await res.json();
+        summaryStateEl.textContent = `Summary generated with ${data.model || "llama3.2:1b"}.`;
+        summaryContentEl.textContent = data.summary || "No summary returned.";
+      } catch (_) {
+        summaryStateEl.textContent = "Could not generate summary.";
+        summaryContentEl.textContent = "Unexpected error while requesting summary.";
+      } finally {
+        updateSummaryButtonState();
       }
     }
 
@@ -289,9 +448,11 @@
       if (debounceId) clearTimeout(debounceId);
       debounceId = setTimeout(runSemanticSearch, 280);
     });
+    generateSummaryBtn.addEventListener("click", generateSummary);
 
     loadBasicPatient();
     warmupSemanticIndex();
+    clearSummary();
   </script>
 </body>
 </html>

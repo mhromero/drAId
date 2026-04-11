@@ -178,6 +178,11 @@ class RecomputeTriageRequest(BaseModel):
     selected_evidence: list[dict] = []
 
 
+class SemanticSummaryRequest(BaseModel):
+    query: str
+    results: list[dict]
+
+
 # ── Helpers de persistencia ──────────────────────────────────────────────────
 
 def _load_cases() -> list:
@@ -1358,6 +1363,92 @@ async def _call_external_search_service(payload: dict) -> dict:
         raise HTTPException(status_code=502, detail=f"Buscador externo no disponible: {exc}") from exc
     except httpx.HTTPStatusError as exc:
         raise HTTPException(status_code=502, detail=f"Buscador externo devolvió error HTTP: {exc}") from exc
+
+
+def _format_results_for_summary_prompt(results: list[dict], limit: int = 12) -> str:
+    lines: list[str] = []
+    for idx, item in enumerate(results[:limit], start=1):
+        origin = str(item.get("origin") or "unknown")
+        score = item.get("score")
+        score_txt = f"{float(score):.3f}" if isinstance(score, (int, float)) else "n/a"
+        text = str(item.get("text") or "").strip().replace("\n", " ")
+        if len(text) > 520:
+            text = text[:520].rstrip() + "..."
+        lines.append(f"{idx}. origin={origin} | score={score_txt} | snippet={text}")
+    return "\n".join(lines)
+
+
+@app.post("/fhir/pacientes/{cip}/search/summary")
+async def summarize_search_results(cip: str, payload: SemanticSummaryRequest):
+    """
+    Generates an on-demand English summary from semantic search results.
+    """
+    query = (payload.query or "").strip()
+    results = payload.results or []
+    if not query:
+        raise HTTPException(status_code=400, detail="Query is required to generate a summary.")
+    if not results:
+        raise HTTPException(status_code=400, detail="At least one search result is required.")
+
+    model_name = os.getenv("OLLAMA_MODEL", "llama3.2:1b")
+    ollama_host = os.getenv("OLLAMA_HOST", "http://127.0.0.1:11434")
+    ollama_bin = os.path.expanduser(os.getenv("OLLAMA_BIN", "~/PLN/bin/ollama"))
+
+    try:
+        from ollama import AsyncClient
+    except Exception as exc:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Python package 'ollama' is not available: {exc}",
+        ) from exc
+
+    system_prompt = (
+        "You are a clinical summarization assistant. "
+        "Write in English only. "
+        "Summarize semantic-search snippets for a physician. "
+        "Do not invent facts. If evidence is weak or conflicting, state that clearly. "
+        "Keep it concise and actionable."
+    )
+    user_prompt = (
+        f"Patient CIP: {cip}\n"
+        f"Search query: {query}\n\n"
+        "Semantic search results:\n"
+        f"{_format_results_for_summary_prompt(results)}\n\n"
+        "Output format:\n"
+        "1) One short paragraph with the key clinical picture.\n"
+        "2) Bullet list of 3-5 relevant findings.\n"
+        "3) One line with risks/uncertainties from the evidence quality.\n"
+        "4) One line with suggested next review step."
+    )
+
+    try:
+        client = AsyncClient(host=ollama_host)
+        response = await client.chat(
+            model=model_name,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            options={"temperature": 0.2},
+        )
+        summary = ((response or {}).get("message") or {}).get("content", "").strip()
+        if not summary:
+            raise RuntimeError("Empty response from model")
+        return {
+            "integration_status": "ok",
+            "summary": summary,
+            "model": model_name,
+            "host": ollama_host,
+        }
+    except Exception as exc:
+        raise HTTPException(
+            status_code=502,
+            detail=(
+                "Ollama summary generation failed. "
+                f"Verify Ollama is running and model '{model_name}' is available. "
+                f"Expected binary path: {ollama_bin}. Error: {exc}"
+            ),
+        ) from exc
 
 
 @app.get("/fhir/pacientes/{cip}/search")

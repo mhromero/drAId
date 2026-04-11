@@ -10,6 +10,7 @@ dependencies = [
     "fastapi>=0.135.3",
     "httpx>=0.28.1",
     "negspacy>=1.0.4",
+    "ollama>=0.6.1",
     "pillow>=11.2.1",
     "pymupdf>=1.26.0",
     "pypdf>=6.10.0",
