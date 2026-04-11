@@ -1,0 +1,20 @@
+**ELECTROCARDIOGRAM REPORT**  
+La Paz University Hospital — Cardiology Section  
+Date: 01/22/2026, 10:10 AM  
+Patient: Martínez López, Carlos | CIP: 2800001234
+
+**PARAMETERS**  
+- Rhythm: Regular sinus rhythm.  
+- Heart rate: 88 bpm.  
+- PR: 162 ms (normal).  
+- QRS: 88 ms (normal, no conduction block).  
+- QTc: 420 ms (normal).  
+- Electrical axis: +45° (normal).
+
+**DESCRIPTION**  
+No acute repolarization changes are observed. No ST-segment elevation. No pathological Q waves suggestive of prior necrosis are identified in any lead. T-wave morphology shows no significant abnormalities. Compared with prior ECG from 2023: no relevant changes.
+
+**CONCLUSION**  
+ECG within normal limits. No electrocardiographic criteria of acute coronary syndrome at the time of recording.
+
+Dr. Alejandro Vega Montero — On-call cardiologist

@@ -1,0 +1,46 @@
+**EMERGENCY REPORT — HOSPITAL EMERGENCY DEPARTMENT**  
+La Paz University Hospital — SERMAS  
+Date and time of care: 01/22/2026, 10:00 AM  
+Patient: Martínez López, Carlos  
+Date of birth: 03/14/1966 | Sex: Male | CIP: 2800001234
+
+**CHIEF COMPLAINT**  
+Sudden-onset oppressive chest pain approximately 2 hours prior, radiating to the jaw and left arm, with associated cold sweating. Reports previous similar episodes of lower intensity during exertion.
+
+**RELEVANT PAST MEDICAL HISTORY**  
+- Hypertension (since 2015), on Losartan 50 mg/day.  
+- Type 2 diabetes mellitus (since 2018), on Metformin 850 mg every 12 h.  
+- Known ischemic heart disease (since 2021).  
+- Percutaneous coronary angioplasty with stent in 2023 (proximal LAD).  
+- Lipid-lowering therapy: Atorvastatin 40 mg/night.  
+- No known drug allergies.
+
+**PHYSICAL EXAMINATION**  
+- BP: 152/90 mmHg | HR: 88 bpm | SpO2: 97% | Temp: 36.4 °C  
+- Conscious and oriented. Mild mucocutaneous pallor.  
+- Cardiopulmonary auscultation: regular rhythm, no murmurs. Bilateral vesicular breath sounds preserved.  
+- Abdomen: soft, non-tender. Lower limbs: no edema.
+
+**COMPLEMENTARY TESTS**  
+- 12-lead ECG: sinus rhythm at 88 bpm. No acute repolarization changes. No conduction blocks.  
+- Chest X-ray: normal cardiothoracic ratio. No infiltrates or pleural effusion.  
+- Urgent labs: Hemoglobin 13.1 g/dL. Leukocytes 7.8 x10e9/L. Glucose 148 mg/dL.  
+  High-sensitivity Troponin I: 14 ng/L (normal <34 ng/L). Creatinine 0.95 mg/dL.
+
+**CLINICAL ASSESSMENT**  
+Low-risk non-ST elevation acute coronary syndrome (NSTE-ACS).  
+Decompensated stable angina. Probable unstable angina to rule out.
+
+**TREATMENT IN THE EMERGENCY DEPARTMENT**  
+- ASA 300 mg PO loading dose.  
+- Sublingual nitroglycerin 0.4 mg with partial clinical improvement.  
+- Continuous monitoring. Peripheral IV line.  
+- 6-hour observation with serial troponins at 3 hours: 12 ng/L (decrease).
+
+**DISCHARGE PLAN**  
+Discharge home with priority Cardiology follow-up in 48–72 hours.  
+Continue usual medication. Relative rest. Rescue sublingual nitroglycerin.  
+Alarm instructions: return to the emergency department if chest pain recurs.
+
+Responsible physician: Dr. Javier Ramos Ortiz  
+Medical license no.: 28-12345

@@ -1,0 +1,28 @@
+CARDIOVASCULAR NURSING CARE PLAN
+La Paz University Hospital — Outpatient Cardiology Unit
+Date: 03/10/2026
+Patient: Martínez López, Carlos | CIP: 2800001234
+Responsible nurse: María Jesús Flores Torres
+
+NURSING ASSESSMENT
+59-year-old patient with ischemic heart disease, hypertension, and type 2 diabetes. Reports partial adherence to diet. Good medication adherence by self-report. Vitals: BP 136/82 mmHg, HR 74 bpm, SpO2 98%, weight 83 kg.
+
+NURSING DIAGNOSES (NANDA)
+
+00099 Ineffective health maintenance related to insufficient knowledge of cardiovascular diet.
+00126 Deficient knowledge related to glycemic control.
+INTERVENTIONS (NIC)
+
+Education on DASH diet and sodium reduction.
+Training on recognition of cardiovascular warning signs.
+Instruction on correct self-monitoring blood glucose technique.
+Reinforcement of adherence to antiplatelet treatment (ASA).
+Measurement and recording of vital signs. Monthly weight monitoring.
+OUTCOMES/GOALS (NOC)
+
+Target BP <130/80 mmHg at next follow-up.
+HbA1c <7.0% in 3 months.
+BMI <27 kg/m² in 6 months.
+María Jesús Flores Torres | Cardiology Specialist Nurse
+
+

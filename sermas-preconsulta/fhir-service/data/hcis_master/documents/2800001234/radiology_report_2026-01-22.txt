@@ -1,0 +1,24 @@
+**RADIOLOGY REPORT — CHEST X-RAY (PA VIEW)**  
+La Paz University Hospital — Radiodiagnostics Department  
+Examination date: 01/22/2026, 10:15 AM  
+Report date: 01/22/2026, 11:20 AM  
+Patient: Martínez López, Carlos | CIP: 2800001234  
+Requesting physician: Dr. Javier Ramos (Emergency Department)
+
+**TECHNIQUE**  
+Posteroanterior projection in standing position, with full inspiration.
+
+**FINDINGS**  
+- Cardiothoracic ratio: 0.50 (normal). Cardiac silhouette at the upper limit of normal.  
+- Mediastinum: no widening. Right and left hila appear normal.  
+- Pulmonary parenchyma: no consolidations, infiltrates, or nodules.  
+  No signs of pulmonary edema or vascular redistribution.  
+- Vascular markings: normal.  
+- Ribs and soft tissues: no relevant findings.  
+- Costophrenic angles: clear. No pleural effusion.
+
+**CONCLUSION**  
+Chest X-ray with no acute findings. No definite cardiomegaly.  
+No infiltrates or consolidations.
+
+Dr. Roberto Sánchez Paloma — Radiologist

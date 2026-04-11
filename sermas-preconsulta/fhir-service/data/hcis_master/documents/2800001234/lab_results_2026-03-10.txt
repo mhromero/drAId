@@ -1,0 +1,28 @@
+**LABORATORY REPORT — FOLLOW-UP BLOOD TESTS**  
+La Paz University Hospital — Clinical Laboratory Service  
+Collection date: 03/10/2026, 08:00 AM | Report date: 03/10/2026, 11:00 AM  
+Patient: Martínez López, Carlos | CIP: 2800001234 | Requesting physician: Dr. Mora
+
+**COMPLETE BLOOD COUNT**  
+Hemoglobin: 13.1 g/dL [RI: 13.5–17.5] ↓ mild  
+Hematocrit: 39.8% [RI: 41–53] ↓ mild  
+MCV: 88 fL (normal)  
+Leukocytes: 7.8 x10e9/L (normal) | Neutrophils: 62%  
+Platelets: 198 x10e9/L (normal)
+
+**BIOCHEMISTRY**  
+Fasting glucose: 142 mg/dL [RI: 70–100] ↑ (poor glycemic control)  
+HbA1c: 7.4% [target <7.0%] ↑ mild  
+Creatinine: 0.95 mg/dL | eGFR: 76 mL/min/1.73m² (mild G2)  
+Total cholesterol: 168 mg/dL (controlled with statin)  
+LDL: 92 mg/dL [target <70 in high CV risk] ↑  
+HDL: 38 mg/dL ↓  
+Triglycerides: 189 mg/dL ↑ mild  
+Sodium: 139 mEq/L | Potassium: 4.1 mEq/L | Chloride: 103 mEq/L  
+ALT: 28 U/L | AST: 24 U/L (normal while on statin)
+
+**COMMENTS**  
+Mild normocytic anemia. Rule out iron deficiency at next follow-up.  
+LDL remains above target in a very high cardiovascular-risk patient.  
+Consider statin optimization or adding ezetimibe.  
+Suboptimal glycemic control: review diet and adherence to Metformin.

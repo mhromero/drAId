@@ -1,0 +1,37 @@
+PROGRESS NOTE — OUTPATIENT CARDIOLOGY CLINIC
+La Paz University Hospital — SERMAS
+Date: 03/10/2026, 12:00 PM
+Patient: Martínez López, Carlos | CIP: 2800001234
+Physician: Dr. Isabel Mora Castellano — Cardiologist
+
+REASON FOR CONSULTATION
+Follow-up after unstable angina episode in January 2026. Ongoing management of ischemic heart disease with LAD stent.
+
+HISTORY
+The patient reports good tolerance to usual exertion since the January episode. No new episodes of chest pain at rest or on exertion. Adherent to treatment. Reports occasional morning dizziness, possibly due to morning hypotension.
+
+EXAMINATION
+BP: 136/82 mmHg | HR: 74 bpm | SpO2: 98%
+Auscultation: regular rhythm, no audible murmurs. Preserved vesicular breath sounds.
+No ankle edema.
+
+TEST REVIEW
+
+Labs (03/10/2026): Hemoglobin 13.1 (mild anemia). LDL 92 mg/dL.
+HbA1c 7.4%. LDL above target (<70 mg/dL).
+ECG: Sinus rhythm, no changes versus prior tracings.
+Echocardiography (pending request): no recent LVEF data available.
+CLINICAL ASSESSMENT
+
+Stable ischemic heart disease. Patent LAD stent (favorable clinical course).
+Hypertension with suboptimal control in the morning period.
+Dyslipidemia: LDL above goal in a very high cardiovascular-risk patient.
+Mild anemia: etiology to be determined.
+PLAN
+
+Add Ezetimibe 10 mg at night to reach LDL target <70 mg/dL.
+Request transthoracic echocardiogram.
+Refer to Hematology for anemia workup.
+Review Losartan schedule (take at night to avoid morning hypotension).
+Next follow-up in 3 months with echocardiogram and labs.
+Dr. Isabel Mora Castellano | Medical license no.: 28-67890
