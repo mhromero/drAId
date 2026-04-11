@@ -413,7 +413,7 @@ def _build_fragments_from_bundle(bundle: dict, cip: str) -> list[dict]:
 
 # ── Lectura de documentos desde carpeta medical_search/data/{cip}/ ────────────
 
-_MEDICAL_DATA_DIR = _DRAID_ROOT / "medical_search" / "data"
+_MEDICAL_DATA_DIR = _DRAID_ROOT / "sermas-preconsulta" / "fhir-service" / "data" / "hcis_master" / "documents"
 
 _STEM_TO_SECTION: list[tuple[str, str, str]] = [
     ("nota_urgencias",           "urgencias",                  "Nota de Urgencias"),
