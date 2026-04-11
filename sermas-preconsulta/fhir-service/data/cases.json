@@ -49,5 +49,74 @@
       "phone": "+34600000123",
       "message": "SERMAS Madrid: Your physician reviewed your symptoms. Keep your scheduled appointment. If symptoms worsen, call emergency services immediately."
     }
+  },
+  {
+    "id": "case-2800001001-20260411",
+    "session_id": "seed-dashboard-2800001001",
+    "cip": "2800001001",
+    "caller_phone": "+34600000101",
+    "timestamp": "2026-04-11T10:05:00",
+    "symptoms": {
+      "chief_complaint": "Persistent nighttime nasal congestion and recurrent sneezing despite partial response to antihistamine treatment.",
+      "duration": "3 weeks",
+      "severity": "moderate",
+      "symptoms": [
+        "nasal congestion",
+        "watery rhinorrhea",
+        "frequent sneezing",
+        "nasal itching"
+      ],
+      "associated_symptoms": [
+        "dust-triggered worsening",
+        "occasional mild exertional dyspnea"
+      ]
+    },
+    "history": {
+      "paciente": {
+        "nombre": "Javier Romero Sanchez",
+        "edad": 47,
+        "cip": "2800001001",
+        "fecha_nacimiento": "1979-02-14",
+        "sexo": "male"
+      },
+      "diagnosticos_activos": [
+        "Persistent allergic rhinitis"
+      ],
+      "medicacion_actual": [
+        "Cetirizine 10 mg nightly",
+        "Intranasal budesonide 64 mcg, 1 spray per nostril every 12 hours",
+        "Nasal saline irrigation"
+      ],
+      "alergias": [],
+      "visitas_recientes": [
+        {
+          "fecha": "2026-04-03",
+          "tipo": "Family medicine",
+          "nota": "Initial evaluation for rhinitis symptoms"
+        },
+        {
+          "fecha": "2026-04-05",
+          "tipo": "Nursing follow-up",
+          "nota": "Partial improvement, education and adherence review"
+        },
+        {
+          "fecha": "2026-04-08",
+          "tipo": "Interdisciplinary plan update",
+          "nota": "Escalated to intranasal corticosteroid and monitoring goals"
+        }
+      ]
+    },
+    "triage": {
+      "urgencia": "media",
+      "resumen": "Clinical documents suggest persistent but stable allergic rhinitis with nighttime impact and environmental triggers, without current emergency respiratory red flags.",
+      "alertas": [
+        "Symptoms persist after first-line antihistamine therapy",
+        "Nighttime congestion affects sleep quality",
+        "Dust exposure at home remains a relevant trigger"
+      ],
+      "recomendacion": "Keep case in pending physician review to confirm treatment optimization, reinforce exposure control, and decide if early allergy referral is needed if control remains suboptimal."
+    },
+    "status": "pending",
+    "notification": null
   }
 ]
