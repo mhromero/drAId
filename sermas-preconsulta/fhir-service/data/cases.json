@@ -1,0 +1,53 @@
+[
+  {
+    "id": "case-2800001234-20260411",
+    "session_id": "seed-dashboard-2800001234",
+    "cip": "2800001234",
+    "caller_phone": "+34600000123",
+    "timestamp": "2026-04-11T09:15:00",
+    "symptoms": {
+      "chief_complaint": "Intermittent oppressive chest pain during moderate exertion over the last 24 hours, currently resolved at rest.",
+      "duration": "24 hours",
+      "severity": "moderate",
+      "symptoms": [
+        "chest pain",
+        "jaw radiation",
+        "left arm discomfort"
+      ],
+      "associated_symptoms": [
+        "cold sweating",
+        "mild dizziness"
+      ]
+    },
+    "history": {
+      "paciente": {
+        "nombre": "Carlos Martinez Lopez",
+        "cip": "2800001234",
+        "fecha_nacimiento": "1965-01-20",
+        "sexo": "male"
+      },
+      "diagnosticos_activos": [],
+      "medicacion_actual": [],
+      "alergias": [],
+      "visitas_recientes": []
+    },
+    "triage": {
+      "urgencia": "media",
+      "resumen": "Patient with high cardiovascular risk and prior ischemic heart disease presents recurrent exertional chest pain without current red flags at rest.",
+      "alertas": [
+        "Known coronary artery disease with LAD stent",
+        "Recent emergency episode for unstable angina",
+        "Suboptimal cardiovascular risk factor control"
+      ],
+      "recomendacion": "Clinical follow-up call completed. Keep scheduled cardiology plan, reinforce warning signs, and escalate to emergency care if pain recurs at rest or lasts more than 15 minutes."
+    },
+    "status": "keep_appointment",
+    "actioned_at": "2026-04-11T09:32:00",
+    "notification": {
+      "sent": false,
+      "simulated": true,
+      "phone": "+34600000123",
+      "message": "SERMAS Madrid: Your physician reviewed your symptoms. Keep your scheduled appointment. If symptoms worsen, call emergency services immediately."
+    }
+  }
+]
