@@ -17,10 +17,12 @@ else
   echo "  → Ollama ya está corriendo"
 fi
 
+VENV="$ROOT/../.venv"
+
 # LLM service
 echo "  → Arrancando llm-service (puerto 8002)..."
 LLM_BACKEND=ollama OLLAMA_MODEL=llama3.1:8b \
-  "$ROOT/llm-service/.venv/bin/uvicorn" main:app \
+  "$VENV/bin/uvicorn" main:app \
   --app-dir "$ROOT/llm-service" \
   --port 8002 --log-level warning > /tmp/sermas-llm.log 2>&1 &
 
@@ -29,7 +31,7 @@ sleep 2
 # FHIR service + dashboard
 echo "  → Arrancando fhir-service + dashboard (puerto 8001)..."
 LLM_SERVICE_URL=http://localhost:8002 \
-  "$ROOT/fhir-service/.venv/bin/uvicorn" main:app \
+  "$VENV/bin/uvicorn" main:app \
   --app-dir "$ROOT/fhir-service" \
   --port 8001 --log-level warning > /tmp/sermas-fhir.log 2>&1 &
 

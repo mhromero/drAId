@@ -1,0 +1,28 @@
+INFORME DE LABORATORIO — ANALÍTICA DE CONTROL
+Hospital Universitario La Paz — Servicio de Análisis Clínicos
+Fecha extracción: 10/03/2026  08:00 h  |  Fecha informe: 10/03/2026  11:00 h
+Paciente: Martínez López, Carlos  |  CIP: 2800001234  |  Médico solicitante: Dr. Mora
+
+HEMATIMETRÍA
+Hemoglobina: 13.1 g/dL  [VR: 13.5-17.5]  ↓ leve
+Hematocrito: 39.8%  [VR: 41-53]  ↓ leve
+VCM: 88 fL (normal)
+Leucocitos: 7.8 x10e9/L (normal)  |  Neutrófilos: 62%
+Plaquetas: 198 x10e9/L (normal)
+
+BIOQUÍMICA
+Glucosa basal: 142 mg/dL  [VR: 70-100]  ↑ (mal control glucémico)
+HbA1c: 7.4%  [objetivo < 7.0%]  ↑ leve
+Creatinina: 0.95 mg/dL  |  eGFR: 76 mL/min/1.73m²  (G2 leve)
+Colesterol total: 168 mg/dL  (controlado con estatina)
+LDL: 92 mg/dL  [objetivo < 70 en alto riesgo CV]  ↑
+HDL: 38 mg/dL  ↓
+Triglicéridos: 189 mg/dL  ↑ leve
+Sodio: 139 mEq/L  |  Potasio: 4.1 mEq/L  |  Cloro: 103 mEq/L
+ALT: 28 U/L  |  AST: 24 U/L  (normal bajo estatina)
+
+OBSERVACIONES
+Anemia leve normocítica. Descartar ferropenia en control próximo.
+LDL por encima del objetivo en paciente de muy alto riesgo cardiovascular.
+Considerar ajuste de estatina o añadir ezetimibe.
+Control glucémico subóptimo: revisar dieta y adherencia a Metformina.

@@ -12,11 +12,15 @@ Endpoints:
 """
 
 import json
+import logging
 import os
 import uuid
 import base64
 from datetime import datetime
 from pathlib import Path
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
+logger = logging.getLogger("fhir-service")
 
 import httpx
 from fastapi import FastAPI, HTTPException, Query
@@ -45,6 +49,9 @@ PATIENT_HISTORY_PATH = DASHBOARD_DIR / "historial.html"
 LLM_SERVICE_URL = os.getenv("LLM_SERVICE_URL", "http://llm-service:8002")
 SEARCH_SERVICE_URL = os.getenv("SEARCH_SERVICE_URL")
 CASES_FILE = Path(__file__).parent / "data" / "cases.json"
+
+# Raíz del proyecto drAId (tres niveles por encima del fhir-service)
+_DRAID_ROOT = Path(__file__).parent.parent.parent
 CASES_FILE.parent.mkdir(parents=True, exist_ok=True)
 
 
@@ -404,17 +411,133 @@ def _build_fragments_from_bundle(bundle: dict, cip: str) -> list[dict]:
     return fragments
 
 
+# ── Lectura de documentos desde carpeta medical_search/data/{cip}/ ────────────
+
+_MEDICAL_DATA_DIR = _DRAID_ROOT / "medical_search" / "data"
+
+_STEM_TO_SECTION: list[tuple[str, str, str]] = [
+    ("nota_urgencias",           "urgencias",                  "Nota de Urgencias"),
+    ("informe_urgencias",        "urgencias",                  "Informe Urgencias"),
+    ("informe_alta",             "informes_alta_evolucion",    "Informe de Alta"),
+    ("resultado_laboratorio",    "laboratorio",                "Resultado Laboratorio"),
+    ("resultado_analitica",      "laboratorio",                "Analítica"),
+    ("resultado_ecg",            "informes_pruebas",           "ECG"),
+    ("resultado_espirometria",   "informes_pruebas",           "Espirometría"),
+    ("informe_radiologia",       "pruebas_imagen",             "Informe Radiología"),
+    ("informe_tac",              "pruebas_imagen",             "TAC"),
+    ("nota_evolucion",           "consultas_externas",         "Nota de Especialista"),
+    ("nota_atencion_primaria",   "consultas_externas",         "Atención Primaria"),
+    ("nota_medicina_interna",    "consultas_externas",         "Medicina Interna"),
+    ("control_obstetrico",       "consultas_externas",         "Control Obstétrico"),
+    ("nota_enfermeria",          "planes_cuidados",            "Plan Enfermería"),
+    ("plan_cuidados",            "planes_cuidados",            "Plan de Cuidados"),
+    ("historia_clinica",         "informes_alta_evolucion",    "Historia Clínica Resumida"),
+]
+
+
+def _stem_to_section(stem: str) -> tuple[str, str]:
+    sl = stem.lower()
+    for keyword, section, label in _STEM_TO_SECTION:
+        if keyword in sl:
+            return section, label
+    return "anotaciones_notas_libres", "Documento"
+
+
+def _extract_date_from_stem(stem: str) -> str:
+    import re
+    # Pattern YYYY-MM-DD in filename
+    m = re.search(r"(\d{4}-\d{2}-\d{2})", stem)
+    if m:
+        return m.group(1)
+    # Pattern YYYYMMDD
+    for token in stem.replace("-", "_").split("_"):
+        try:
+            from datetime import datetime as _dt
+            return _dt.strptime(token, "%Y%m%d").date().isoformat()
+        except ValueError:
+            pass
+    return ""
+
+
+def _read_folder_as_sections(cip: str) -> list[dict]:
+    """
+    Lee todos los TXT/PDF de medical_search/data/{cip}/ y los devuelve
+    como fragmentos all_sections listos para el historial del dashboard.
+    """
+    folder = _MEDICAL_DATA_DIR / cip
+    if not folder.is_dir():
+        return []
+
+    try:
+        import sys as _sys
+        _sys.path.insert(0, str(_DRAID_ROOT))
+        import fitz as _fitz
+        _fitz_ok = True
+    except ImportError:
+        _fitz_ok = False
+
+    sections: list[dict] = []
+    for f in sorted(folder.iterdir()):
+        if not f.is_file():
+            continue
+        suffix = f.suffix.lower()
+        if suffix not in {".txt", ".pdf"}:
+            continue
+        try:
+            if suffix == ".txt":
+                text = f.read_text(encoding="utf-8", errors="ignore").strip()
+            elif _fitz_ok:
+                with _fitz.open(str(f)) as doc:
+                    text = "\n".join(p.get_text("text").strip() for p in doc).strip()
+            else:
+                continue
+        except Exception:
+            continue
+
+        if not text:
+            continue
+
+        source_section, section_label = _stem_to_section(f.stem)
+        sections.append({
+            "source_section": source_section,
+            "section_type":   section_label,
+            "resource_type":  section_label,
+            "filename":       f.name,
+            "timestamp":      _extract_date_from_stem(f.stem),
+            "author":         "No informado",
+            "text":           text,
+            "confidence":     0.95 if suffix == ".txt" else 0.90,
+            "manual_review":  False,
+        })
+
+    return sections
+
+
 async def _resolve_hcis_history(cip: str) -> dict | None:
+    # Intentar leer desde carpeta de documentos del paciente
+    folder_sections = _read_folder_as_sections(cip)
+
     bundle = await get_patient_bundle(cip)
     if bundle:
         master_record = build_patient_master_record(bundle, cip)
         base = to_legacy_history_view(master_record, cip)
-        if not base.get("all_sections"):
-            # Fallback defensivo para no romper el dashboard si faltan secciones.
+        # Si hay carpeta de documentos, usarla como fuente principal de all_sections
+        if folder_sections:
+            base["all_sections"] = folder_sections
+        elif not base.get("all_sections"):
             base["all_sections"] = _build_fragments_from_bundle(bundle, cip)
         if not base.get("catalogo_hcis"):
             base["catalogo_hcis"] = _hcis_section_catalog()
         return base
+
+    # Sin bundle FHIR — si hay carpeta de documentos, construir historial mínimo
+    if folder_sections:
+        return {
+            "estructura": "HCIS",
+            "paciente": {"cip": cip},
+            "all_sections": folder_sections,
+            "catalogo_hcis": _hcis_section_catalog(),
+        }
 
     cached_history = _get_cached_history_for_cip(cip)
     if not cached_history:
@@ -885,6 +1008,103 @@ async def _call_llm_service(symptoms: dict, history: dict) -> dict:
         }
 
 
+_CHROMA_DIR = _DRAID_ROOT / "medical_search" / ".chroma_medical"
+
+
+async def _local_medical_search_for_cip(cip: str, query: str, top_k: int = 10) -> dict:
+    """
+    Búsqueda semántica local usando medical_search (ChromaDB + spaCy).
+    Indexa automáticamente los documentos del paciente si la colección está vacía.
+    """
+    import sys
+    if str(_DRAID_ROOT) not in sys.path:
+        sys.path.insert(0, str(_DRAID_ROOT))
+
+    from datetime import datetime as _dt
+    import chromadb as _chromadb
+    from medical_search.indexer import IndexedDocument, SemanticIndexer
+    from medical_search.ingest import ingest_file, IngestionError
+    from medical_search.processor import initialize_nlp, process_clinical_text
+    from medical_search.search import MedicalSearcher
+
+    collection_name = f"medical_notes_{cip}"
+    persist_dir = str(_CHROMA_DIR)
+    patient_folder = _MEDICAL_DATA_DIR / cip
+
+    logger.info("[search] cip=%s query=%r collection=%s", cip, query, collection_name)
+
+    # Auto-indexar si la colección está vacía
+    client = _chromadb.PersistentClient(path=persist_dir)
+    col = client.get_or_create_collection(collection_name, metadata={"hnsw:space": "cosine"})
+    logger.info("[search] collection %s has %d chunks", collection_name, col.count())
+
+    if col.count() == 0 and patient_folder.exists():
+        files = [f for f in sorted(patient_folder.rglob("*")) if f.is_file() and f.suffix.lower() in {".txt", ".pdf"}]
+        logger.info("[search] indexing %d files from %s", len(files), patient_folder)
+        nlp = initialize_nlp()
+        indexer = SemanticIndexer(
+            persist_dir=persist_dir,
+            collection_name=collection_name,
+        )
+        for src in sorted(patient_folder.rglob("*")):
+            if not src.is_file() or src.suffix.lower() not in {".txt", ".pdf"}:
+                continue
+            try:
+                ingested = ingest_file(src)
+                processed = process_clinical_text(ingested.raw_text, nlp)
+                # Extract date from filename stem (e.g. nota_urgencias_2026-01-22)
+                doc_date = "unknown"
+                for part in src.stem.replace("-", "_").split("_"):
+                    try:
+                        doc_date = _dt.strptime(part, "%Y%m%d").date().isoformat()
+                        break
+                    except ValueError:
+                        # try YYYY-MM-DD format embedded in stem
+                        pass
+                # Try YYYY-MM-DD in stem directly
+                import re as _re
+                m = _re.search(r"(\d{4}-\d{2}-\d{2})", src.stem)
+                if m:
+                    doc_date = m.group(1)
+                indexer.index_document(IndexedDocument(
+                    doc_id=str(src.resolve()),
+                    patient_id=cip,
+                    document_date=doc_date,
+                    source_path=str(src.resolve()),
+                    processed=processed,
+                ))
+            except IngestionError as e:
+                logger.warning("[search] failed to index %s: %s", src.name, e)
+
+        logger.info("[search] indexing complete — collection now has %d chunks", col.count())
+
+    if col.count() == 0:
+        logger.warning("[search] no documents found for cip=%s", cip)
+        return {"integration_status": "no_documents", "source": "medical_search", "items": []}
+
+    searcher = MedicalSearcher(persist_dir=persist_dir, collection_name=collection_name)
+    hits = searcher.search(query, top_k=top_k)
+    logger.info("[search] query=%r returned %d hits", query, len(hits))
+
+    from pathlib import Path as _Path
+    items = []
+    for hit in hits:
+        src_path = hit.metadata.get("source_path", "")
+        filename = _Path(src_path).name if src_path else hit.doc_id
+        doc_date = hit.metadata.get("document_date", "")
+        items.append({
+            "type": "documento",
+            "date": doc_date,
+            "origin": filename,
+            "text": hit.text,
+            "source_section": "medical_search",
+            "confidence": round(hit.score, 4),
+            "score": round(hit.score, 4),
+        })
+
+    return {"integration_status": "ok", "source": "medical_search", "items": items}
+
+
 async def _call_external_search_service(payload: dict) -> dict:
     """
     Proxy al buscador semántico/clásico externo (RAG) ya implementado por el equipo.
@@ -922,9 +1142,16 @@ async def search_patient_history(
     limit: int = Query(default=50, ge=1, le=200),
 ):
     """
-    Endpoint de integración con el buscador RAG del equipo.
-    No implementa scoring local: delega en SEARCH_SERVICE_URL.
+    Búsqueda semántica sobre los documentos del paciente.
+    Usa medical_search (ChromaDB + spaCy) localmente cuando SEARCH_SERVICE_URL no está configurado.
     """
+    if not q.strip():
+        return {"integration_status": "ok", "source": "medical_search", "items": []}
+
+    if not SEARCH_SERVICE_URL:
+        return await _local_medical_search_for_cip(cip, q, top_k=limit)
+
+    # Delegar en servicio externo
     bundle = await get_patient_bundle(cip)
     if not bundle:
         raise HTTPException(status_code=404, detail="Paciente no encontrado")

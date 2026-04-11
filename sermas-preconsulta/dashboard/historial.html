@@ -107,6 +107,11 @@
       margin-bottom: 8px;
       display: none;
     }
+    .notice.semantic-ok {
+      border-color: #38a169;
+      background: #f0fff4;
+      color: #276749;
+    }
 
     .table-wrap {
       border: 1px solid #6f8db2;
@@ -388,7 +393,7 @@
         return h.all_sections.map(f => buildDoc(
           (f.section_type || f.resource_type || "documento").toLowerCase(),
           f.timestamp || "",
-          `HCIS.${f.resource_type || "Resource"}`,
+          f.filename || `HCIS.${f.resource_type || "Resource"}`,
           f.text || "",
           `${f.source_section || ""} ${f.author || ""}`,
           {
@@ -718,6 +723,8 @@
       `;
     }
 
+    let _lastSearchSource = null;
+
     async function fetchServerSearch(query, mode) {
       if (!cip) return null;
       const params = new URLSearchParams();
@@ -730,10 +737,12 @@
       if (!res.ok) return null;
       const data = await res.json();
       if (data?.integration_status && data.integration_status !== "ok") {
+        _lastSearchSource = null;
         return null;
       }
       const items = Array.isArray(data?.items) ? data.items : [];
-      if (!items.length) return null;
+      if (!items.length) { _lastSearchSource = null; return null; }
+      _lastSearchSource = data.source || null;
       return items.map((it) => ({
         type: (it.type || "documento").toLowerCase(),
         date: it.date || "",
@@ -753,6 +762,7 @@
       const q = queryEl.value.trim();
       const mode = modeEl.value;
       let results = null;
+      _lastSearchSource = null;
       try {
         results = await fetchServerSearch(q, mode);
       } catch (e) {
@@ -760,6 +770,16 @@
       }
       if (!Array.isArray(results)) {
         results = searchDocs(q, mode);
+      }
+
+      // Show semantic search notice
+      if (_lastSearchSource === "medical_search" && q) {
+        fallbackNoticeEl.className = "notice semantic-ok";
+        fallbackNoticeEl.textContent = "Búsqueda semántica activa — resultados obtenidos de los documentos clínicos del paciente.";
+        fallbackNoticeEl.style.display = "block";
+      } else if (!_lastSearchSource || !q) {
+        fallbackNoticeEl.className = "notice";
+        fallbackNoticeEl.style.display = "none";
       }
       if (isTimelineMode) {
         resultsViewEl.style.display = "none";

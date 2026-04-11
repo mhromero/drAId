@@ -1,0 +1,23 @@
+RESULTADO DE ANALÍTICA URGENTE
+Hospital General Universitario Gregorio Marañón
+Fecha: 01/02/2026  20:40 h
+Paciente: García Ruiz, Ana  |  CIP: 2800005678
+
+HEMOGRAMA
+Leucocitos: 8.5 x10e9/L  Normal  (Neutrófilos 65%, Eosinófilos 4%)
+Hemoglobina: 13.8 g/dL  Normal
+Plaquetas: 278 x10e9/L  Normal
+
+BIOQUÍMICA
+PCR: 4.2 mg/L  [VR < 5]  Límite normal
+Glucosa: 112 mg/dL  Levemente elevada (estrés / corticoides)
+Sodio: 138 mEq/L  |  Potasio: 3.8 mEq/L
+Creatinina: 0.78 mg/dL  |  eGFR > 90 mL/min
+
+GASOMETRÍA ARTERIAL
+pH: 7.42  |  pCO2: 36 mmHg  |  pO2: 78 mmHg  |  SatO2: 96%  |  HCO3: 23 mEq/L
+→ Hipoxemia leve. Sin acidosis ni alcalosis metabólica.
+
+CONCLUSIÓN
+Sin datos de infección bacteriana activa. Leucocitosis leve probable reactiva
+a corticoterapia. Hipoxemia leve en contexto de crisis asmática.

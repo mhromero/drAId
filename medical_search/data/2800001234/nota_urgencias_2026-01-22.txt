@@ -1,0 +1,48 @@
+INFORME DE URGENCIAS — SERVICIO DE URGENCIAS HOSPITALARIAS
+Hospital Universitario La Paz — SERMAS
+Fecha y hora de asistencia: 22/01/2026  10:00 h
+Paciente: Martínez López, Carlos
+Fecha nacimiento: 14/03/1966  |  Sexo: Varón  |  CIP: 2800001234
+
+MOTIVO DE CONSULTA
+Dolor torácico opresivo de inicio súbito hace aproximadamente 2 horas,
+irradiado a mandíbula y brazo izquierdo, con sudoración fría asociada.
+Refiere episodios similares previos de menor intensidad en contexto de esfuerzo.
+
+ANTECEDENTES PERSONALES RELEVANTES
+- Hipertensión arterial (desde 2015), en tratamiento con Losartán 50 mg/día.
+- Diabetes mellitus tipo 2 (desde 2018), con Metformina 850 mg/12h.
+- Cardiopatía isquémica conocida (desde 2021).
+- Angioplastia coronaria percutánea con stent en 2023 (DA proximal).
+- Tratamiento hipolipemiante: Atorvastatina 40 mg/noche.
+- No alergias medicamentosas conocidas.
+
+EXPLORACIÓN FÍSICA
+- PA: 152/90 mmHg  |  FC: 88 lpm  |  SatO2: 97%  |  Tª: 36.4 °C
+- Consciente y orientado. Ligera palidez mucocutánea.
+- Auscultación cardiopulmonar: rítmico sin soplos. MVC bilateral.
+- Abdomen: blando, no doloroso. EEII: sin edemas.
+
+PRUEBAS COMPLEMENTARIAS
+- ECG 12 derivaciones: ritmo sinusal a 88 lpm. Sin cambios agudos de la repolarización. Sin bloqueos.
+- Radiografía de tórax: índice cardiotorácico normal. Sin infiltrados ni derrame pleural.
+- Analítica urgente: Hemoglobina 13.1 g/dL. Leucocitos 7.8 x10e9/L. Glucosa 148 mg/dL.
+  Troponina I ultrasensible: 14 ng/L (normal < 34 ng/L). Creatinina 0.95 mg/dL.
+
+JUICIO CLÍNICO
+Síndrome coronario agudo sin elevación del ST (SCASEST) de bajo riesgo.
+Angina estable descompensada. Probable angina inestable a descartar.
+
+TRATAMIENTO EN URGENCIAS
+- AAS 300 mg v.o. en dosis de carga.
+- Nitroglicerina sublingual 0.4 mg con mejoría clínica parcial.
+- Monitorización continua. Vía venosa periférica.
+- Observación 6 h con controles de Troponina seriados a las 3 h: 12 ng/L (descenso).
+
+PLAN AL ALTA
+Alta a domicilio con seguimiento preferente en Cardiología en 48-72 h.
+Mantener medicación habitual. Reposo relativo. Nitroglicerina sublingual de rescate.
+Instrucciones de alarma: acudir a urgencias si reaparece dolor torácico.
+
+Médico responsable: Dr. Javier Ramos Ortiz
+Nº colegiado: 28-12345

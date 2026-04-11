@@ -1,0 +1,450 @@
+{
+  "metadata": {
+    "schema_version": "1.0.0",
+    "record_id": "hcis-master-2800001234-v1",
+    "patient_cip": "2800001234",
+    "source_system": "HP-HCIS-SIM",
+    "generated_at": "2026-04-10T22:05:00Z",
+    "ingestion_notes": "Perfil sintetico para pruebas de extraccion, embeddings y busqueda clinica."
+  },
+  "patient_demographics": {
+    "cip": "2800001234",
+    "full_name": "Carlos Martinez Lopez",
+    "sex": "male",
+    "birth_date": "1966-03-14",
+    "age": 60,
+    "national_id_masked": "***1234**",
+    "contact": {
+      "phone_masked": "*** *** 112",
+      "city": "Madrid"
+    }
+  },
+  "sections": {
+    "history_summary": {
+      "content": "Paciente con riesgo cardiovascular alto: HTA, DM2 y cardiopatia isquemica. Varias atenciones por dolor toracico en los ultimos 24 meses.",
+      "traceability": {
+        "source_section": "historia_clinica_resumida",
+        "source_resource_type": "Composition",
+        "source_document_id": "DOC-HCR-001",
+        "timestamp": "2026-04-01T10:12:00",
+        "author": "Dra. Lucia Perez (Medicina Interna)",
+        "confidence": 0.93,
+        "manual_review": false,
+        "evidence_text": "Riesgo cardiovascular alto con episodios de dolor toracico recurrente."
+      }
+    },
+    "encounters": [
+      {
+        "encounter_id": "ENC-URG-20260122",
+        "care_setting": "urgencias",
+        "date_start": "2026-01-22T08:31:00",
+        "date_end": "2026-01-22T14:05:00",
+        "specialty": "Urgencias",
+        "reason": "Dolor toracico opresivo con irradiacion a brazo izquierdo.",
+        "outcome": "Alta a domicilio con ajuste de tratamiento y control en cardiologia.",
+        "traceability": {
+          "source_section": "urgencias",
+          "source_resource_type": "Encounter",
+          "source_document_id": "DOC-URG-001",
+          "timestamp": "2026-01-22T14:05:00",
+          "author": "Dr. Javier Ramos (Urgencias)",
+          "confidence": 0.94,
+          "manual_review": false,
+          "evidence_text": "Dolor toracico de caracter opresivo de 2 horas de evolucion."
+        }
+      },
+      {
+        "encounter_id": "ENC-CEX-20251110",
+        "care_setting": "consultas_externas",
+        "date_start": "2025-11-10T09:15:00",
+        "date_end": "2025-11-10T10:00:00",
+        "specialty": "Cardiologia",
+        "reason": "Revision de cardiopatia isquemica cronica.",
+        "outcome": "Enfermedad estable. Se mantiene doble prevencion secundaria.",
+        "traceability": {
+          "source_section": "consultas_externas",
+          "source_resource_type": "Encounter",
+          "source_document_id": "DOC-CEX-001",
+          "timestamp": "2025-11-10T10:00:00",
+          "author": "Dra. Elena Robles (Cardiologia)",
+          "confidence": 0.9,
+          "manual_review": false,
+          "evidence_text": "Cardiopatia isquemica estable sin nuevos episodios de angina de esfuerzo."
+        }
+      }
+    ],
+    "diagnoses": [
+      {
+        "name": "Hipertension arterial",
+        "coding_system": "SNOMED",
+        "code": "38341003",
+        "status": "active",
+        "onset_date": "2015-06-01",
+        "traceability": {
+          "source_section": "problemas_diagnosticos",
+          "source_resource_type": "Condition",
+          "source_document_id": "DOC-HCR-001",
+          "timestamp": "2015-06-01",
+          "author": "Dr. AP Madrid Centro",
+          "confidence": 0.89,
+          "manual_review": false,
+          "evidence_text": "Antecedente de HTA en seguimiento por AP desde 2015."
+        }
+      },
+      {
+        "name": "Diabetes mellitus tipo 2",
+        "coding_system": "SNOMED",
+        "code": "44054006",
+        "status": "active",
+        "onset_date": "2018-01-20",
+        "traceability": {
+          "source_section": "problemas_diagnosticos",
+          "source_resource_type": "Condition",
+          "source_document_id": "DOC-HCR-001",
+          "timestamp": "2018-01-20",
+          "author": "Dra. AP Madrid Centro",
+          "confidence": 0.88,
+          "manual_review": false,
+          "evidence_text": "DM2 con HbA1c oscilante entre 7.0 y 7.6%."
+        }
+      },
+      {
+        "name": "Cardiopatia isquemica",
+        "coding_system": "SNOMED",
+        "code": "53741008",
+        "status": "active",
+        "onset_date": "2021-11-05",
+        "traceability": {
+          "source_section": "problemas_diagnosticos",
+          "source_resource_type": "Condition",
+          "source_document_id": "DOC-ALTA-2021-11",
+          "timestamp": "2021-11-08",
+          "author": "Servicio de Cardiologia",
+          "confidence": 0.95,
+          "manual_review": false,
+          "evidence_text": "Sindrome coronario sin elevacion ST con coronariografia y stent."
+        }
+      }
+    ],
+    "procedures": [
+      {
+        "name": "Angioplastia coronaria con stent en DA",
+        "category": "cirugia_previa",
+        "date": "2021-11-07",
+        "status": "completed",
+        "notes": "Sin complicaciones inmediatas.",
+        "traceability": {
+          "source_section": "procedimientos",
+          "source_resource_type": "Procedure",
+          "source_document_id": "DOC-ALTA-2021-11",
+          "timestamp": "2021-11-07T12:10:00",
+          "author": "Dr. Carlos Nunez (Hemodinamica)",
+          "confidence": 0.96,
+          "manual_review": false,
+          "evidence_text": "Se implanta stent farmacoactivo en arteria descendente anterior."
+        }
+      },
+      {
+        "name": "Apendicectomia laparoscopica",
+        "category": "cirugia_previa",
+        "date": "2004-05-12",
+        "status": "completed",
+        "notes": "Cirugia previa referida en antecedentes remotos.",
+        "traceability": {
+          "source_section": "antecedentes_personales_familiares",
+          "source_resource_type": "ClinicalNote",
+          "source_document_id": "DOC-NOTA-AP-001",
+          "timestamp": "2019-03-01T09:00:00",
+          "author": "Dra. AP Madrid Centro",
+          "confidence": 0.62,
+          "manual_review": true,
+          "evidence_text": "Refiere apendicectomia a los 38 anos, sin informe quirurgico adjunto."
+        }
+      }
+    ],
+    "medications": [
+      {
+        "name": "Losartan 50 mg",
+        "dose": "50 mg",
+        "frequency": "1 comprimido cada 24 h",
+        "route": "oral",
+        "status": "active",
+        "traceability": {
+          "source_section": "medicacion",
+          "source_resource_type": "MedicationRequest",
+          "source_document_id": "DOC-MED-2026-01",
+          "timestamp": "2026-01-22T13:45:00",
+          "author": "Dr. Javier Ramos (Urgencias)",
+          "confidence": 0.91,
+          "manual_review": false,
+          "evidence_text": "Mantener losartan 50 mg/dia."
+        }
+      },
+      {
+        "name": "Metformina 850 mg",
+        "dose": "850 mg",
+        "frequency": "1 comprimido cada 12 h",
+        "route": "oral",
+        "status": "active",
+        "traceability": {
+          "source_section": "medicacion",
+          "source_resource_type": "MedicationRequest",
+          "source_document_id": "DOC-MED-2026-01",
+          "timestamp": "2026-01-22T13:45:00",
+          "author": "Dr. Javier Ramos (Urgencias)",
+          "confidence": 0.91,
+          "manual_review": false,
+          "evidence_text": "Continuar metformina 850 mg cada 12 horas."
+        }
+      }
+    ],
+    "allergies_adrs": [
+      {
+        "substance": "Ibuprofeno",
+        "criticality": "high",
+        "reaction": "Urticaria generalizada",
+        "traceability": {
+          "source_section": "alergias_ram",
+          "source_resource_type": "AllergyIntolerance",
+          "source_document_id": "DOC-ALERG-001",
+          "timestamp": "2019-08-10T11:20:00",
+          "author": "Dra. Marta Solis (Alergologia)",
+          "confidence": 0.84,
+          "manual_review": false,
+          "evidence_text": "Episodio de urticaria tras ingesta de ibuprofeno."
+        }
+      }
+    ],
+    "lab_results": [
+      {
+        "test_name": "Troponina I",
+        "date": "2026-01-22T09:05:00",
+        "value": "0.018",
+        "unit": "ng/mL",
+        "reference_range": "<0.034",
+        "interpretation": "normal",
+        "traceability": {
+          "source_section": "laboratorio",
+          "source_resource_type": "Observation",
+          "source_document_id": "DOC-LAB-20260122",
+          "timestamp": "2026-01-22T09:10:00",
+          "author": "Laboratorio Central",
+          "confidence": 0.97,
+          "manual_review": false,
+          "evidence_text": "Troponina I en rango normal."
+        }
+      }
+    ],
+    "imaging_reports": [
+      {
+        "study": "Radiografia de torax AP",
+        "date": "2026-01-22T10:42:00",
+        "impression": "Sin signos de congestion pulmonar ni consolidacion.",
+        "traceability": {
+          "source_section": "pruebas_imagen",
+          "source_resource_type": "DiagnosticReport",
+          "source_document_id": "DOC-RX-20260122",
+          "timestamp": "2026-01-22T11:05:00",
+          "author": "Dr. Pablo Ortega (Radiologia)",
+          "confidence": 0.93,
+          "manual_review": false,
+          "evidence_text": "No hallazgos agudos en parenquima pulmonar."
+        }
+      }
+    ],
+    "discharge_summaries": [
+      {
+        "date": "2026-01-22T14:05:00",
+        "service": "Urgencias",
+        "summary": "Alta con sospecha de angina establecida, sin elevacion de biomarcadores, control precoz en cardiologia.",
+        "traceability": {
+          "source_section": "informes_alta_evolucion",
+          "source_resource_type": "DocumentReference",
+          "source_document_id": "DOC-URG-001",
+          "timestamp": "2026-01-22T14:05:00",
+          "author": "Dr. Javier Ramos (Urgencias)",
+          "confidence": 0.95,
+          "manual_review": false,
+          "evidence_text": "Se decide alta con recomendaciones y seguimiento preferente."
+        }
+      }
+    ],
+    "clinical_notes": [
+      {
+        "note_type": "evolucion_medica",
+        "date": "2026-01-22T12:15:00",
+        "text": "Paciente estable hemodinamicamente. Dolor toracico cede con nitroglicerina sublingual.",
+        "traceability": {
+          "source_section": "anotaciones_notas_libres",
+          "source_resource_type": "DocumentReference",
+          "source_document_id": "DOC-NOTA-URG-001",
+          "timestamp": "2026-01-22T12:15:00",
+          "author": "Dr. Javier Ramos (Urgencias)",
+          "confidence": 0.9,
+          "manual_review": false,
+          "evidence_text": "Dolor toracico cede tras nitroglicerina."
+        }
+      }
+    ],
+    "nursing_notes": [
+      {
+        "note_type": "cuidados_enfermeria",
+        "date": "2026-01-22T11:50:00",
+        "text": "TA 145/88, FC 82, SatO2 98%. Paciente tranquilo, sin dolor en ese momento.",
+        "traceability": {
+          "source_section": "cuidados_enfermeria",
+          "source_resource_type": "DocumentReference",
+          "source_document_id": "DOC-ENF-001",
+          "timestamp": "2026-01-22T11:50:00",
+          "author": "Enf. Ana Beltran",
+          "confidence": 0.89,
+          "manual_review": false,
+          "evidence_text": "Constantes estables y ausencia de dolor al control."
+        }
+      }
+    ],
+    "interconsultations": [
+      {
+        "requested_service": "Cardiologia",
+        "date": "2026-01-22T12:40:00",
+        "question": "Valorar origen cardiaco del dolor toracico y necesidad de ingreso.",
+        "response": "Sin criterios actuales de ingreso. Seguimiento preferente en 48-72 h.",
+        "traceability": {
+          "source_section": "interconsultas",
+          "source_resource_type": "ServiceRequest",
+          "source_document_id": "DOC-INT-001",
+          "timestamp": "2026-01-22T13:20:00",
+          "author": "Dra. Elena Robles (Cardiologia)",
+          "confidence": 0.87,
+          "manual_review": false,
+          "evidence_text": "No criterios de ingreso en este momento."
+        }
+      }
+    ],
+    "documents": [
+      {
+        "document_id": "DOC-URG-001",
+        "title": "Informe de asistencia a urgencias",
+        "section": "informes_alta_evolucion",
+        "content_type": "application/pdf",
+        "storage_ref": "documents/2800001234/informe_urgencias_2026-01-22.pdf",
+        "text_preview": "Motivo: dolor toracico opresivo. Alta con control en cardiologia.",
+        "traceability": {
+          "source_section": "documentos_registros_transacciones",
+          "source_resource_type": "DocumentReference",
+          "source_document_id": "DOC-URG-001",
+          "timestamp": "2026-01-22T14:05:00",
+          "author": "Dr. Javier Ramos (Urgencias)",
+          "confidence": 0.95,
+          "manual_review": false,
+          "evidence_text": "Informe firmado electronicamente en urgencias."
+        }
+      },
+      {
+        "document_id": "DOC-ECG-001",
+        "title": "Informe de electrocardiograma",
+        "section": "pruebas_imagen",
+        "content_type": "application/pdf",
+        "storage_ref": "documents/2800001234/informe_electrocardiograma_2026-01-22.pdf",
+        "text_preview": "Ritmo sinusal, sin elevacion del ST, alteraciones inespecificas repolarizacion.",
+        "traceability": {
+          "source_section": "informes_pruebas",
+          "source_resource_type": "DocumentReference",
+          "source_document_id": "DOC-ECG-001",
+          "timestamp": "2026-01-22T09:50:00",
+          "author": "Dr. Laura Prieto (Cardiologia)",
+          "confidence": 0.94,
+          "manual_review": false,
+          "evidence_text": "ECG sin criterios de IAM con elevacion ST."
+        }
+      },
+      {
+        "document_id": "DOC-NOTA-URG-001",
+        "title": "Nota medica de evolucion",
+        "section": "anotaciones_notas_libres",
+        "content_type": "text/plain",
+        "storage_ref": "documents/2800001234/nota_medica_urgencias_2026-01-22.txt",
+        "text_preview": "Dolor cede tras nitroglicerina. Se programa control preferente.",
+        "traceability": {
+          "source_section": "anotaciones_notas_libres",
+          "source_resource_type": "DocumentReference",
+          "source_document_id": "DOC-NOTA-URG-001",
+          "timestamp": "2026-01-22T12:15:00",
+          "author": "Dr. Javier Ramos (Urgencias)",
+          "confidence": 0.9,
+          "manual_review": false,
+          "evidence_text": "Dolor toracico cede con nitroglicerina sublingual."
+        }
+      }
+    ]
+  },
+  "documents_registry": [
+    {
+      "document_id": "DOC-URG-001",
+      "filename": "informe_urgencias_2026-01-22.pdf",
+      "content_type": "application/pdf",
+      "path": "documents/2800001234/informe_urgencias_2026-01-22.pdf",
+      "sha256": "bcfc07e8a327e9f1bc33c63b6aef62328335db2286f964394e1d4182a339756d"
+    },
+    {
+      "document_id": "DOC-ECG-001",
+      "filename": "informe_electrocardiograma_2026-01-22.pdf",
+      "content_type": "application/pdf",
+      "path": "documents/2800001234/informe_electrocardiograma_2026-01-22.pdf",
+      "sha256": "7326e898f554e61f587be9e659d2c7d378a81e7d7a7dda1fd674134b2f0c26fa"
+    },
+    {
+      "document_id": "DOC-NOTA-URG-001",
+      "filename": "nota_medica_urgencias_2026-01-22.txt",
+      "content_type": "text/plain",
+      "path": "documents/2800001234/nota_medica_urgencias_2026-01-22.txt",
+      "sha256": "d58c58de3e640ad1ea582ef8a7ec49c5602cae055f9c8f846d72912fa3e3931d"
+    }
+  ],
+  "all_sections_index": [
+    {
+      "fragment_id": "FR-0001",
+      "source_section": "urgencias",
+      "resource_type": "Encounter",
+      "timestamp": "2026-01-22T14:05:00",
+      "author": "Dr. Javier Ramos (Urgencias)",
+      "text": "Dolor toracico opresivo con irradiacion a brazo izquierdo de 2 horas de evolucion.",
+      "confidence": 0.94,
+      "manual_review": false,
+      "source_document_id": "DOC-URG-001"
+    },
+    {
+      "fragment_id": "FR-0002",
+      "source_section": "anotaciones_notas_libres",
+      "resource_type": "DocumentReference",
+      "timestamp": "2026-01-22T12:15:00",
+      "author": "Dr. Javier Ramos (Urgencias)",
+      "text": "Dolor toracico cede tras nitroglicerina sublingual.",
+      "confidence": 0.9,
+      "manual_review": false,
+      "source_document_id": "DOC-NOTA-URG-001"
+    },
+    {
+      "fragment_id": "FR-0003",
+      "source_section": "procedimientos",
+      "resource_type": "Procedure",
+      "timestamp": "2021-11-07T12:10:00",
+      "author": "Dr. Carlos Nunez (Hemodinamica)",
+      "text": "Implantacion de stent farmacoactivo en arteria descendente anterior.",
+      "confidence": 0.96,
+      "manual_review": false,
+      "source_document_id": "DOC-ALTA-2021-11"
+    },
+    {
+      "fragment_id": "FR-0004",
+      "source_section": "antecedentes_personales_familiares",
+      "resource_type": "ClinicalNote",
+      "timestamp": "2019-03-01T09:00:00",
+      "author": "Dra. AP Madrid Centro",
+      "text": "Refiere apendicectomia previa sin informe quirurgico digitalizado.",
+      "confidence": 0.62,
+      "manual_review": true,
+      "source_document_id": "DOC-NOTA-AP-001"
+    }
+  ]
+}

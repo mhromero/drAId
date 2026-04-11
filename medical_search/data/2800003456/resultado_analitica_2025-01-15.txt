@@ -1,0 +1,27 @@
+RESULTADO DE ANALÍTICA GENERAL
+Centro de Salud Carabanchel Norte — Laboratorio
+Fecha extracción: 15/01/2025  08:30 h
+Paciente: Torres Vega, Miguel  |  CIP: 2800003456  |  Edad: 27 años
+
+HEMOGRAMA
+Hemoglobina: 15.2 g/dL  [VR: 13.5-17.5]  Normal
+Hematocrito: 45.1%  Normal
+VCM: 89 fL  |  HCM: 31 pg
+Leucocitos: 6.2 x10e9/L  Normal  |  Neutrófilos: 58%  |  Linfocitos: 35%
+Plaquetas: 232 x10e9/L  Normal
+
+BIOQUÍMICA
+Glucosa: 86 mg/dL  Normal
+Urea: 28 mg/dL  |  Creatinina: 0.88 mg/dL  |  eGFR: > 90 mL/min/1.73m²
+Colesterol total: 165 mg/dL  Normal
+LDL calculado: 98 mg/dL  Normal
+HDL: 55 mg/dL  Normal  |  No-HDL: 110 mg/dL
+Triglicéridos: 86 mg/dL  Normal
+AST: 18 U/L  |  ALT: 22 U/L  Normal
+TSH: 1.8 mUI/L  [VR: 0.4-4.0]  Normal
+
+ORINA (sistemático)
+Color: amarillo claro. Nitritos: negativo. Leucocitos: negativo.
+Glucosa: negativo. Proteínas: negativo.
+
+CONCLUSIÓN: Analítica sin alteraciones. No se detectan hallazgos patológicos.
