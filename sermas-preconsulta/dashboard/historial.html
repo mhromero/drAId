@@ -164,13 +164,15 @@
 
         const data = await res.json();
         if (data.integration_status === "no_documents") {
-          searchStateEl.textContent = data.message || "No hay documentos para indexar.";
+          const p = data.documents_path ? ` Ruta: ${data.documents_path}` : "";
+          searchStateEl.textContent = (data.message || "No hay documentos para indexar.") + p;
           return;
         }
 
         const idx = data.indexing || {};
         if (idx.performed) {
-          searchStateEl.textContent = `Índice listo (${idx.indexed_files || 0} ficheros, ${idx.failed_files || 0} errores). Escribe una consulta.`;
+          const p = data.documents_path ? ` Ruta: ${data.documents_path}.` : "";
+          searchStateEl.textContent = `Índice listo (${idx.indexed_files || 0} ficheros, ${idx.failed_files || 0} errores).${p} Escribe una consulta.`;
         } else {
           searchStateEl.textContent = "Índice preparado. Escribe una consulta para buscar en los documentos clínicos.";
         }
@@ -260,7 +262,8 @@
 
         if (status === "no_documents") {
           clearResults();
-          searchStateEl.textContent = data.message || "No hay documentos del paciente para indexar.";
+          const p = data.documents_path ? ` Ruta: ${data.documents_path}` : "";
+          searchStateEl.textContent = (data.message || "No hay documentos del paciente para indexar.") + p;
           return;
         }
 

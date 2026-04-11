@@ -14,6 +14,9 @@ Endpoints:
 import json
 import logging
 import os
+import re
+import shutil
+import subprocess
 import uuid
 import base64
 from datetime import datetime
@@ -76,7 +79,86 @@ def _resolve_documents_root() -> Path:
 
 
 def _resolve_patient_folder(cip: str) -> Path:
-    return _MEDICAL_DATA_DIR / (cip or "").strip()
+    raw = (cip or "").strip()
+    normalized = re.sub(r"[^0-9A-Za-z_-]", "", raw)
+    candidates = [raw, normalized]
+
+    # If CIP comes as reference-like token (e.g., Patient/2800001234), use last chunk.
+    if "/" in raw:
+        candidates.append(raw.split("/")[-1].strip())
+
+    for candidate in candidates:
+        if not candidate:
+            continue
+        folder = _MEDICAL_DATA_DIR / candidate
+        if folder.is_dir():
+            return folder
+
+    # Fallback to normalized name for deterministic error messages.
+    return _MEDICAL_DATA_DIR / (normalized or raw)
+
+
+def _find_indexable_files(folder: Path) -> list[Path]:
+    if not folder.exists() or not folder.is_dir():
+        return []
+    return [
+        f for f in sorted(folder.rglob("*"))
+        if f.is_file() and f.suffix.lower() in {".txt", ".pdf"}
+    ]
+
+
+def _run_medical_search_index(cip: str, patient_folder: Path, collection_name: str, persist_dir: str) -> tuple[int, str, str]:
+    """
+    Ejecuta indexado con la misma lógica del comando CLI:
+      uv run medical-search index <folder> --patient-id <cip>
+    Se implementa vía python -m medical_search para evitar depender del entrypoint.
+    """
+    import sys
+
+    cmd = [
+        sys.executable,
+        "-m",
+        "medical_search",
+        "index",
+        str(patient_folder),
+        "--patient-id",
+        cip,
+        "--persist-dir",
+        persist_dir,
+        "--collection",
+        collection_name,
+    ]
+    proc = subprocess.run(cmd, capture_output=True, text=True)
+    return proc.returncode, proc.stdout or "", proc.stderr or ""
+
+
+def _is_chroma_storage_error(exc: Exception) -> bool:
+    msg = str(exc).lower()
+    markers = [
+        "nothing found on disk",
+        "error creating hnsw segment reader",
+        "segment",
+    ]
+    return any(marker in msg for marker in markers)
+
+
+def _reset_chroma_storage_for_collection(persist_dir: str, collection_name: str) -> None:
+    import chromadb as _chromadb
+
+    try:
+        client = _chromadb.PersistentClient(path=persist_dir)
+        client.delete_collection(collection_name)
+    except Exception:
+        pass
+
+    # As a hard reset for corrupted local state in hackathon mode.
+    try:
+        if Path(persist_dir).exists():
+            shutil.rmtree(persist_dir, ignore_errors=True)
+    except Exception:
+        pass
+
+    Path(persist_dir).mkdir(parents=True, exist_ok=True)
 
 
 # ── Modelos ──────────────────────────────────────────────────────────────────
@@ -1045,16 +1127,12 @@ async def _local_medical_search_for_cip(cip: str, query: str, top_k: int = 10, i
         if str(_DRAID_ROOT) not in sys.path:
             sys.path.insert(0, str(_DRAID_ROOT))
 
-        from datetime import datetime as _dt
         import chromadb as _chromadb
-        from medical_search.indexer import IndexedDocument, SemanticIndexer
-        from medical_search.ingest import ingest_file, IngestionError
-        from medical_search.processor import initialize_nlp, process_clinical_text
         from medical_search.search import MedicalSearcher
 
+        cip = (cip or "").strip()
         collection_name = f"medical_notes_{cip}"
         persist_dir = str(_CHROMA_DIR)
-        cip = (cip or "").strip()
         patient_folder = _resolve_patient_folder(cip)
 
         _CHROMA_DIR.mkdir(parents=True, exist_ok=True)
@@ -1062,8 +1140,18 @@ async def _local_medical_search_for_cip(cip: str, query: str, top_k: int = 10, i
         logger.info("[search] cip=%s query=%r collection=%s", cip, query, collection_name)
 
         client = _chromadb.PersistentClient(path=persist_dir)
-        col = client.get_or_create_collection(collection_name, metadata={"hnsw:space": "cosine"})
-        chunks_before = col.count()
+        try:
+            col = client.get_or_create_collection(collection_name, metadata={"hnsw:space": "cosine"})
+            chunks_before = col.count()
+        except Exception as exc:
+            if not _is_chroma_storage_error(exc):
+                raise
+
+            logger.warning("[search] chroma storage corrupted for %s, rebuilding local index storage", collection_name)
+            _reset_chroma_storage_for_collection(persist_dir, collection_name)
+            client = _chromadb.PersistentClient(path=persist_dir)
+            col = client.get_or_create_collection(collection_name, metadata={"hnsw:space": "cosine"})
+            chunks_before = col.count()
 
         indexing_required = chunks_before == 0
         indexing_performed = False
@@ -1073,13 +1161,14 @@ async def _local_medical_search_for_cip(cip: str, query: str, top_k: int = 10, i
         logger.info("[search] collection %s has %d chunks", collection_name, chunks_before)
 
         if indexing_required:
-            if not patient_folder.exists():
+            if not patient_folder.exists() or not patient_folder.is_dir():
                 logger.warning("[search] patient folder not found for cip=%s at %s", cip, patient_folder)
                 return {
                     "integration_status": "no_documents",
                     "source": "medical_search",
                     "items": [],
                     "message": f"No existe carpeta de documentos del paciente para indexar en: {patient_folder}",
+                    "documents_path": str(patient_folder),
                     "indexing": {
                         "required": True,
                         "performed": False,
@@ -1088,10 +1177,7 @@ async def _local_medical_search_for_cip(cip: str, query: str, top_k: int = 10, i
                     },
                 }
 
-            files = [
-                f for f in sorted(patient_folder.rglob("*"))
-                if f.is_file() and f.suffix.lower() in {".txt", ".pdf"}
-            ]
+            files = _find_indexable_files(patient_folder)
             if not files:
                 logger.warning("[search] no indexable files for cip=%s in %s", cip, patient_folder)
                 return {
@@ -1099,6 +1185,7 @@ async def _local_medical_search_for_cip(cip: str, query: str, top_k: int = 10, i
                     "source": "medical_search",
                     "items": [],
                     "message": "No hay archivos .txt/.pdf para indexar.",
+                    "documents_path": str(patient_folder),
                     "indexing": {
                         "required": True,
                         "performed": False,
@@ -1108,44 +1195,30 @@ async def _local_medical_search_for_cip(cip: str, query: str, top_k: int = 10, i
                 }
 
             logger.info("[search] indexing %d files from %s", len(files), patient_folder)
-            nlp = initialize_nlp()
-            indexer = SemanticIndexer(
-                persist_dir=persist_dir,
+            rc, stdout, stderr = _run_medical_search_index(
+                cip=cip,
+                patient_folder=patient_folder,
                 collection_name=collection_name,
+                persist_dir=persist_dir,
             )
 
-            for src in files:
-                try:
-                    ingested = ingest_file(src)
-                    processed = process_clinical_text(ingested.raw_text, nlp)
-
-                    doc_date = "unknown"
-                    for part in src.stem.replace("-", "_").split("_"):
-                        try:
-                            doc_date = _dt.strptime(part, "%Y%m%d").date().isoformat()
-                            break
-                        except ValueError:
-                            pass
-
-                    import re as _re
-                    m = _re.search(r"(\d{4}-\d{2}-\d{2})", src.stem)
-                    if m:
-                        doc_date = m.group(1)
-
-                    indexer.index_document(IndexedDocument(
-                        doc_id=str(src.resolve()),
-                        patient_id=cip,
-                        document_date=doc_date,
-                        source_path=str(src.resolve()),
-                        processed=processed,
-                    ))
-                    indexed_files += 1
-                except IngestionError as e:
-                    failed_files += 1
-                    logger.warning("[search] failed to index %s: %s", src.name, e)
-                except Exception as e:
-                    failed_files += 1
-                    logger.exception("[search] unexpected indexing error for %s: %s", src.name, e)
+            indexed_files = len([line for line in stdout.splitlines() if line.strip().startswith("Indexed:")])
+            failed_files = len([line for line in stdout.splitlines() if line.strip().startswith("[ERROR]")])
+            if rc != 0 and indexed_files == 0:
+                logger.warning("[search] medical_search index command failed rc=%s stderr=%s", rc, stderr.strip())
+                return {
+                    "integration_status": "error",
+                    "source": "medical_search",
+                    "items": [],
+                    "message": f"Fallo indexando con medical_search: {stderr.strip() or stdout.strip() or 'error desconocido'}",
+                    "documents_path": str(patient_folder),
+                    "indexing": {
+                        "required": True,
+                        "performed": True,
+                        "indexed_files": indexed_files,
+                        "failed_files": max(failed_files, len(files) - indexed_files),
+                    },
+                }
 
             indexing_performed = True
             logger.info("[search] indexing complete — collection now has %d chunks", col.count())
@@ -1158,6 +1231,7 @@ async def _local_medical_search_for_cip(cip: str, query: str, top_k: int = 10, i
                 "source": "medical_search",
                 "items": [],
                 "message": "No hay chunks indexados para este paciente.",
+                "documents_path": str(patient_folder),
                 "indexing": {
                     "required": indexing_required,
                     "performed": indexing_performed,
@@ -1176,6 +1250,7 @@ async def _local_medical_search_for_cip(cip: str, query: str, top_k: int = 10, i
                 "source": "medical_search",
                 "items": [],
                 "message": message,
+                "documents_path": str(patient_folder),
                 "indexing": {
                     "required": indexing_required,
                     "performed": indexing_performed,
@@ -1185,7 +1260,33 @@ async def _local_medical_search_for_cip(cip: str, query: str, top_k: int = 10, i
             }
 
         searcher = MedicalSearcher(persist_dir=persist_dir, collection_name=collection_name)
-        hits = searcher.search(query, top_k=top_k)
+        try:
+            hits = searcher.search(query, top_k=top_k)
+        except Exception as exc:
+            if not _is_chroma_storage_error(exc):
+                raise
+
+            logger.warning("[search] chroma query failed due to storage inconsistency, rebuilding and reindexing")
+            _reset_chroma_storage_for_collection(persist_dir, collection_name)
+
+            files = _find_indexable_files(patient_folder)
+            if not files:
+                raise
+
+            rc, stdout, stderr = _run_medical_search_index(
+                cip=cip,
+                patient_folder=patient_folder,
+                collection_name=collection_name,
+                persist_dir=persist_dir,
+            )
+            indexed_files = max(indexed_files, len([line for line in stdout.splitlines() if line.strip().startswith("Indexed:")]))
+            failed_files = max(failed_files, len([line for line in stdout.splitlines() if line.strip().startswith("[ERROR]")]))
+            if rc != 0 and indexed_files == 0:
+                raise RuntimeError(stderr.strip() or stdout.strip() or "Fallo reindexando tras reset de Chroma")
+
+            searcher = MedicalSearcher(persist_dir=persist_dir, collection_name=collection_name)
+            hits = searcher.search(query, top_k=top_k)
+
         logger.info("[search] query=%r returned %d hits", query, len(hits))
 
         from pathlib import Path as _Path
@@ -1213,6 +1314,7 @@ async def _local_medical_search_for_cip(cip: str, query: str, top_k: int = 10, i
             "source": "medical_search",
             "items": items,
             "message": message,
+            "documents_path": str(patient_folder),
             "indexing": {
                 "required": indexing_required,
                 "performed": indexing_performed,

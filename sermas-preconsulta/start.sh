@@ -8,6 +8,19 @@ ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 echo "Iniciando SERMAS Pre-Consulta..."
 
+# Limpieza de procesos antiguos para evitar quedarnos con código viejo en memoria.
+cleanup_port() {
+  local port="$1"
+  if command -v fuser >/dev/null 2>&1; then
+    fuser -k "${port}/tcp" >/dev/null 2>&1 || true
+  fi
+}
+
+cleanup_port 8001
+cleanup_port 8002
+pkill -f "uvicorn.*--app-dir .*sermas-preconsulta/fhir-service.*--port 8001" 2>/dev/null || true
+pkill -f "uvicorn.*--app-dir .*sermas-preconsulta/llm-service.*--port 8002" 2>/dev/null || true
+
 # Ollama
 if ! curl -s http://localhost:11434/api/tags > /dev/null 2>&1; then
   echo "  → Arrancando Ollama..."
