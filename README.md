@@ -1,6 +1,8 @@
-# dr AId
+# dr AId - Harvard Systems Innovation Lab Hackathon Project 2026
 
-Diagnostic screening for doctor appointments based on patient symptoms and history through integration with an LLM model.
+Team members: María Romero Huertas - Yushan Yang Xu - Carmen Fernández González
+
+Diagnostic screening for doctor appointments based on patient symptoms and history through integration with an LLM model.  
 
 https://youtu.be/YCr1c3JRJwE
 
