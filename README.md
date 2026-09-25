@@ -1,4 +1,4 @@
-# dr AId - Harvard Systems Innovation Lab Hackathon Project 2026
+# dr AId - Harvard Health Systems Innovation Lab Hackathon Project 2026
 
 Team members: María Romero Huertas - Yushan Yang Xu - Carmen Fernández González
 
